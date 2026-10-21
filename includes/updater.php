@@ -122,6 +122,7 @@ class Inpulsia_Medios_Updater {
 	}
 
 	public function action_links( $links ) {
+		array_unshift( $links, '<a href="' . esc_url( admin_url( 'upload.php?page=inpulsia-medios' ) ) . '">Abrir</a>' );
 		if ( current_user_can( 'update_plugins' ) ) {
 			$url     = wp_nonce_url( admin_url( 'plugins.php?inpulsia_medios_check=1' ), 'inpulsia_medios_check' );
 			$links[] = '<a href="' . esc_url( $url ) . '">Buscar actualizaciones</a>';

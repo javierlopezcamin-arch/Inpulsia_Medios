@@ -4,6 +4,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 add_action( 'admin_post_inpulsia_medios_export', 'inpulsia_medios_export' );
+add_action( 'admin_post_inpulsia_medios_template', 'inpulsia_medios_template' );
+
+function inpulsia_medios_template() {
+	check_admin_referer( 'inpulsia_medios_template' );
+	if ( ! current_user_can( 'upload_files' ) ) {
+		wp_die( 'No tienes permisos.' );
+	}
+	nocache_headers();
+	header( 'Content-Type: text/csv; charset=utf-8' );
+	header( 'Content-Disposition: attachment; filename="plantilla-inpulsia-medios.csv"' );
+	$out = fopen( 'php://output', 'w' );
+	fwrite( $out, "\xEF\xBB\xBF" );
+	fputcsv( $out, [ 'ID', 'filename', 'title', 'alt', 'caption', 'description' ], ';' );
+	fputcsv( $out, [ '123', 'reforma-cocina-santander', 'Reforma de cocina en Santander', 'Cocina reformada con encimera de madera y muebles blancos', '', INPULSIA_MEDIOS_CLEAR ], ';' );
+	fclose( $out );
+	exit;
+}
 
 function inpulsia_medios_export() {
 	check_admin_referer( 'inpulsia_medios_export' );

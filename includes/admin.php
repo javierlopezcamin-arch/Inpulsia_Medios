@@ -24,6 +24,8 @@ function inpulsia_medios_assets( $hook ) {
 		'nonce'    => wp_create_nonce( 'inpulsia_medios_nonce' ),
 		'labels'   => inpulsia_medios_field_labels(),
 		'clear'    => INPULSIA_MEDIOS_CLEAR,
+		'edit_url' => admin_url( 'post.php?action=edit&post=' ),
+		'history'  => admin_url( 'upload.php?page=inpulsia-medios&tab=historial' ),
 	] );
 }
 
@@ -48,7 +50,9 @@ function inpulsia_medios_tab_importar() {
 	?>
 	<div class="inpulsia-medios-card">
 		<h2>Subir CSV</h2>
-		<p>Columnas: <code>ID</code> (obligatoria), <code>filename</code>, <code>title</code>, <code>alt</code>, <code>caption</code>, <code>description</code>. Las demás se ignoran.</p>
+		<p>Columnas: <code>ID</code> (obligatoria), <code>filename</code>, <code>title</code>, <code>alt</code>, <code>caption</code>, <code>description</code>. Las demás se ignoran.
+			<a href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=inpulsia_medios_template' ), 'inpulsia_medios_template' ) ); ?>">Descargar plantilla</a>
+			· <a href="<?php echo esc_url( admin_url( 'upload.php?page=inpulsia-medios&tab=exportar' ) ); ?>">Exportar medios actuales</a></p>
 		<ul class="inpulsia-medios-help">
 			<li>Celda vacía = no cambiar. Escribe <code><?php echo esc_html( INPULSIA_MEDIOS_CLEAR ); ?></code> para vaciar un campo.</li>
 			<li>El nombre de archivo se normaliza para SEO (minúsculas, guiones, sin tildes) y conserva la extensión original.</li>
@@ -180,7 +184,7 @@ function inpulsia_medios_parse_csv( $path ) {
 	if ( strpos( $content, "\xEF\xBB\xBF" ) === 0 ) {
 		$content = substr( $content, 3 );
 	}
-	if ( ! mb_check_encoding( $content, 'UTF-8' ) ) {
+	if ( function_exists( 'mb_check_encoding' ) && ! mb_check_encoding( $content, 'UTF-8' ) ) {
 		$content = mb_convert_encoding( $content, 'UTF-8', 'Windows-1252' );
 	}
 
@@ -239,6 +243,7 @@ function inpulsia_medios_ajax_preview() {
 	$items = [];
 	$valid = [];
 	$stems = [];
+	$seen  = [];
 
 	foreach ( $rows as $row ) {
 		$id   = absint( $row['id'] );
@@ -247,6 +252,15 @@ function inpulsia_medios_ajax_preview() {
 			$items[] = [ 'id' => $row['id'], 'error' => 'No existe un medio con este ID.' ];
 			continue;
 		}
+		if ( ! current_user_can( 'edit_post', $id ) ) {
+			$items[] = [ 'id' => $id, 'error' => 'No tienes permisos para editar este medio.' ];
+			continue;
+		}
+		if ( isset( $seen[ $id ] ) ) {
+			$items[] = [ 'id' => $id, 'error' => 'ID repetido en el CSV: se usa solo la primera fila.' ];
+			continue;
+		}
+		$seen[ $id ] = true;
 
 		list( $cur, $changes ) = inpulsia_medios_changes( $id, $row );
 		$warn      = [];
@@ -272,6 +286,7 @@ function inpulsia_medios_ajax_preview() {
 
 		$items[ 'id' . $id ] = [
 			'id'       => $id,
+			'edit'     => get_edit_post_link( $id, 'raw' ),
 			'thumb'    => (string) wp_get_attachment_image_url( $id, 'thumbnail', true ),
 			'current'  => $cur,
 			'changes'  => $changes,

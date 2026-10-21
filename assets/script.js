@@ -10,6 +10,10 @@
 		return $el;
 	}
 
+	function idLink(id) {
+		return $('<a target="_blank" rel="noopener">').attr('href', cfg.edit_url + encodeURIComponent(id)).text(id);
+	}
+
 	function shown(v) {
 		return v === '' ? '(vacío)' : v;
 	}
@@ -43,7 +47,7 @@
 
 		$.each(data.items, function (i, item) {
 			var $tr = $('<tr>');
-			$tr.append(txt('td', item.id, 'col-id'));
+			$tr.append($('<td class="col-id">').append(item.edit ? idLink(item.id) : document.createTextNode(item.id)));
 
 			if (item.error) {
 				errCount++;
@@ -129,7 +133,7 @@
 					var d = res.data;
 					$.each(d.results, function (_, r) {
 						counts[r.status] = (counts[r.status] || 0) + 1;
-						$log.append($('<p>').addClass('log-' + r.status).append(txt('strong', 'ID ' + r.id + ': '), txt('span', r.msg)));
+						$log.append($('<p>').addClass('log-' + r.status).append($('<strong>').append('ID ', idLink(r.id), ': '), txt('span', r.msg)));
 					});
 					var pct = d.total ? Math.round(d.next / d.total * 100) : 100;
 					$bar.css('width', pct + '%');
@@ -149,7 +153,12 @@
 				return;
 			}
 			$status.text('Terminado: ' + counts.ok + ' correctos, ' + counts.partial + ' parciales, ' + counts.error + ' errores, ' + counts.skip + ' sin cambios.');
-			if (action === 'inpulsia_medios_undo') setTimeout(function () { location.reload(); }, 1500);
+			if (action === 'inpulsia_medios_undo') {
+				setTimeout(function () { location.reload(); }, 1500);
+			} else {
+				$status.append(' ', $('<a>').attr('href', cfg.history).text('Ver historial / deshacer'));
+				$('#inpulsia-medios-file').val('');
+			}
 		}
 	}
 })(jQuery);

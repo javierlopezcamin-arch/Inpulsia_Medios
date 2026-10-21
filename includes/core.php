@@ -71,6 +71,9 @@ function inpulsia_medios_apply_row( $id, $row, $undo = false ) {
 	if ( ! $post || $post->post_type !== 'attachment' ) {
 		return [ 'status' => 'error', 'msg' => 'Medio no encontrado.' ];
 	}
+	if ( ! current_user_can( 'edit_post', $id ) ) {
+		return [ 'status' => 'error', 'msg' => 'No tienes permisos para editar este medio.' ];
+	}
 
 	list( $cur, $changes ) = inpulsia_medios_changes( $id, $row, $undo );
 	if ( ! $changes ) {
