@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Leer versión del plugin
+        id: v
+        run: |
+          VERSION=$(sed -n 's/^ \* Version: *//p' inpulsia-medios.php | tr -d '\r ')
+          CONST=$(sed -n "s/.*INPULSIA_MEDIOS_VERSION', '\([^']*\)'.*/\1/p" inpulsia-medios.php)
+          if [ -z "$VERSION" ] || [ "$VERSION" != "$CONST" ]; then
+            echo "::error::La versión de la cabecera ($VERSION) y INPULSIA_MEDIOS_VERSION ($CONST) no coinciden"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Comprobar si la release ya existe
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "v${{ steps.v.outputs.version }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "La v${{ steps.v.outputs.version }} ya está publicada; no se hace nada."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Empaquetar zip
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          mkdir -p "$RUNNER_TEMP/build/inpulsia-medios"
+          git archive HEAD | tar -x -C "$RUNNER_TEMP/build/inpulsia-medios"
+          cd "$RUNNER_TEMP/build"
+          zip -rq "$GITHUB_WORKSPACE/inpulsia-medios.zip" inpulsia-medios
+          unzip -l "$GITHUB_WORKSPACE/inpulsia-medios.zip"
+
+      - name: Publicar release
+        if: steps.check.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          V="${{ steps.v.outputs.version }}"
+          PREV=$(git describe --tags --abbrev=0 2>/dev/null || true)
+          if [ -n "$PREV" ]; then RANGE="$PREV..HEAD"; else RANGE="HEAD"; fi
+          git log --pretty='- %s' $RANGE > notes.md
+          gh release create "v$V" inpulsia-medios.zip \
+            --target "$GITHUB_SHA" \
+            --title "Inpulsia Medios $V" \
+            --notes-file notes.md

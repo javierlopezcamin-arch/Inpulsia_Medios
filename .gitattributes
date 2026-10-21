@@ -1,3 +1,4 @@
 build.sh export-ignore
 .gitattributes export-ignore
+.github export-ignore
 README.md export-ignore

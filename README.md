@@ -34,9 +34,11 @@ Al cambiar `filename` se renombran el original, las miniaturas y las versiones `
 
 ## Publicar una versión
 
-1. Sube la versión en la cabecera y en `INPULSIA_MEDIOS_VERSION` de `inpulsia-medios.php`.
-2. Commit y push.
-3. Ejecuta `./build.sh` para generar `../inpulsia-medios.zip`.
-4. En GitHub, crea una Release con la etiqueta `vX.Y.Z` y adjunta el zip.
+1. Sube la versión en la cabecera y en `INPULSIA_MEDIOS_VERSION` de `inpulsia-medios.php`. Las dos tienen que coincidir.
+2. Haz commit y push a `main`.
+
+La GitHub Action [`release.yml`](.github/workflows/release.yml) detecta la versión nueva, genera el zip y publica la Release `vX.Y.Z` con la lista de commits como notas. Si la versión no ha cambiado, no hace nada.
 
 Las webs con el plugin instalado verán la actualización en **Plugins**, o al instante con el enlace «Buscar actualizaciones». El repositorio debe ser público.
+
+Si necesitas el zip en local, usa `./build.sh`.
