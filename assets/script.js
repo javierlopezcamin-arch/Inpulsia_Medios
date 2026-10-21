@@ -1,108 +1,155 @@
 (function ($) {
 	'use strict';
 
-	// Export
-	$('#inpulsia-medios-export').on('click', function () {
-		window.location.href = inpulsiaMedios.ajax_url +
-			'?action=inpulsia_medios_export&nonce=' + inpulsiaMedios.nonce;
-	});
+	var cfg = window.inpulsiaMedios;
+	var token = null;
 
-	// Upload & preview
+	function txt(tag, text, cls) {
+		var $el = $('<' + tag + '>').text(text == null ? '' : String(text));
+		if (cls) $el.addClass(cls);
+		return $el;
+	}
+
+	function shown(v) {
+		return v === '' ? '(vacío)' : v;
+	}
+
 	$('#inpulsia-medios-form').on('submit', function (e) {
 		e.preventDefault();
 		var file = $('#inpulsia-medios-file')[0].files[0];
 		if (!file) return;
 
 		var fd = new FormData();
-		fd.append('action', 'inpulsia_medios_process');
-		fd.append('action_type', 'preview');
-		fd.append('nonce', inpulsiaMedios.nonce);
+		fd.append('action', 'inpulsia_medios_preview');
+		fd.append('nonce', cfg.nonce);
 		fd.append('csv_file', file);
 
-		$('#inpulsia-medios-preview, #inpulsia-medios-results').hide();
+		var $spinner = $(this).find('.spinner').addClass('is-active');
+		$('#inpulsia-medios-preview, #inpulsia-medios-run').prop('hidden', true);
 
-		$.ajax({
-			url: inpulsiaMedios.ajax_url,
-			type: 'POST',
-			data: fd,
-			processData: false,
-			contentType: false,
-			success: function (res) {
-				if (!res.success) {
-					alert(res.data || 'Error al procesar el CSV.');
-					return;
-				}
+		$.ajax({ url: cfg.ajax_url, type: 'POST', data: fd, processData: false, contentType: false })
+			.done(function (res) {
+				if (!res.success) return alert(res.data || 'Error al procesar el CSV.');
+				token = res.data.token;
 				renderPreview(res.data);
-			},
-			error: function () {
-				alert('Error de conexión.');
-			}
-		});
+			})
+			.fail(function () { alert('Error de conexión.'); })
+			.always(function () { $spinner.removeClass('is-active'); });
 	});
 
-	function renderPreview(items) {
+	function renderPreview(data) {
 		var $tbody = $('#inpulsia-medios-table tbody').empty();
-		$.each(items, function (i, item) {
-			var row = '<tr>' +
-				'<td>' + item.id + '</td>' +
-				'<td>' + (item.thumb ? '<img src="' + item.thumb + '">' : '—') + '</td>' +
-				'<td>' + diffCell(item.current_name, item.new_name) + '</td>' +
-				'<td>' + diffCell(item.current_alt, item.new_alt) + '</td>' +
-				'<td>' + diffCell(item.current_desc, item.new_desc) + '</td>' +
-				'</tr>';
-			$tbody.append(row);
-		});
-		$('#inpulsia-medios-preview').show();
-	}
+		var warnCount = 0, errCount = 0;
 
-	function diffCell(current, next) {
-		if (!next || next === current) {
-			return escHtml(current) || '<em>vacío</em>';
-		}
-		return '<span>' + escHtml(current || '(vacío)') + '</span>' +
-			'<span class="arrow">→</span>' +
-			'<span class="changed">' + escHtml(next) + '</span>';
-	}
+		$.each(data.items, function (i, item) {
+			var $tr = $('<tr>');
+			$tr.append(txt('td', item.id, 'col-id'));
 
-	function escHtml(str) {
-		var d = document.createElement('div');
-		d.textContent = str;
-		return d.innerHTML;
-	}
-
-	// Apply
-	$('#inpulsia-medios-apply').on('click', function () {
-		if (!confirm('¿Aplicar todos los cambios?')) return;
-
-		var $btn = $(this).prop('disabled', true).text('Procesando…');
-
-		$.post(inpulsiaMedios.ajax_url, {
-			action: 'inpulsia_medios_process',
-			action_type: 'apply',
-			nonce: inpulsiaMedios.nonce
-		}, function (res) {
-			$btn.prop('disabled', false).text('Aplicar cambios');
-			$('#inpulsia-medios-preview').hide();
-
-			if (!res.success) {
-				alert(res.data || 'Error.');
+			if (item.error) {
+				errCount++;
+				$tr.addClass('row-error').attr('data-warn', '1');
+				$tr.append($('<td>'), $('<td>'), $('<td>').append(txt('span', item.error, 'warn-error')));
+				$tbody.append($tr);
 				return;
 			}
-			renderResults(res.data);
+
+			$tr.append($('<td class="col-thumb">').append(item.thumb ? $('<img>').attr('src', item.thumb).attr('alt', '') : ''));
+
+			var $changes = $('<td>');
+			var keys = Object.keys(item.changes);
+			if (!keys.length) {
+				$changes.append(txt('em', 'Sin cambios', 'muted'));
+				$tr.addClass('row-skip');
+			}
+			$.each(keys, function (_, f) {
+				$changes.append(
+					$('<div class="change">').append(
+						txt('strong', cfg.labels[f] + ': '),
+						txt('span', shown(item.current[f]), 'old'),
+						txt('span', ' → ', 'arrow'),
+						txt('span', shown(item.changes[f]), 'new')
+					)
+				);
+			});
+			$tr.append($changes);
+
+			var $warn = $('<td class="col-warn">');
+			$.each(item.warnings, function (_, w) { $warn.append(txt('div', w, 'warn')); });
+			if (item.warnings.length) { warnCount++; $tr.attr('data-warn', '1'); }
+			$tr.append($warn);
+
+			$tbody.append($tr);
 		});
+
+		$('#inpulsia-medios-summary').empty().append(
+			txt('span', data.total + ' medios con cambios', 'pill pill-ok'),
+			warnCount ? txt('span', warnCount + ' con avisos', 'pill pill-warn') : '',
+			errCount ? txt('span', errCount + ' IDs no encontrados', 'pill pill-error') : ''
+		);
+		$('#inpulsia-medios-apply').prop('disabled', !data.total).text('Aplicar ' + data.total + ' cambios');
+		$('#inpulsia-medios-only-warn').prop('checked', false);
+		$('#inpulsia-medios-preview').prop('hidden', false);
+	}
+
+	$('#inpulsia-medios-only-warn').on('change', function () {
+		$('#inpulsia-medios-table tbody tr').not('[data-warn]').toggle(!this.checked);
 	});
 
 	$('#inpulsia-medios-cancel').on('click', function () {
-		$('#inpulsia-medios-preview').hide();
+		$('#inpulsia-medios-preview').prop('hidden', true);
+		token = null;
 	});
 
-	function renderResults(items) {
-		var $log = $('#inpulsia-medios-log').empty();
-		$.each(items, function (i, item) {
-			var cls = 'log-' + item.status;
-			$log.append('<p class="' + cls + '"><strong>ID ' + item.id + ':</strong> ' + escHtml(item.msg) + '</p>');
-		});
-		$('#inpulsia-medios-results').show();
-	}
+	$('#inpulsia-medios-apply').on('click', function () {
+		if (!token || !confirm('¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial.')) return;
+		$('#inpulsia-medios-preview').prop('hidden', true);
+		run('inpulsia_medios_apply', token, 'Aplicando cambios');
+	});
 
+	$(document).on('click', '.inpulsia-medios-undo', function () {
+		if (!confirm('¿Deshacer esta importación y restaurar los valores anteriores?')) return;
+		$('.inpulsia-medios-undo').prop('disabled', true);
+		run('inpulsia_medios_undo', $(this).data('token'), 'Deshaciendo importación');
+	});
+
+	function run(action, tok, title) {
+		var $box = $('#inpulsia-medios-run').prop('hidden', false);
+		var $bar = $box.find('.inpulsia-medios-progress > div').css('width', '0%');
+		var $status = $('#inpulsia-medios-run-status');
+		var $log = $('#inpulsia-medios-log').empty();
+		var counts = { ok: 0, partial: 0, error: 0, skip: 0 };
+		$('#inpulsia-medios-run-title').text(title);
+
+		window.onbeforeunload = function () { return true; };
+
+		(function step(offset) {
+			$.post(cfg.ajax_url, { action: action, nonce: cfg.nonce, token: tok, offset: offset })
+				.done(function (res) {
+					if (!res.success) return finish(res.data || 'Error.');
+					var d = res.data;
+					$.each(d.results, function (_, r) {
+						counts[r.status] = (counts[r.status] || 0) + 1;
+						$log.append($('<p>').addClass('log-' + r.status).append(txt('strong', 'ID ' + r.id + ': '), txt('span', r.msg)));
+					});
+					var pct = d.total ? Math.round(d.next / d.total * 100) : 100;
+					$bar.css('width', pct + '%');
+					$status.text(d.next + ' de ' + d.total + ' procesados');
+					if (d.done) finish(null);
+					else step(d.next);
+				})
+				.fail(function () {
+					finish('Se ha perdido la conexión en el registro ' + offset + '. Lo ya procesado está guardado en el Historial.');
+				});
+		})(0);
+
+		function finish(error) {
+			window.onbeforeunload = null;
+			if (error) {
+				$status.empty().append(txt('span', error, 'log-error'));
+				return;
+			}
+			$status.text('Terminado: ' + counts.ok + ' correctos, ' + counts.partial + ' parciales, ' + counts.error + ' errores, ' + counts.skip + ' sin cambios.');
+			if (action === 'inpulsia_medios_undo') setTimeout(function () { location.reload(); }, 1500);
+		}
+	}
 })(jQuery);
