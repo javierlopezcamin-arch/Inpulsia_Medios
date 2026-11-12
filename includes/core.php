@@ -233,6 +233,24 @@ function inpulsia_medios_apply_rows( $token, $rows ) {
 	return $results;
 }
 
+// Optimizes attachments under a history token; returns results with before/after bytes.
+function inpulsia_medios_optimize_ids( $token, $ids, $opts ) {
+	$log     = get_option( 'inpulsia_medios_log_' . $token, [] );
+	$results = [];
+	foreach ( $ids as $id ) {
+		$r = inpulsia_medios_optimize( (int) $id, $opts );
+		if ( ! empty( $r['prev'] ) ) {
+			$log[] = [ 'id' => (int) $id, 'prev' => $r['prev'] ];
+		}
+		unset( $r['prev'] );
+		$results[] = [ 'id' => (int) $id ] + $r;
+	}
+	update_option( 'inpulsia_medios_log_' . $token, $log, false );
+	inpulsia_medios_history_update( $token, [ 'changed' => count( $log ) ] );
+	inpulsia_medios_flush_elementor();
+	return $results;
+}
+
 function inpulsia_medios_undo_entries( $token ) {
 	return array_reverse( (array) get_option( 'inpulsia_medios_log_' . $token, [] ) );
 }
@@ -240,8 +258,22 @@ function inpulsia_medios_undo_entries( $token ) {
 function inpulsia_medios_undo_rows( $entries ) {
 	$results = [];
 	foreach ( $entries as $item ) {
-		$r = inpulsia_medios_apply_row( $item['id'], $item['prev'], true );
+		$prev     = $item['prev'];
+		$restored = null;
+		if ( isset( $prev['restore'] ) ) {
+			$restored = inpulsia_medios_backup_restore( $prev['restore'] );
+			unset( $prev['restore'] );
+		}
+		$r = $prev ? inpulsia_medios_apply_row( $item['id'], $prev, true ) : [ 'status' => 'ok', 'msg' => '' ];
 		unset( $r['prev'] );
+		if ( is_wp_error( $restored ) ) {
+			$extra       = $r['status'] === 'ok' ? $r['msg'] : '';
+			$r['status'] = 'error';
+			$r['msg']    = trim( 'Archivo: ' . $restored->get_error_message() . ' ' . $extra );
+		} elseif ( $restored ) {
+			$r['status'] = 'ok';
+			$r['msg']    = trim( 'Imagen original restaurada. ' . ( $r['msg'] === 'Sin cambios.' ? '' : $r['msg'] ) );
+		}
 		$results[] = [ 'id' => $item['id'] ] + $r;
 	}
 	inpulsia_medios_flush_elementor();

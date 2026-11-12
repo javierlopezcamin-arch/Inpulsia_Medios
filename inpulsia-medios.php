@@ -3,7 +3,7 @@
  * Plugin Name: Inpulsia Medios
  * Plugin URI: https://github.com/javierlopezcamin-arch/Inpulsia_Medios
  * Description: Actualización masiva de medios (nombre de archivo, título, alt, leyenda y descripción) mediante CSV con indicaciones SEO.
- * Version: 1.2.0
+ * Version: 1.3.0
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Inpulsia
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'INPULSIA_MEDIOS_VERSION', '1.2.0' );
+define( 'INPULSIA_MEDIOS_VERSION', '1.3.0' );
 define( 'INPULSIA_MEDIOS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'INPULSIA_MEDIOS_URL', plugin_dir_url( __FILE__ ) );
 define( 'INPULSIA_MEDIOS_CLEAR', '[vaciar]' );
@@ -32,6 +32,8 @@ new Inpulsia_Medios_Updater( __FILE__ );
 if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 	require_once INPULSIA_MEDIOS_PATH . 'includes/parser.php';
 	require_once INPULSIA_MEDIOS_PATH . 'includes/export.php';
+	require_once INPULSIA_MEDIOS_PATH . 'includes/usage.php';
+	require_once INPULSIA_MEDIOS_PATH . 'includes/optimize.php';
 }
 if ( is_admin() ) {
 	require_once INPULSIA_MEDIOS_PATH . 'includes/admin.php';

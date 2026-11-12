@@ -3,6 +3,7 @@
 
 	var cfg = window.inpulsiaMedios;
 	var token = null;
+	var applyAction = 'inpulsia_medios_apply';
 
 	function txt(tag, text, cls) {
 		var $el = $('<' + tag + '>').text(text == null ? '' : String(text));
@@ -144,11 +145,54 @@
 		})();
 	});
 
+	/* ---------- Optimize ---------- */
+
+	function optimize(mode) {
+		var data = {
+			action: 'inpulsia_medios_opt_stage',
+			nonce: cfg.nonce,
+			mode: mode,
+			format: $('#im-opt-format').val(),
+			max_width: $('#im-opt-width').val(),
+			quality: $('#im-opt-quality').val(),
+			backup: $('#im-opt-backup').is(':checked'),
+			ai: $('#im-opt-ai').is(':checked')
+		};
+		if (mode === 'selected') {
+			data.ids = $grid.find('.inpulsia-medios-row-check:checked').closest('tr').map(function () { return $(this).data('id'); }).get();
+			if (!data.ids.length) return alert('Selecciona al menos una imagen.');
+		} else {
+			var params = new URLSearchParams(location.search);
+			data.s = params.get('s') || '';
+			data.usage = params.get('usage') || '';
+			data.missing_alt = params.get('missing_alt') || '';
+		}
+		var $btns = $('#inpulsia-medios-opt-selected, #inpulsia-medios-opt-all').prop('disabled', true);
+		$.post(cfg.ajax_url, data)
+			.done(function (res) {
+				if (!res.success) return alert(res.data || 'Error.');
+				token = res.data.token;
+				$('#inpulsia-medios-grid-wrap').prop('hidden', true);
+				renderPreview(res.data);
+			})
+			.fail(function () { alert('Error de conexión.'); })
+			.always(function () { $btns.prop('disabled', false); });
+	}
+
+	$('#inpulsia-medios-opt-selected').on('click', function () { optimize('selected'); });
+	$('#inpulsia-medios-opt-all').on('click', function () {
+		var n = $(this).data('total');
+		if (n > 50 && !confirm('Se van a revisar ' + n + ' imágenes. Puede tardar varios minutos. ¿Seguir?')) return;
+		optimize('filter');
+	});
+
 	/* ---------- Preview ---------- */
 
 	function renderPreview(data) {
 		var $tbody = $('#inpulsia-medios-table tbody').empty();
 		var warnCount = 0, errCount = 0;
+		var isOpt = data.mode === 'optimize';
+		applyAction = isOpt ? 'inpulsia_medios_opt_apply' : 'inpulsia_medios_apply';
 
 		$.each(data.items, function (i, item) {
 			var $tr = $('<tr>');
@@ -163,6 +207,20 @@
 			}
 
 			$tr.append($('<td class="col-thumb">').append(item.thumb ? $('<img>').attr('src', item.thumb).attr('alt', '') : ''));
+
+			if (isOpt) {
+				var $plan = $('<td>').append(txt('strong', item.name));
+				if (item.skip) {
+					$plan.append(txt('div', item.skip, 'muted'));
+					$tr.addClass('row-skip');
+				}
+				$.each(item.lines || [], function (_, l) { $plan.append(txt('div', l, 'change')); });
+				var $w = $('<td class="col-warn">');
+				$.each(item.warnings || [], function (_, w) { $w.append(txt('div', w, 'warn')); });
+				if ((item.warnings || []).length) { warnCount++; $tr.attr('data-warn', '1'); }
+				$tbody.append($tr.append($plan, $w));
+				return;
+			}
 
 			var $changes = $('<td>');
 			var keys = Object.keys(item.changes);
@@ -191,11 +249,13 @@
 		});
 
 		$('#inpulsia-medios-summary').empty().append(
-			txt('span', data.total + ' medios con cambios', 'pill pill-ok'),
+			txt('span', data.total + (isOpt ? ' imágenes a optimizar · ' + data.bytes + ' actuales' : ' medios con cambios'), 'pill pill-ok'),
+			isOpt && data.listed > data.total ? txt('span', (data.listed - data.total) + ' se omiten', 'pill') : '',
+			isOpt && data.listed > data.items.length ? txt('span', 'se muestran ' + data.items.length + ' de ' + data.listed, 'pill') : '',
 			warnCount ? txt('span', warnCount + ' con avisos', 'pill pill-warn') : '',
 			errCount ? txt('span', errCount + ' con errores', 'pill pill-error') : ''
 		);
-		$('#inpulsia-medios-apply').prop('disabled', !data.total).text('Aplicar ' + data.total + ' cambios');
+		$('#inpulsia-medios-apply').prop('disabled', !data.total).text(isOpt ? 'Optimizar ' + data.total + ' imágenes' : 'Aplicar ' + data.total + ' cambios');
 		$('#inpulsia-medios-only-warn').prop('checked', false);
 		$('#inpulsia-medios-preview').prop('hidden', false);
 	}
@@ -214,7 +274,7 @@
 		if (!token || !confirm('¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial.')) return;
 		$('#inpulsia-medios-preview').prop('hidden', true);
 		window.inpulsiaMediosSaving = true;
-		run('inpulsia_medios_apply', token, 'Aplicando cambios');
+		run(applyAction, token, applyAction === 'inpulsia_medios_opt_apply' ? 'Optimizando imágenes' : 'Aplicando cambios');
 	});
 
 	$(document).on('click', '.inpulsia-medios-undo', function () {
@@ -232,6 +292,7 @@
 		var $log = $('#inpulsia-medios-log').empty();
 		var counts = { ok: 0, partial: 0, error: 0, skip: 0 };
 		var purged = [];
+		var before = 0, after = 0;
 		$('#inpulsia-medios-run-title').text(title);
 
 		window.onbeforeunload = function () { return true; };
@@ -243,6 +304,7 @@
 					var d = res.data;
 					$.each(d.results, function (_, r) {
 						counts[r.status] = (counts[r.status] || 0) + 1;
+						if (r.before) { before += r.before; after += r.after; }
 						$log.append($('<p>').addClass('log-' + r.status).append($('<strong>').append('ID ', idLink(r.id), ': '), txt('span', r.msg)));
 					});
 					var pct = d.total ? Math.round(d.next / d.total * 100) : 100;
@@ -263,6 +325,10 @@
 				return;
 			}
 			$status.text('Terminado: ' + counts.ok + ' correctos, ' + counts.partial + ' parciales, ' + counts.error + ' errores, ' + counts.skip + ' sin cambios.');
+			if (before > after) {
+				var mb = function (b) { return (b / 1048576).toFixed(1).replace('.', ',') + ' MB'; };
+				$status.append($('<br>'), txt('strong', 'Ahorro: ' + mb(before - after) + ' (' + mb(before) + ' → ' + mb(after) + ', −' + Math.round((1 - after / before) * 100) + ' %)'));
+			}
 			if (purged.length) $status.append($('<br>'), txt('span', 'Cachés vaciadas: ' + purged.join(', ') + '.', 'muted'));
 			if (action === 'inpulsia_medios_undo') {
 				setTimeout(function () { location.reload(); }, 1500);

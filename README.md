@@ -10,6 +10,7 @@ En **Medios → Inpulsia Medios**:
 
 - **Importar**: sube un CSV o `.xlsx`, revisa la vista previa con sus avisos y aplica los cambios. Se procesan por lotes con barra de progreso.
 - **Editar**: tabla de 20 imágenes por página con búsqueda y filtro «solo sin alt». Los cambios se revisan en la misma vista previa antes de aplicarse. El botón **IA** propone alt, nombre y título para una imagen; también se puede pedir para todas las seleccionadas.
+- **Optimizar** (dentro de Editar): convierte a JPG o WebP, limita el ancho, recomprime y quita los metadatos EXIF. Opcionalmente pone nombre amigable y alt con IA cuando faltan o el nombre es de cámara (`IMG_2041`, `DSC0099`, `WhatsApp Image…`). Se aplica a las imágenes seleccionadas o a todas las del filtro, por ejemplo **En uso en la web**.
 - **Exportar**: CSV de la biblioteca filtrado por tipo, imágenes sin alt o fecha. La columna `usado_en` indica dónde aparece cada imagen (destacada, galería de WooCommerce, contenido y Elementor).
 - **Historial**: deshace cualquiera de las últimas 20 importaciones o ediciones.
 - **Redirecciones**: lista de redirecciones 301 creadas al renombrar archivos, con sus visitas.
@@ -40,6 +41,17 @@ Separador `;` o `,`, en UTF-8 o Windows-1252. En Excel se lee la primera hoja.
 4. Al terminar se vacían las cachés de WP Rocket, LiteSpeed, W3 Total Cache, WP Super Cache, SiteGround, WP Fastest Cache, Breeze y Elementor. Las cachés de CDN externos hay que vaciarlas a mano.
 
 Al cambiar el alt también se actualiza en las imágenes ya insertadas en Gutenberg o el editor clásico (`<img class="wp-image-ID">`). Elementor lo lee siempre del medio.
+
+## Optimización de imágenes
+
+- Los PNG, WebP y GIF estáticos se convierten al formato elegido (JPG por defecto, o WebP). Los que tienen píxeles transparentes, como los logos, se mantienen en su formato y los GIF animados no se tocan.
+- La imagen se limita al ancho máximo (2560 px por defecto) y se recomprime (calidad 82). Se corrige la orientación EXIF y se regeneran las miniaturas.
+- Si el resultado no pesa al menos un 5 % menos que el original, la imagen se deja como está. En gráficos planos, un PNG suele pesar menos que un JPG.
+- Las URLs antiguas se reemplazan en todo el sitio y redirigen con 301 a las nuevas, igual que al renombrar.
+- Con la copia de seguridad activada, los archivos originales se guardan en `uploads/inpulsia-medios-backups/` y la optimización se puede deshacer desde Historial. En Ajustes se pueden borrar las copias de más de 30 días.
+- Si la web ya usa ShortPixel, Imagify, EWWW, Smush u Optimole, se muestra un aviso para no comprimir dos veces.
+
+El filtro **En uso en la web** detecta imágenes destacadas, galerías de WooCommerce, logo e icono del sitio, imágenes insertadas en el contenido y cualquier URL de `uploads` en Elementor, metadatos u opciones. El resultado se guarda una hora; **Recalcular uso** lo actualiza. Los campos de imagen de ACF que solo guardan el ID no se detectan.
 
 ## Sugerencias con IA
 

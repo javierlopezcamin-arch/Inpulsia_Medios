@@ -11,6 +11,8 @@ tests_add_filter( 'muplugins_loaded', function () use ( $root ) {
 	require $root . '/inpulsia-medios.php';
 	require_once $root . '/includes/parser.php';
 	require_once $root . '/includes/export.php';
+	require_once $root . '/includes/usage.php';
+	require_once $root . '/includes/optimize.php';
 } );
 
 require $tests_dir . '/includes/bootstrap.php';
