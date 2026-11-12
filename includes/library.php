@@ -57,13 +57,25 @@ function inpulsia_medios_where_used( $id, $limit = 5 ) {
 		$out[] = [
 			'id'    => $pid,
 			'title' => $p->post_title !== '' ? $p->post_title : '#' . $pid,
-			'url'   => $p->post_type === 'elementor_library' ? (string) get_edit_post_link( $pid, 'raw' ) : (string) get_permalink( $pid ),
+			'url'     => $p->post_type === 'elementor_library' ? (string) get_edit_post_link( $pid, 'raw' ) : (string) get_permalink( $pid ),
+			'keyword' => inpulsia_medios_focus_keyword( $pid ),
 		];
 		if ( count( $out ) >= $limit ) {
 			break;
 		}
 	}
 	return $out;
+}
+
+// Main keyword set in Rank Math, Yoast SEO or SEOPress for a post.
+function inpulsia_medios_focus_keyword( $post_id ) {
+	foreach ( [ 'rank_math_focus_keyword', '_yoast_wpseo_focuskw', '_seopress_analysis_target_kw' ] as $key ) {
+		$kw = trim( explode( ',', (string) get_post_meta( $post_id, $key, true ) )[0] );
+		if ( $kw !== '' ) {
+			return $kw;
+		}
+	}
+	return '';
 }
 
 /* ---------- WPML / Polylang ---------- */

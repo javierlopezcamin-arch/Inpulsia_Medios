@@ -76,11 +76,11 @@ function inpulsia_medios_read_csv( $path ) {
 // Minimal reader for the first worksheet of an .xlsx file (shared, inline and numeric cells).
 function inpulsia_medios_read_xlsx( $path ) {
 	if ( ! class_exists( 'ZipArchive' ) ) {
-		return new WP_Error( 'no_zip', 'El servidor no tiene la extensión ZIP de PHP. Guarda el archivo como CSV.' );
+		return new WP_Error( 'no_zip', __( 'El servidor no tiene la extensión ZIP de PHP. Guarda el archivo como CSV.', 'inpulsia-medios' ) );
 	}
 	$zip = new ZipArchive();
 	if ( $zip->open( $path ) !== true ) {
-		return new WP_Error( 'bad_xlsx', 'No se pudo abrir el archivo Excel.' );
+		return new WP_Error( 'bad_xlsx', __( 'No se pudo abrir el archivo Excel.', 'inpulsia-medios' ) );
 	}
 
 	$xml = function ( $name ) use ( $zip ) {
@@ -112,7 +112,7 @@ function inpulsia_medios_read_xlsx( $path ) {
 	$sheet = $xml( $sheet_path );
 	$zip->close();
 	if ( ! $sheet ) {
-		return new WP_Error( 'bad_xlsx', 'El archivo Excel no tiene hojas legibles.' );
+		return new WP_Error( 'bad_xlsx', __( 'El archivo Excel no tiene hojas legibles.', 'inpulsia-medios' ) );
 	}
 
 	$table = [];

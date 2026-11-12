@@ -333,4 +333,78 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertSame( 60, inpulsia_medios_score( [ 'total' => 10, 'missing' => 10, 'big' => 0, 'names' => 0, 'png' => 0 ] ) );
 		$this->assertSame( 0, inpulsia_medios_score( [ 'total' => 10, 'missing' => 10, 'big' => 10, 'names' => 10, 'png' => 10 ] ) );
 	}
+
+	public function test_usage_index_updates_when_a_post_is_saved() {
+		$id = $this->upload( 'nueva.jpg', 40, 40 );
+		inpulsia_medios_used_ids( true );
+		$this->assertNotContains( $id, inpulsia_medios_used_ids() );
+
+		$post = self::factory()->post->create( [ 'post_content' => '<img class="wp-image-' . $id . '" src="x.jpg">' ] );
+		inpulsia_medios_usage_flush();
+		$this->assertContains( $id, inpulsia_medios_used_ids() );
+
+		wp_update_post( [ 'ID' => $post, 'post_content' => 'sin imagen' ] );
+		inpulsia_medios_usage_flush();
+		$this->assertNotContains( $id, inpulsia_medios_used_ids() );
+	}
+
+	public function test_new_uploads_are_optimized_in_background_when_enabled() {
+		update_option( 'inpulsia_medios_opt', [ 'auto' => true, 'backup' => true ] );
+		$id = $this->upload( 'subida.png', 800, 400 );
+		$this->assertNotFalse( wp_next_scheduled( 'inpulsia_medios_auto_optimize', [ $id, 0 ] ) );
+
+		wp_set_current_user( 0 );
+		inpulsia_medios_auto_run( $id );
+		$this->assertSame( 'image/jpeg', get_post_mime_type( $id ) );
+		$this->assertSame( 0, get_current_user_id() );
+		$h = inpulsia_medios_history()[0];
+		$this->assertSame( 'Optimización automática al subir', $h['file'] );
+		$this->assertSame( 1, $h['changed'] );
+
+		update_option( 'inpulsia_medios_opt', [ 'auto' => false ] );
+		$off = $this->upload( 'manual.png', 40, 40 );
+		$this->assertFalse( wp_next_scheduled( 'inpulsia_medios_auto_optimize', [ $off, 0 ] ) );
+	}
+
+	public function test_focus_keyword_from_seo_plugins_reaches_where_used() {
+		$id   = $this->upload( 'jardin.jpg', 40, 40 );
+		$post = self::factory()->post->create( [ 'post_content' => '<img class="wp-image-' . $id . '" src="' . wp_get_attachment_url( $id ) . '">' ] );
+		update_post_meta( $post, 'rank_math_focus_keyword', 'jardinería en Girona,poda' );
+		$this->assertSame( 'jardinería en Girona', inpulsia_medios_where_used( $id )[0]['keyword'] );
+		delete_post_meta( $post, 'rank_math_focus_keyword' );
+		update_post_meta( $post, '_yoast_wpseo_focuskw', 'mantenimiento de jardines' );
+		$this->assertSame( 'mantenimiento de jardines', inpulsia_medios_focus_keyword( $post ) );
+	}
+
+	public function test_library_bulk_action_opens_editar_with_those_images() {
+		$a   = $this->upload( 'a.jpg', 40, 40 );
+		$b   = $this->upload( 'b.jpg', 40, 40 );
+		$this->upload( 'c.jpg', 40, 40 );
+		$url = inpulsia_medios_media_bulk_handle( 'x', 'inpulsia_optimize', [ $a, $b ] );
+		$this->assertStringContainsString( 'do=optimize', $url );
+		parse_str( wp_parse_url( $url, PHP_URL_QUERY ), $q );
+		$this->assertEqualsCanonicalizing( [ $a, $b ], $this->ids_for( [ 'ids' => $q['ids'] ] ) );
+		$this->assertSame( 'x', inpulsia_medios_media_bulk_handle( 'x', 'delete', [ $a ] ) );
+	}
+
+	public function test_english_and_catalan_translations_load() {
+		$check = function ( $locale ) {
+			$filter = function () use ( $locale ) {
+				return $locale;
+			};
+			add_filter( 'determine_locale', $filter, 99 );
+			unload_textdomain( 'inpulsia-medios' );
+			inpulsia_medios_load_textdomain();
+			$text = __( 'Optimizar imágenes', 'inpulsia-medios' );
+			remove_filter( 'determine_locale', $filter, 99 );
+			unload_textdomain( 'inpulsia-medios' );
+			return $text;
+		};
+		$this->assertSame( 'Optimize images', $check( 'en_US' ) );
+		$this->assertSame( 'Optimize images', $check( 'en_GB' ) );
+		$this->assertSame( 'Optimitza les imatges', $check( 'ca' ) );
+		$this->assertSame( 'Optimitza les imatges', $check( 'ca_ES' ) );
+		$this->assertSame( 'Optimizar imágenes', $check( 'es_ES' ) );
+		$this->assertArrayHasKey( '%s seleccionadas', inpulsia_medios_js_i18n() );
+	}
 }

@@ -109,11 +109,11 @@ function inpulsia_medios_orphans_cleanup( $all = false ) {
 function inpulsia_medios_done_notes( $kept_old = true ) {
 	$notes = [];
 	if ( get_transient( 'inpulsia_medios_cloudflare' ) && empty( $GLOBALS['inpulsia_medios_cloudflare_purged'] ) ) {
-		$notes[] = 'La web pasa por Cloudflare: vacía su caché desde el panel de Cloudflare para que las visitas vean ya las imágenes nuevas.';
+		$notes[] = __( 'La web pasa por Cloudflare: vacía su caché desde el panel de Cloudflare para que las visitas vean ya las imágenes nuevas.', 'inpulsia-medios' );
 	}
 	$notes[] = $kept_old
-		? 'Los archivos antiguos se conservan ' . INPULSIA_MEDIOS_GRACE_DAYS . ' días para que ninguna caché muestre una imagen rota; después se borran solos.'
-		: 'Las imágenes anteriores se han borrado del servidor. Vacía también la caché del hosting o de Cloudflare si alguna página sigue pidiéndolas.';
+		? sprintf( __( 'Los archivos antiguos se conservan %d días para que ninguna caché muestre una imagen rota; después se borran solos.', 'inpulsia-medios' ), INPULSIA_MEDIOS_GRACE_DAYS )
+		: __( 'Las imágenes anteriores se han borrado del servidor. Vacía también la caché del hosting o de Cloudflare si alguna página sigue pidiéndolas.', 'inpulsia-medios' );
 	return $notes;
 }
 
@@ -158,7 +158,7 @@ function inpulsia_medios_check_public( $id ) {
 		$code = is_wp_error( $res ) ? 200 : (int) wp_remote_retrieve_response_code( $res );
 	}
 	if ( $code >= 400 ) {
-		return sprintf( 'Atención: la imagen nueva responde con error %d al abrirla desde la web; revisa los permisos de uploads o las reglas del servidor para .%s.', $code, pathinfo( $url, PATHINFO_EXTENSION ) );
+		return sprintf( __( 'Atención: la imagen nueva responde con error %d al abrirla desde la web; revisa los permisos de uploads o las reglas del servidor para .%s.', 'inpulsia-medios' ), $code, pathinfo( $url, PATHINFO_EXTENSION ) );
 	}
 	return '';
 }

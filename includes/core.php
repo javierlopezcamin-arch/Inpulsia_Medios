@@ -9,11 +9,11 @@ function inpulsia_medios_fields() {
 
 function inpulsia_medios_field_labels() {
 	return [
-		'filename'    => 'Nombre',
-		'title'       => 'Título',
-		'alt'         => 'Alt',
-		'caption'     => 'Leyenda',
-		'description' => 'Descripción',
+		'filename'    => __( 'Nombre', 'inpulsia-medios' ),
+		'title'       => __( 'Título', 'inpulsia-medios' ),
+		'alt'         => __( 'Alt', 'inpulsia-medios' ),
+		'caption'     => __( 'Leyenda', 'inpulsia-medios' ),
+		'description' => __( 'Descripción', 'inpulsia-medios' ),
 	];
 }
 
@@ -82,15 +82,15 @@ function inpulsia_medios_build_preview( $rows ) {
 		$id   = absint( $row['id'] ?? 0 );
 		$post = $id ? get_post( $id ) : null;
 		if ( ! $post || $post->post_type !== 'attachment' ) {
-			$items[] = [ 'id' => $row['id'] ?? '', 'error' => 'No existe un medio con este ID.' ];
+			$items[] = [ 'id' => $row['id'] ?? '', 'error' => __( 'No existe un medio con este ID.', 'inpulsia-medios' ) ];
 			continue;
 		}
 		if ( ! current_user_can( 'edit_post', $id ) ) {
-			$items[] = [ 'id' => $id, 'error' => 'No tienes permisos para editar este medio.' ];
+			$items[] = [ 'id' => $id, 'error' => __( 'No tienes permisos para editar este medio.', 'inpulsia-medios' ) ];
 			continue;
 		}
 		if ( isset( $seen[ $id ] ) ) {
-			$items[] = [ 'id' => $id, 'error' => 'ID repetido: se usa solo la primera fila.' ];
+			$items[] = [ 'id' => $id, 'error' => __( 'ID repetido: se usa solo la primera fila.', 'inpulsia-medios' ) ];
 			continue;
 		}
 		$seen[ $id ] = true;
@@ -101,19 +101,19 @@ function inpulsia_medios_build_preview( $rows ) {
 		$final_fn  = $changes['filename'] ?? $cur['filename'];
 
 		if ( wp_attachment_is_image( $id ) && $final_alt === '' ) {
-			$warn[] = 'Sin texto alternativo.';
+			$warn[] = __( 'Sin texto alternativo.', 'inpulsia-medios' );
 		}
 		if ( mb_strlen( $final_alt ) > 125 ) {
-			$warn[] = 'Alt de ' . mb_strlen( $final_alt ) . ' caracteres (recomendado ≤ 125).';
+			$warn[] = sprintf( __( 'Alt de %d caracteres (recomendado ≤ 125).', 'inpulsia-medios' ), mb_strlen( $final_alt ) );
 		}
 		if ( $final_alt !== '' && sanitize_title( $final_alt ) === sanitize_title( $final_fn ) ) {
-			$warn[] = 'El alt repite el nombre de archivo.';
+			$warn[] = __( 'El alt repite el nombre de archivo.', 'inpulsia-medios' );
 		}
 		if ( isset( $changes['filename'] ) ) {
 			$stems[ $final_fn ][] = $id;
 			$file                 = get_attached_file( $id );
 			if ( $file && file_exists( dirname( $file ) . '/' . $final_fn . '.' . pathinfo( $file, PATHINFO_EXTENSION ) ) ) {
-				$warn[] = 'Ya existe un archivo con ese nombre en la carpeta: no se renombrará.';
+				$warn[] = __( 'Ya existe un archivo con ese nombre en la carpeta: no se renombrará.', 'inpulsia-medios' );
 			}
 		}
 
@@ -133,7 +133,7 @@ function inpulsia_medios_build_preview( $rows ) {
 	foreach ( $stems as $ids ) {
 		if ( count( $ids ) > 1 ) {
 			foreach ( $ids as $id ) {
-				$items[ 'id' . $id ]['warnings'][] = 'Nombre repetido (IDs ' . implode( ', ', $ids ) . ').';
+				$items[ 'id' . $id ]['warnings'][] = sprintf( __( 'Nombre repetido (IDs %s).', 'inpulsia-medios' ), implode( ', ', $ids ) );
 			}
 		}
 	}
@@ -144,15 +144,15 @@ function inpulsia_medios_build_preview( $rows ) {
 function inpulsia_medios_apply_row( $id, $row, $undo = false ) {
 	$post = get_post( $id );
 	if ( ! $post || $post->post_type !== 'attachment' ) {
-		return [ 'status' => 'error', 'msg' => 'Medio no encontrado.' ];
+		return [ 'status' => 'error', 'msg' => __( 'Medio no encontrado.', 'inpulsia-medios' ) ];
 	}
 	if ( ! current_user_can( 'edit_post', $id ) ) {
-		return [ 'status' => 'error', 'msg' => 'No tienes permisos para editar este medio.' ];
+		return [ 'status' => 'error', 'msg' => __( 'No tienes permisos para editar este medio.', 'inpulsia-medios' ) ];
 	}
 
 	list( $cur, $changes ) = inpulsia_medios_changes( $id, $row, $undo );
 	if ( ! $changes ) {
-		return [ 'status' => 'skip', 'msg' => 'Sin cambios.' ];
+		return [ 'status' => 'skip', 'msg' => __( 'Sin cambios.', 'inpulsia-medios' ) ];
 	}
 
 	$prev = [];
@@ -168,7 +168,7 @@ function inpulsia_medios_apply_row( $id, $row, $undo = false ) {
 		$alt = sanitize_text_field( $changes['alt'] );
 		update_post_meta( $id, '_wp_attachment_image_alt', $alt );
 		$synced = inpulsia_medios_sync_alt( $id, $alt );
-		$done[] = $labels['alt'] . ( $synced ? " ({$synced} en contenido)" : '' );
+		$done[] = $labels['alt'] . ( $synced ? ' ' . sprintf( __( '(%d en contenido)', 'inpulsia-medios' ), $synced ) : '' );
 	}
 
 	$update = [ 'ID' => $id ];
@@ -194,7 +194,7 @@ function inpulsia_medios_apply_row( $id, $row, $undo = false ) {
 			$errors[] = 'Nombre: ' . $r->get_error_message();
 			unset( $prev['filename'] );
 		} else {
-			$done[] = $labels['filename'] . ( $r > 0 ? " ({$r} contenidos actualizados)" : '' );
+			$done[] = $labels['filename'] . ( $r > 0 ? ' ' . sprintf( __( '(%d contenidos actualizados)', 'inpulsia-medios' ), $r ) : '' );
 		}
 	}
 
@@ -274,7 +274,7 @@ function inpulsia_medios_undo_rows( $entries ) {
 			$r['msg']    = trim( 'Archivo: ' . $restored->get_error_message() . ' ' . $extra );
 		} elseif ( $restored ) {
 			$r['status'] = 'ok';
-			$r['msg']    = trim( 'Imagen original restaurada. ' . ( $r['msg'] === 'Sin cambios.' ? '' : $r['msg'] ) );
+			$r['msg']    = trim( __( 'Imagen original restaurada.', 'inpulsia-medios' ) . ' ' . ( $r['msg'] === __( 'Sin cambios.', 'inpulsia-medios' ) ? '' : $r['msg'] ) );
 		}
 		$results[] = [ 'id' => $item['id'] ] + $r;
 	}
@@ -288,10 +288,10 @@ function inpulsia_medios_rename( $id, $new_stem, $keep_old = true ) {
 
 	$file = get_attached_file( $id );
 	if ( ! $file || ! file_exists( $file ) ) {
-		return new WP_Error( 'not_found', 'archivo no encontrado en el servidor.' );
+		return new WP_Error( 'not_found', __( 'archivo no encontrado en el servidor.', 'inpulsia-medios' ) );
 	}
 	if ( $new_stem === '' ) {
-		return new WP_Error( 'empty', 'nombre vacío.' );
+		return new WP_Error( 'empty', __( 'nombre vacío.', 'inpulsia-medios' ) );
 	}
 	$old_stem = inpulsia_medios_stem( $id );
 	if ( $new_stem === $old_stem ) {
@@ -338,7 +338,7 @@ function inpulsia_medios_rename( $id, $new_stem, $keep_old = true ) {
 	inpulsia_medios_orphans_release( $id, $dir, array_values( $map ) );
 	foreach ( $map as $new ) {
 		if ( file_exists( $dir . '/' . $new ) && ! isset( $map[ $new ] ) ) {
-			return new WP_Error( 'exists', "ya existe «{$new}» en la carpeta." );
+			return new WP_Error( 'exists', sprintf( __( 'ya existe «%s» en la carpeta.', 'inpulsia-medios' ), $new ) );
 		}
 	}
 
@@ -351,7 +351,7 @@ function inpulsia_medios_rename( $id, $new_stem, $keep_old = true ) {
 			foreach ( array_reverse( $moved, true ) as $o => $n ) {
 				@rename( $dir . '/' . $n, $dir . '/' . $o );
 			}
-			return new WP_Error( 'rename_failed', 'no se pudo renombrar (permisos del servidor).' );
+			return new WP_Error( 'rename_failed', __( 'no se pudo renombrar (permisos del servidor).', 'inpulsia-medios' ) );
 		}
 		$moved[ $old ] = $new;
 	}
@@ -558,27 +558,27 @@ function inpulsia_medios_purge_caches() {
 	$purged = [];
 	if ( function_exists( 'rocket_clean_domain' ) ) {
 		rocket_clean_domain();
-		$purged[] = 'WP Rocket';
+		$purged[] = __( 'WP Rocket', 'inpulsia-medios' );
 	}
 	if ( defined( 'LSCWP_V' ) ) {
 		do_action( 'litespeed_purge_all' );
-		$purged[] = 'LiteSpeed Cache';
+		$purged[] = __( 'LiteSpeed Cache', 'inpulsia-medios' );
 	}
 	if ( function_exists( 'w3tc_flush_all' ) ) {
 		w3tc_flush_all();
-		$purged[] = 'W3 Total Cache';
+		$purged[] = __( 'W3 Total Cache', 'inpulsia-medios' );
 	}
 	if ( function_exists( 'wp_cache_clear_cache' ) ) {
 		wp_cache_clear_cache();
-		$purged[] = 'WP Super Cache';
+		$purged[] = __( 'WP Super Cache', 'inpulsia-medios' );
 	}
 	if ( function_exists( 'sg_cachepress_purge_cache' ) ) {
 		sg_cachepress_purge_cache();
-		$purged[] = 'SiteGround Optimizer';
+		$purged[] = __( 'SiteGround Optimizer', 'inpulsia-medios' );
 	}
 	if ( class_exists( 'WpFastestCache' ) ) {
 		do_action( 'wpfc_clear_all_cache' );
-		$purged[] = 'WP Fastest Cache';
+		$purged[] = __( 'WP Fastest Cache', 'inpulsia-medios' );
 	}
 	if ( class_exists( '\Breeze_PurgeCache' ) ) {
 		do_action( 'breeze_clear_all_cache' );
@@ -586,11 +586,11 @@ function inpulsia_medios_purge_caches() {
 	}
 	if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->files_manager ) ) {
 		\Elementor\Plugin::$instance->files_manager->clear_cache();
-		$purged[] = 'Elementor (CSS regenerado)';
+		$purged[] = __( 'Elementor (CSS regenerado)', 'inpulsia-medios' );
 	}
 	if ( has_action( 'rt_nginx_helper_purge_all' ) ) {
 		do_action( 'rt_nginx_helper_purge_all' );
-		$purged[] = 'Nginx Helper';
+		$purged[] = __( 'Nginx Helper', 'inpulsia-medios' );
 	}
 	if ( class_exists( 'autoptimizeCache' ) && method_exists( 'autoptimizeCache', 'clearall' ) ) {
 		autoptimizeCache::clearall();
@@ -602,7 +602,7 @@ function inpulsia_medios_purge_caches() {
 	}
 	if ( class_exists( 'Cache_Enabler' ) && method_exists( 'Cache_Enabler', 'clear_complete_cache' ) ) {
 		Cache_Enabler::clear_complete_cache();
-		$purged[] = 'Cache Enabler';
+		$purged[] = __( 'Cache Enabler', 'inpulsia-medios' );
 	}
 	if ( class_exists( 'WpeCommon' ) ) {
 		foreach ( [ 'purge_memcached', 'clear_maxcdn_cache', 'purge_varnish_cache' ] as $m ) {
@@ -610,7 +610,7 @@ function inpulsia_medios_purge_caches() {
 				call_user_func( [ 'WpeCommon', $m ] );
 			}
 		}
-		$purged[] = 'WP Engine';
+		$purged[] = __( 'WP Engine', 'inpulsia-medios' );
 	}
 	if ( isset( $GLOBALS['kinsta_cache'] ) && isset( $GLOBALS['kinsta_cache']->kinsta_cache_purge ) && method_exists( $GLOBALS['kinsta_cache']->kinsta_cache_purge, 'purge_complete_caches' ) ) {
 		$GLOBALS['kinsta_cache']->kinsta_cache_purge->purge_complete_caches();
@@ -664,3 +664,46 @@ function inpulsia_medios_history_find( $token ) {
 function inpulsia_medios_new_token() {
 	return strtolower( wp_generate_password( 12, false ) );
 }
+
+// One Historial entry per kind, user and day (autosave, automatic optimization…), so small changes stay undoable together.
+function inpulsia_medios_daily_token( $kind, $label ) {
+	$user  = get_current_user_id();
+	$key   = 'inpulsia_medios_daily_' . $kind . '_' . $user;
+	$today = current_time( 'Y-m-d' );
+	$saved = get_option( $key );
+	$entry = is_array( $saved ) && $saved['day'] === $today ? inpulsia_medios_history_find( $saved['token'] ) : null;
+	if ( $entry && $entry['status'] !== 'deshecho' ) {
+		return $saved['token'];
+	}
+	$token = inpulsia_medios_new_token();
+	$who   = wp_get_current_user();
+	inpulsia_medios_history_add( [
+		'token'   => $token,
+		'date'    => current_time( 'mysql' ),
+		'user'    => $who->exists() ? $who->display_name : 'WordPress',
+		'file'    => $label,
+		'rows'    => 0,
+		'changed' => 0,
+		'status'  => 'aplicado',
+	] );
+	update_option( $key, [ 'day' => $today, 'token' => $token ], false );
+	return $token;
+}
+
+// History labels are stored in Spanish; show them in the admin language.
+function inpulsia_medios_history_label( $label ) {
+	$known = [
+		'Edición en tabla'                 => __( 'Edición en tabla', 'inpulsia-medios' ),
+		'Guardado automático en tabla'     => __( 'Guardado automático en tabla', 'inpulsia-medios' ),
+		'Optimización automática al subir' => __( 'Optimización automática al subir', 'inpulsia-medios' ),
+	];
+	if ( isset( $known[ $label ] ) ) {
+		return $known[ $label ];
+	}
+	if ( preg_match( '/^Optimización \((\w+), (\d+) px\)$/u', $label, $m ) ) {
+		/* translators: 1: image format, 2: max width in pixels. */
+		return sprintf( __( 'Optimización (%1$s, %2$d px)', 'inpulsia-medios' ), $m[1], $m[2] );
+	}
+	return $label;
+}
+

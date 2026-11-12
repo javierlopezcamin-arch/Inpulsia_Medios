@@ -101,3 +101,7 @@ Sin MySQL se puede usar SQLite: copia el drop-in del plugin `sqlite-database-int
 La GitHub Action [`release.yml`](.github/workflows/release.yml) ejecuta el análisis estático y los tests con PHP 7.4 y 8.4 sobre MySQL. Si pasan y la versión es nueva, genera el zip y publica la Release `vX.Y.Z`. Las webs con el plugin instalado verán la actualización en **Plugins**, o al instante con el enlace «Buscar actualizaciones».
 
 Para generar el zip en local: `./build.sh`.
+
+## Traducciones
+
+El plugin está escrito en español e incluye inglés (`en_US`, también para `en_GB` y otras variantes) y catalán (`ca`). Tras añadir o cambiar textos, ejecuta `bin/i18n.sh` (necesita gettext), traduce las entradas nuevas de cada `.po` y vuelve a ejecutarlo para compilar los `.mo`.

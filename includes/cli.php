@@ -14,7 +14,7 @@ class Inpulsia_Medios_CLI {
 		}
 		$admins = get_users( [ 'role' => 'administrator', 'number' => 1, 'fields' => 'ID' ] );
 		if ( ! $admins ) {
-			WP_CLI::error( 'No hay administradores. Indica un usuario con --user=<id|login>.' );
+			WP_CLI::error( __( 'No hay administradores. Indica un usuario con --user=<id|login>.', 'inpulsia-medios' ) );
 		}
 		wp_set_current_user( (int) $admins[0] );
 	}
@@ -42,14 +42,14 @@ class Inpulsia_Medios_CLI {
 		$this->require_user();
 		$file = $args[0];
 		if ( ! is_readable( $file ) ) {
-			WP_CLI::error( "No se puede leer {$file}." );
+			WP_CLI::error( sprintf( __( 'No se puede leer %s.', 'inpulsia-medios' ), $file ) );
 		}
 		$rows = inpulsia_medios_parse_file( $file );
 		if ( is_wp_error( $rows ) ) {
 			WP_CLI::error( $rows->get_error_message() );
 		}
 		if ( ! $rows ) {
-			WP_CLI::error( 'El archivo está vacío o no tiene columna ID.' );
+			WP_CLI::error( __( 'El archivo está vacío o no tiene columna ID.', 'inpulsia-medios' ) );
 		}
 
 		list( $items, $valid ) = inpulsia_medios_build_preview( $rows );
@@ -57,7 +57,7 @@ class Inpulsia_Medios_CLI {
 		foreach ( $items as $item ) {
 			$changes = [];
 			foreach ( $item['changes'] ?? [] as $f => $v ) {
-				$changes[] = $f . ': ' . ( $v === '' ? '(vacío)' : $v );
+				$changes[] = $f . ': ' . ( $v === '' ? __( '(vacío)', 'inpulsia-medios' ) : $v );
 			}
 			$table[] = [
 				'ID'      => $item['id'],
@@ -66,12 +66,12 @@ class Inpulsia_Medios_CLI {
 			];
 		}
 		WP_CLI\Utils\format_items( 'table', $table, [ 'ID', 'Cambios', 'Avisos' ] );
-		WP_CLI::log( count( $valid ) . ' medios con cambios.' );
+		WP_CLI::log( sprintf( __( '%d medios con cambios.', 'inpulsia-medios' ), count( $valid ) ) );
 
 		if ( ! $valid || isset( $assoc['dry-run'] ) ) {
 			return;
 		}
-		WP_CLI::confirm( '¿Aplicar los cambios?', $assoc );
+		WP_CLI::confirm( __( '¿Aplicar los cambios?', 'inpulsia-medios' ), $assoc );
 
 		$token = inpulsia_medios_new_token();
 		inpulsia_medios_history_add( [
@@ -107,7 +107,7 @@ class Inpulsia_Medios_CLI {
 			$token
 		) );
 		if ( $purged ) {
-			WP_CLI::log( 'Cachés vaciadas: ' . implode( ', ', $purged ) . '.' );
+			WP_CLI::log( sprintf( __( 'Cachés vaciadas: %s.', 'inpulsia-medios' ), implode( ', ', $purged ) ) );
 		}
 	}
 
@@ -137,7 +137,7 @@ class Inpulsia_Medios_CLI {
 	public function export( $args, $assoc ) {
 		$out = fopen( $args[0], 'w' );
 		if ( ! $out ) {
-			WP_CLI::error( "No se puede escribir {$args[0]}." );
+			WP_CLI::error( sprintf( __( 'No se puede escribir %s.', 'inpulsia-medios' ), $args[0] ) );
 		}
 		$n = inpulsia_medios_export_write( $out, [
 			'type'        => isset( $assoc['all'] ) ? 'all' : 'image',
@@ -147,7 +147,7 @@ class Inpulsia_Medios_CLI {
 			'to'          => $assoc['to'] ?? '',
 		] );
 		fclose( $out );
-		WP_CLI::success( "{$n} medios exportados a {$args[0]}." );
+		WP_CLI::success( sprintf( __( '%1$d medios exportados a %2$s.', 'inpulsia-medios' ), $n, $args[0] ) );
 	}
 
 	/**
@@ -166,7 +166,7 @@ class Inpulsia_Medios_CLI {
 				'Estado'  => $e['status'],
 			];
 		}, inpulsia_medios_history() );
-		WP_CLI\Utils\format_items( 'table', $rows, [ 'Token', 'Fecha', 'Origen', 'Usuario', 'Cambios', 'Estado' ] );
+		WP_CLI\Utils\format_items( 'table', $rows, [ 'Token', __( 'Fecha', 'inpulsia-medios' ), __( 'Origen', 'inpulsia-medios' ), __( 'Usuario', 'inpulsia-medios' ), 'Cambios', __( 'Estado', 'inpulsia-medios' ) ] );
 	}
 
 	/**
@@ -184,9 +184,9 @@ class Inpulsia_Medios_CLI {
 		$this->require_user();
 		$entry = inpulsia_medios_history_find( sanitize_key( $args[0] ) );
 		if ( ! $entry || $entry['status'] === 'deshecho' ) {
-			WP_CLI::error( 'Esta importación no existe o ya se deshizo.' );
+			WP_CLI::error( __( 'Esta importación no existe o ya se deshizo.', 'inpulsia-medios' ) );
 		}
-		WP_CLI::confirm( "¿Deshacer {$entry['changed']} cambios de «{$entry['file']}»?", $assoc );
+		WP_CLI::confirm( sprintf( __( '¿Deshacer %1$d cambios de «%2$s»?', 'inpulsia-medios' ), $entry['changed'], $entry['file'] ), $assoc );
 		$results = inpulsia_medios_undo_rows( inpulsia_medios_undo_entries( $entry['token'] ) );
 		inpulsia_medios_history_update( $entry['token'], [ 'status' => 'deshecho' ] );
 		inpulsia_medios_purge_caches();
@@ -195,7 +195,7 @@ class Inpulsia_Medios_CLI {
 				WP_CLI::warning( "ID {$r['id']}: {$r['msg']}" );
 			}
 		}
-		WP_CLI::success( count( $results ) . ' medios restaurados.' );
+		WP_CLI::success( sprintf( __( '%d medios restaurados.', 'inpulsia-medios' ), count( $results ) ) );
 	}
 }
 

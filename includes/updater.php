@@ -101,8 +101,8 @@ class Inpulsia_Medios_Updater {
 			'last_updated'  => $release['date'],
 			'download_link' => $release['package'],
 			'sections'      => [
-				'description' => '<p>Edición masiva de los medios de WordPress: nombre de archivo, título, texto alternativo, leyenda y descripción desde CSV, Excel, una tabla editable o WP-CLI, con sugerencias de IA.</p>'
-					. '<p>Optimiza imágenes (JPG o WebP, ancho máximo y compresión) manteniendo las transparentes. Al renombrar o convertir actualiza las URLs en todo el sitio, crea redirecciones 301, vacía cachés y permite deshacer desde el historial.</p>',
+				'description' => __( '<p>Edición masiva de los medios de WordPress: nombre de archivo, título, texto alternativo, leyenda y descripción desde CSV, Excel, una tabla editable o WP-CLI, con sugerencias de IA.</p>', 'inpulsia-medios' )
+					. __( '<p>Optimiza imágenes (JPG o WebP, ancho máximo y compresión) manteniendo las transparentes. Al renombrar o convertir actualiza las URLs en todo el sitio, crea redirecciones 301, vacía cachés y permite deshacer desde el historial.</p>', 'inpulsia-medios' ),
 				'changelog'   => $this->notes_html( $release['notes'] ),
 			],
 		];
@@ -114,7 +114,7 @@ class Inpulsia_Medios_Updater {
 			return trim( ltrim( trim( $line ), '-*' ) );
 		}, explode( "\n", (string) $notes ) ) );
 		if ( ! $items ) {
-			return '<p>Sin notas de versión.</p>';
+			return __( '<p>Sin notas de versión.</p>', 'inpulsia-medios' );
 		}
 		return '<ul><li>' . implode( '</li><li>', array_map( 'esc_html', $items ) ) . '</li></ul>';
 	}
@@ -132,7 +132,7 @@ class Inpulsia_Medios_Updater {
 		if ( $wp_filesystem && $wp_filesystem->move( $source, $target, true ) ) {
 			return $target;
 		}
-		return new WP_Error( 'inpulsia_medios_folder', 'No se pudo preparar la carpeta del plugin.' );
+		return new WP_Error( 'inpulsia_medios_folder', __( 'No se pudo preparar la carpeta del plugin.', 'inpulsia-medios' ) );
 	}
 
 	public function purge() {

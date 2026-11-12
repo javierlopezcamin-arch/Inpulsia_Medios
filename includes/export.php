@@ -9,7 +9,7 @@ add_action( 'admin_post_inpulsia_medios_template', 'inpulsia_medios_template' );
 function inpulsia_medios_template() {
 	check_admin_referer( 'inpulsia_medios_template' );
 	if ( ! current_user_can( 'upload_files' ) ) {
-		wp_die( 'No tienes permisos.' );
+		wp_die( esc_html__( 'No tienes permisos.', 'inpulsia-medios' ) );
 	}
 	nocache_headers();
 	header( 'Content-Type: text/csv; charset=utf-8' );
@@ -17,7 +17,7 @@ function inpulsia_medios_template() {
 	$out = fopen( 'php://output', 'w' );
 	fwrite( $out, "\xEF\xBB\xBF" );
 	fputcsv( $out, [ 'ID', 'filename', 'title', 'alt', 'caption', 'description' ], ';', '"', '' );
-	fputcsv( $out, [ '123', 'reforma-cocina-santander', 'Reforma de cocina en Santander', 'Cocina reformada con encimera de madera y muebles blancos', '', INPULSIA_MEDIOS_CLEAR ], ';', '"', '' );
+	fputcsv( $out, [ '123', 'reforma-cocina-santander', __( 'Reforma de cocina en Santander', 'inpulsia-medios' ), __( 'Cocina reformada con encimera de madera y muebles blancos', 'inpulsia-medios' ), '', INPULSIA_MEDIOS_CLEAR ], ';', '"', '' );
 	fclose( $out );
 	exit;
 }
@@ -25,7 +25,7 @@ function inpulsia_medios_template() {
 function inpulsia_medios_export() {
 	check_admin_referer( 'inpulsia_medios_export' );
 	if ( ! current_user_can( 'upload_files' ) ) {
-		wp_die( 'No tienes permisos para exportar medios.' );
+		wp_die( esc_html__( 'No tienes permisos para exportar medios.', 'inpulsia-medios' ) );
 	}
 	$date = function ( $key ) {
 		$v = sanitize_text_field( wp_unslash( $_GET[ $key ] ?? '' ) );
@@ -120,10 +120,10 @@ function inpulsia_medios_usage( $id, $stem, $featured, $gallery ) {
 	};
 
 	foreach ( $featured as $pid ) {
-		$uses[] = $label( $pid, 'Destacada' );
+		$uses[] = $label( $pid, __( 'Destacada', 'inpulsia-medios' ) );
 	}
 	foreach ( $gallery as $pid ) {
-		$uses[] = $label( $pid, 'Galería' );
+		$uses[] = $label( $pid, __( 'Galería', 'inpulsia-medios' ) );
 	}
 
 	$rel    = dirname( (string) get_post_meta( $id, '_wp_attached_file', true ) );
@@ -136,7 +136,7 @@ function inpulsia_medios_usage( $id, $stem, $featured, $gallery ) {
 		$like
 	) );
 	foreach ( $in_content as $pid ) {
-		$uses[] = $label( $pid, 'Contenido' );
+		$uses[] = $label( $pid, __( 'Contenido', 'inpulsia-medios' ) );
 	}
 
 	$in_elementor = $wpdb->get_col( $wpdb->prepare(
@@ -145,12 +145,12 @@ function inpulsia_medios_usage( $id, $stem, $featured, $gallery ) {
 		$like_e
 	) );
 	foreach ( $in_elementor as $pid ) {
-		$uses[] = $label( $pid, 'Elementor' );
+		$uses[] = $label( $pid, __( 'Elementor', 'inpulsia-medios' ) );
 	}
 
 	$parent = wp_get_post_parent_id( $id );
 	if ( $parent && ! $uses ) {
-		$uses[] = $label( $parent, 'Subida en' );
+		$uses[] = $label( $parent, __( 'Subida en', 'inpulsia-medios' ) );
 	}
 
 	return array_values( array_unique( array_filter( $uses ) ) );

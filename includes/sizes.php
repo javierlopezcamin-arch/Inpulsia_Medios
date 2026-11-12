@@ -10,9 +10,9 @@ add_filter( 'wp_update_attachment_metadata', 'inpulsia_medios_track_size', 10, 2
 
 function inpulsia_medios_weights() {
 	return [
-		'300k' => [ 300 * KB_IN_BYTES, 'Más de 300 KB' ],
-		'1m'   => [ MB_IN_BYTES, 'Más de 1 MB' ],
-		'2m'   => [ 2 * MB_IN_BYTES, 'Más de 2 MB' ],
+		'300k' => [ 300 * KB_IN_BYTES, __( 'Más de 300 KB', 'inpulsia-medios' ) ],
+		'1m'   => [ MB_IN_BYTES, __( 'Más de 1 MB', 'inpulsia-medios' ) ],
+		'2m'   => [ 2 * MB_IN_BYTES, __( 'Más de 2 MB', 'inpulsia-medios' ) ],
 	];
 }
 
@@ -21,7 +21,7 @@ function inpulsia_medios_formats() {
 		'jpg'   => [ [ 'image/jpeg' ], 'JPG' ],
 		'png'   => [ [ 'image/png' ], 'PNG' ],
 		'webp'  => [ [ 'image/webp' ], 'WebP' ],
-		'heavy' => [ [ 'image/png', 'image/gif', 'image/bmp', 'image/tiff' ], 'PNG, GIF y otros pesados' ],
+		'heavy' => [ [ 'image/png', 'image/gif', 'image/bmp', 'image/tiff' ], __( 'PNG, GIF y otros pesados', 'inpulsia-medios' ) ],
 	];
 }
 

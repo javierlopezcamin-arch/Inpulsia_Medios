@@ -8,9 +8,9 @@ add_action( 'admin_post_inpulsia_medios_settings', 'inpulsia_medios_save_setting
 
 function inpulsia_medios_ai_models() {
 	return [
-		'claude-opus-5-5'   => 'Claude Opus 5.5 (mejor calidad)',
-		'claude-sonnet-5-5' => 'Claude Sonnet 5.5 (equilibrado)',
-		'claude-haiku-5-5'  => 'Claude Haiku 5.5 (más barato)',
+		'claude-opus-5-5'   => __( 'Claude Opus 5.5 (mejor calidad)', 'inpulsia-medios' ),
+		'claude-sonnet-5-5' => __( 'Claude Sonnet 5.5 (equilibrado)', 'inpulsia-medios' ),
+		'claude-haiku-5-5'  => __( 'Claude Haiku 5.5 (más barato)', 'inpulsia-medios' ),
 	];
 }
 
@@ -34,7 +34,7 @@ function inpulsia_medios_api_key() {
 function inpulsia_medios_save_settings() {
 	check_admin_referer( 'inpulsia_medios_settings' );
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( 'No tienes permisos.' );
+		wp_die( esc_html__( 'No tienes permisos.', 'inpulsia-medios' ) );
 	}
 	$s      = inpulsia_medios_settings();
 	$models = inpulsia_medios_ai_models();
@@ -50,6 +50,10 @@ function inpulsia_medios_save_settings() {
 	$s['context'] = sanitize_textarea_field( wp_unslash( $_POST['context'] ?? '' ) );
 
 	update_option( 'inpulsia_medios_settings', $s, false );
+
+	$opt         = inpulsia_medios_opt_settings();
+	$opt['auto'] = ! empty( $_POST['auto_optimize'] );
+	update_option( 'inpulsia_medios_opt', $opt, false );
 	wp_safe_redirect( admin_url( 'upload.php?page=inpulsia-medios&tab=ajustes&saved=1' ) );
 	exit;
 }
@@ -58,7 +62,7 @@ function inpulsia_medios_ajax_suggest() {
 	check_ajax_referer( 'inpulsia_medios_nonce', 'nonce' );
 	$id = absint( $_POST['id'] ?? 0 );
 	if ( ! $id || ! current_user_can( 'edit_post', $id ) ) {
-		wp_send_json_error( 'No tienes permisos para editar este medio.' );
+		wp_send_json_error( __( 'No tienes permisos para editar este medio.', 'inpulsia-medios' ) );
 	}
 	$r = inpulsia_medios_suggest( $id );
 	if ( is_wp_error( $r ) ) {
@@ -92,7 +96,7 @@ function inpulsia_medios_ai_image( $id ) {
 function inpulsia_medios_suggest( $id ) {
 	$key = inpulsia_medios_api_key();
 	if ( $key === '' ) {
-		return new WP_Error( 'no_key', 'Falta la clave de la API de Claude en Ajustes.' );
+		return new WP_Error( 'no_key', __( 'Falta la clave de la API de Claude en Ajustes.', 'inpulsia-medios' ) );
 	}
 	$settings = inpulsia_medios_settings();
 	$cur      = inpulsia_medios_current( $id );
@@ -105,6 +109,10 @@ function inpulsia_medios_suggest( $id ) {
 	$context .= 'Idioma de los textos: ' . ( $lang !== '' ? $lang : get_locale() ) . "\n";
 	if ( $settings['context'] !== '' ) {
 		$context .= "Contexto del negocio:\n" . $settings['context'] . "\n";
+	}
+	$keywords = array_values( array_unique( array_filter( wp_list_pluck( inpulsia_medios_where_used( $id ), 'keyword' ) ) ) );
+	if ( $keywords ) {
+		$context .= 'Palabra clave SEO de las páginas donde aparece (úsala con naturalidad si encaja con lo que se ve): ' . implode( ' | ', $keywords ) . "\n";
 	}
 	$context .= 'Dónde se usa la imagen: ' . ( $usage ? implode( ' | ', $usage ) : 'sin uso detectado' ) . "\n";
 	$context .= 'Nombre de archivo actual: ' . $cur['filename'] . "\n";
@@ -175,25 +183,25 @@ function inpulsia_medios_suggest( $id ) {
 		'body'    => wp_json_encode( $body ),
 	] );
 	if ( is_wp_error( $res ) ) {
-		return new WP_Error( 'http', 'No se pudo conectar con Claude: ' . $res->get_error_message() );
+		return new WP_Error( 'http', sprintf( __( 'No se pudo conectar con Claude: %s', 'inpulsia-medios' ), $res->get_error_message() ) );
 	}
 
 	$code = wp_remote_retrieve_response_code( $res );
 	$data = json_decode( wp_remote_retrieve_body( $res ), true );
 	if ( $code !== 200 ) {
 		$messages = [
-			401 => 'La clave de la API no es válida.',
-			403 => 'La clave no tiene permiso para este modelo.',
-			429 => 'Límite de uso de la API alcanzado. Espera un momento.',
+			401 => __( 'La clave de la API no es válida.', 'inpulsia-medios' ),
+			403 => __( 'La clave no tiene permiso para este modelo.', 'inpulsia-medios' ),
+			429 => __( 'Límite de uso de la API alcanzado. Espera un momento.', 'inpulsia-medios' ),
 		];
 		$detail = $data['error']['message'] ?? '';
-		return new WP_Error( 'api', $messages[ $code ] ?? "Error de la API ({$code}). {$detail}" );
+		return new WP_Error( 'api', $messages[ $code ] ?? sprintf( __( 'Error de la API (%1$d). %2$s', 'inpulsia-medios' ), $code, $detail ) );
 	}
 	if ( ( $data['stop_reason'] ?? '' ) === 'refusal' ) {
-		return new WP_Error( 'refusal', 'Claude no ha querido describir esta imagen.' );
+		return new WP_Error( 'refusal', __( 'Claude no ha querido describir esta imagen.', 'inpulsia-medios' ) );
 	}
 	if ( ( $data['stop_reason'] ?? '' ) === 'max_tokens' ) {
-		return new WP_Error( 'truncated', 'La respuesta se cortó. Vuelve a intentarlo.' );
+		return new WP_Error( 'truncated', __( 'La respuesta se cortó. Vuelve a intentarlo.', 'inpulsia-medios' ) );
 	}
 
 	$text = '';
@@ -204,7 +212,7 @@ function inpulsia_medios_suggest( $id ) {
 	}
 	$json = json_decode( $text, true );
 	if ( ! is_array( $json ) || ! isset( $json['alt'], $json['filename'], $json['title'] ) ) {
-		return new WP_Error( 'bad_json', 'Respuesta inesperada de Claude.' );
+		return new WP_Error( 'bad_json', __( 'Respuesta inesperada de Claude.', 'inpulsia-medios' ) );
 	}
 
 	return [

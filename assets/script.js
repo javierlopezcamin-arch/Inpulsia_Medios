@@ -5,6 +5,12 @@
 	var token = null;
 	var applyAction = 'inpulsia_medios_apply';
 
+	// Translations come from PHP (wp_localize_script); %s placeholders are filled in order.
+	function t(text) {
+		var out = (cfg.i18n && cfg.i18n[text]) || text, args = arguments, i = 1;
+		return out.replace(/%s/g, function () { return args[i++]; });
+	}
+
 	function txt(tag, text, cls) {
 		var $el = $('<' + tag + '>').text(text == null ? '' : String(text));
 		if (cls) $el.addClass(cls);
@@ -16,7 +22,7 @@
 	}
 
 	function shown(v) {
-		return v === '' ? '(vacío)' : v;
+		return v === '' ? t('(vacío)') : v;
 	}
 
 	/* ---------- Import ---------- */
@@ -36,11 +42,11 @@
 
 		$.ajax({ url: cfg.ajax_url, type: 'POST', data: fd, processData: false, contentType: false, dataType: 'json' })
 			.done(function (res) {
-				if (!res.success) return alert(res.data || 'Error al procesar el archivo.');
+				if (!res.success) return alert(res.data || t('Error al procesar el archivo.'));
 				token = res.data.token;
 				renderPreview(res.data);
 			})
-			.fail(function (xhr, textStatus) { alert(textStatus === 'parsererror' ? 'El servidor ha devuelto una respuesta no válida. Revisa el registro de errores de PHP.' : 'Error de conexión con el servidor.'); })
+			.fail(function (xhr, textStatus) { alert(textStatus === 'parsererror' ? t('El servidor ha devuelto una respuesta no válida. Revisa el registro de errores de PHP.') : t('Error de conexión con el servidor.')); })
 			.always(function () { $spinner.removeClass('is-active'); });
 	});
 
@@ -64,18 +70,18 @@
 		var name = $tr.find('[data-field="filename"]').val() || '';
 		var alt = ($tr.find('[data-field="alt"]').val() || '').trim();
 		var n = [];
-		if (name && CAMERA.test(name)) n.push('Nombre de cámara o genérico: no dice nada a Google.');
-		if (name && slug(name) !== name) n.push('Se guardará como «' + slug(name) + '».');
-		if (name.length > 60) n.push('Demasiado largo: mejor 3-6 palabras.');
+		if (name && CAMERA.test(name)) n.push(t('Nombre de cámara o genérico: no dice nada a Google.'));
+		if (name && slug(name) !== name) n.push(t('Se guardará como «%s».', slug(name)));
+		if (name.length > 60) n.push(t('Demasiado largo: mejor 3-6 palabras.'));
 		out.filename = n;
 		var a = [];
-		if (!alt) a.push('Falta el alt.');
+		if (!alt) a.push(t('Falta el alt.'));
 		else {
-			if (/^(imagen|foto|fotograf[ií]a|image|picture|img)\b/i.test(alt)) a.push('No empieces por «imagen de»: describe directamente.');
-			if (/^[a-z0-9]+(-[a-z0-9]+)+$/i.test(alt)) a.push('Parece un nombre de archivo, no una frase.');
-			if (alt.split(/\s+/).length < 3) a.push('Muy corto: describe qué se ve.');
+			if (/^(imagen|foto|fotograf[ií]a|image|picture|img)\b/i.test(alt)) a.push(t('No empieces por «imagen de»: describe directamente.'));
+			if (/^[a-z0-9]+(-[a-z0-9]+)+$/i.test(alt)) a.push(t('Parece un nombre de archivo, no una frase.'));
+			if (alt.split(/\s+/).length < 3) a.push(t('Muy corto: describe qué se ve.'));
 			var dup = $grid.find('[data-field="alt"]').filter(function () { return this !== $tr.find('[data-field="alt"]')[0] && $(this).val().trim().toLowerCase() === alt.toLowerCase(); }).length;
-			if (dup) a.push('Alt repetido en otra imagen de esta página.');
+			if (dup) a.push(t('Alt repetido en otra imagen de esta página.'));
 		}
 		out.alt = a;
 		$tr.find('.im-hint').each(function () {
@@ -93,7 +99,7 @@
 		});
 		$tr.toggleClass('row-dirty', dirty);
 		var n = $grid.find('tr.row-dirty').length;
-		$('#inpulsia-medios-dirty').text(n ? n + ' imágenes con cambios sin revisar' : '');
+		$('#inpulsia-medios-dirty').text(n ? t('%s imágenes con cambios sin revisar', n) : '');
 		var len = ($tr.find('[data-field="alt"]').val() || '').length;
 		$tr.find('.inpulsia-medios-chars').text(len + '/125').toggleClass('too-long', len > 125);
 		hints($tr);
@@ -106,7 +112,7 @@
 	function refreshSelection() {
 		var n = selectedRows().length;
 		$('.im-actionbar').prop('hidden', !n);
-		$('#im-selected-count').text(n === 1 ? '1 seleccionada' : n + ' seleccionadas');
+		$('#im-selected-count').text(n === 1 ? t('1 seleccionada') : t('%s seleccionadas', n));
 	}
 
 	function setField($f, v) {
@@ -130,14 +136,14 @@
 		var sent = $f.val();
 		$.post(cfg.ajax_url, { action: 'inpulsia_medios_autosave', nonce: cfg.nonce, id: $f.closest('tr').data('id'), field: field, value: sent }, null, 'json')
 			.done(function (res) {
-				if (!res.success) { $td.addClass('is-save-error').attr('title', res.data || 'Error'); return; }
+				if (!res.success) { $td.addClass('is-save-error').attr('title', res.data || t('Error')); return; }
 				$f.attr('data-orig', res.data.value);
 				if ($f.val() === sent) $f.val(res.data.value);
 				$td.addClass('is-saved');
 				setTimeout(function () { $td.removeClass('is-saved'); }, 1500);
 				updateRowState($f.closest('tr'));
 			})
-			.fail(function () { $td.addClass('is-save-error').attr('title', 'Error de conexión: no se ha guardado'); })
+			.fail(function () { $td.addClass('is-save-error').attr('title', t('Error de conexión: no se ha guardado')); })
 			.always(function () { $td.removeClass('is-saving'); });
 	}
 
@@ -191,9 +197,9 @@
 		});
 
 		$('#im-copy-down').on('click', function () {
-			if (!lastField) return alert('Escribe primero en el campo que quieres copiar.');
+			if (!lastField) return alert(t('Escribe primero en el campo que quieres copiar.'));
 			var $src = $(lastField), f = $src.data('field');
-			if (f === 'filename') return alert('Los nombres de archivo deben ser distintos: usa una plantilla con {n}.');
+			if (f === 'filename') return alert(t('Los nombres de archivo deben ser distintos: usa una plantilla con {n}.'));
 			selectedRows().each(function () {
 				var $f = $(this).find('[data-field="' + f + '"]');
 				if ($f[0] !== lastField) { setField($f, $src.val()); save($f); }
@@ -220,6 +226,7 @@
 				n++;
 				var vars = {
 					pagina: $tr.data('page') || $tr.find('[data-field="title"]').val() || '',
+					keyword: $tr.data('keyword') || $tr.data('page') || '',
 					titulo: $tr.find('[data-field="title"]').val() || '',
 					web: cfg.site || '',
 					nombre: $tr.find('[data-field="filename"]').val() || '',
@@ -231,7 +238,7 @@
 				if (field === 'filename') v = slug(v);
 				if (v) { setField($f, v); save($f); changed++; }
 			});
-			alert(changed ? changed + ' campos rellenados. Revisa la tabla y pulsa «Revisar cambios».' : 'No había ningún campo que rellenar con esas condiciones.');
+			alert(changed ? t('%s campos rellenados. Revisa la tabla y pulsa «Revisar cambios».', changed) : t('No había ningún campo que rellenar con esas condiciones.'));
 		});
 
 		window.addEventListener('beforeunload', function (e) {
@@ -254,17 +261,17 @@
 			});
 			rows.push(row);
 		});
-		if (!rows.length) return alert('No has cambiado nada.');
+		if (!rows.length) return alert(t('No has cambiado nada.'));
 
 		var $btn = $(this).prop('disabled', true).addClass('is-loading');
 		$.post(cfg.ajax_url, { action: 'inpulsia_medios_stage', nonce: cfg.nonce, rows: JSON.stringify(rows) }, null, 'json')
 			.done(function (res) {
-				if (!res.success) return alert(res.data || 'Error.');
+				if (!res.success) return alert(res.data || t('Error.'));
 				token = res.data.token;
 				$('#inpulsia-medios-grid-wrap').prop('hidden', true);
 				renderPreview(res.data);
 			})
-			.fail(function (xhr, textStatus) { alert(textStatus === 'parsererror' ? 'El servidor ha devuelto una respuesta no válida. Revisa el registro de errores de PHP.' : 'Error de conexión con el servidor.'); })
+			.fail(function (xhr, textStatus) { alert(textStatus === 'parsererror' ? t('El servidor ha devuelto una respuesta no válida. Revisa el registro de errores de PHP.') : t('Error de conexión con el servidor.')); })
 			.always(function () { $btn.prop('disabled', false).removeClass('is-loading'); });
 	});
 
@@ -276,7 +283,7 @@
 		return $.post(cfg.ajax_url, { action: 'inpulsia_medios_suggest', nonce: cfg.nonce, id: $tr.data('id') }, null, 'json')
 			.done(function (res) {
 				if (!res.success) {
-					$tr.find('.col-ai').append(txt('div', res.data || 'Error', 'ai-error'));
+					$tr.find('.col-ai').append(txt('div', res.data || t('Error'), 'ai-error'));
 					return;
 				}
 				$.each(['alt', 'filename', 'title'], function (_, f) {
@@ -284,7 +291,7 @@
 				});
 				updateRowState($tr);
 			})
-			.fail(function () { $tr.find('.col-ai').append(txt('div', 'Error de conexión', 'ai-error')); })
+			.fail(function () { $tr.find('.col-ai').append(txt('div', t('Error de conexión'), 'ai-error')); })
 			.always(function () { $btn.prop('disabled', false).removeClass('is-busy'); });
 	}
 
@@ -292,7 +299,7 @@
 
 	$('#inpulsia-medios-suggest-selected').on('click', function () {
 		var queue = selectedRows().toArray();
-		if (!queue.length) return alert('Selecciona al menos una imagen.');
+		if (!queue.length) return alert(t('Selecciona al menos una imagen.'));
 		var $btn = $(this).prop('disabled', true);
 		var running = 0;
 		(function next() {
@@ -311,7 +318,7 @@
 			action: 'inpulsia_medios_opt_stage',
 			nonce: cfg.nonce,
 			mode: mode,
-			format: $('#im-opt-format').val(),
+			target: $('#im-opt-format').val(),
 			max_width: $('#im-opt-width').val(),
 			quality: $('#im-opt-quality').val(),
 			backup: $('#im-opt-backup').is(':checked'),
@@ -320,7 +327,7 @@
 		};
 		if (mode === 'selected') {
 			data.ids = selectedRows().map(function () { return $(this).data('id'); }).get();
-			if (!data.ids.length) return alert('Selecciona al menos una imagen.');
+			if (!data.ids.length) return alert(t('Selecciona al menos una imagen.'));
 		} else {
 			var params = new URLSearchParams(location.search);
 			data.s = params.get('s') || '';
@@ -328,16 +335,19 @@
 			data.missing_alt = params.get('missing_alt') || '';
 			data.format = params.get('format') || '';
 			data.weight = params.get('weight') || '';
+			data.names = params.get('names') || '';
+			data.lang = params.get('lang') || '';
+			data.ids = params.get('ids') || '';
 		}
 		var $btns = $('#inpulsia-medios-opt-selected, #inpulsia-medios-opt-all').prop('disabled', true).addClass('is-loading');
 		$.post(cfg.ajax_url, data, null, 'json')
 			.done(function (res) {
-				if (!res.success) return alert(res.data || 'Error.');
+				if (!res.success) return alert(res.data || t('Error.'));
 				token = res.data.token;
 				$('#inpulsia-medios-grid-wrap').prop('hidden', true);
 				renderPreview(res.data);
 			})
-			.fail(function (xhr, textStatus) { alert(textStatus === 'parsererror' ? 'El servidor ha devuelto una respuesta no válida. Revisa el registro de errores de PHP.' : 'Error de conexión con el servidor.'); })
+			.fail(function (xhr, textStatus) { alert(textStatus === 'parsererror' ? t('El servidor ha devuelto una respuesta no válida. Revisa el registro de errores de PHP.') : t('Error de conexión con el servidor.')); })
 			.always(function () { $btns.prop('disabled', false).removeClass('is-loading'); });
 	}
 
@@ -355,7 +365,7 @@
 	});
 	$('#inpulsia-medios-opt-all').on('click', function () {
 		var n = $(this).data('total');
-		if (n > 50 && !confirm('Se van a revisar ' + n + ' imágenes. Puede tardar varios minutos. ¿Seguir?')) return;
+		if (n > 50 && !confirm(t('Se van a revisar %s imágenes. Puede tardar varios minutos. ¿Seguir?', n))) return;
 		optimize('filter');
 	});
 
@@ -398,7 +408,7 @@
 			var $changes = $('<td>');
 			var keys = Object.keys(item.changes);
 			if (!keys.length) {
-				$changes.append(txt('em', 'Sin cambios', 'muted'));
+				$changes.append(txt('em', t('Sin cambios'), 'muted'));
 				$tr.addClass('row-skip');
 			}
 			$.each(keys, function (_, f) {
@@ -422,13 +432,13 @@
 		});
 
 		$('#inpulsia-medios-summary').empty().append(
-			txt('span', data.total + (isOpt ? ' imágenes a optimizar · ' + data.bytes + ' actuales' : ' medios con cambios'), 'pill pill-ok'),
-			isOpt && data.listed > data.total ? txt('span', (data.listed - data.total) + ' se omiten', 'pill') : '',
-			isOpt && data.listed > data.items.length ? txt('span', 'se muestran ' + data.items.length + ' de ' + data.listed, 'pill') : '',
-			warnCount ? txt('span', warnCount + ' con avisos', 'pill pill-warn') : '',
-			errCount ? txt('span', errCount + ' con errores', 'pill pill-error') : ''
+			txt('span', isOpt ? t('%s imágenes a optimizar · %s actuales', data.total, data.bytes) : t('%s medios con cambios', data.total), 'pill pill-ok'),
+			isOpt && data.listed > data.total ? txt('span', t('%s se omiten', data.listed - data.total), 'pill') : '',
+			isOpt && data.listed > data.items.length ? txt('span', t('se muestran %s de %s', data.items.length, data.listed), 'pill') : '',
+			warnCount ? txt('span', t('%s con avisos', warnCount), 'pill pill-warn') : '',
+			errCount ? txt('span', t('%s con errores', errCount), 'pill pill-error') : ''
 		);
-		$('#inpulsia-medios-apply').prop('disabled', !data.total).text(isOpt ? 'Optimizar ' + data.total + ' imágenes' : 'Aplicar ' + data.total + ' cambios');
+		$('#inpulsia-medios-apply').prop('disabled', !data.total).text(isOpt ? t('Optimizar %s imágenes', data.total) : t('Aplicar %s cambios', data.total));
 		$('#inpulsia-medios-only-warn').prop('checked', false);
 		$('#inpulsia-medios-preview').prop('hidden', false);
 	}
@@ -444,16 +454,16 @@
 	});
 
 	$('#inpulsia-medios-apply').on('click', function () {
-		if (!token || !confirm('¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial.')) return;
+		if (!token || !confirm(t('¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial.'))) return;
 		$('#inpulsia-medios-preview').prop('hidden', true);
 		window.inpulsiaMediosSaving = true;
-		run(applyAction, token, applyAction === 'inpulsia_medios_opt_apply' ? 'Optimizando imágenes' : 'Aplicando cambios');
+		run(applyAction, token, applyAction === 'inpulsia_medios_opt_apply' ? t('Optimizando imágenes') : t('Aplicando cambios'));
 	});
 
 	$(document).on('click', '.inpulsia-medios-undo', function () {
-		if (!confirm('¿Deshacer esta importación y restaurar los valores anteriores?')) return;
+		if (!confirm(t('¿Deshacer esta importación y restaurar los valores anteriores?'))) return;
 		$('.inpulsia-medios-undo').prop('disabled', true);
-		run('inpulsia_medios_undo', $(this).data('token'), 'Deshaciendo importación');
+		run('inpulsia_medios_undo', $(this).data('token'), t('Deshaciendo importación'));
 	});
 
 	/* ---------- Batch runner ---------- */
@@ -478,7 +488,7 @@
 			attempt = attempt || 0;
 			$.post({ url: cfg.ajax_url, data: { action: action, nonce: cfg.nonce, token: tok, offset: offset }, dataType: 'json', timeout: 300000 })
 				.done(function (res) {
-					if (!res.success) return finish(res.data || 'Error.');
+					if (!res.success) return finish(res.data || t('Error.'));
 					var d = res.data;
 					$.each(d.results, function (_, r) {
 						counts[r.status] = (counts[r.status] || 0) + 1;
@@ -487,19 +497,19 @@
 					});
 					var pct = d.total ? Math.round(d.next / d.total * 100) : 100;
 					$bar.css('width', pct + '%').parent().attr('aria-valuenow', pct);
-					$status.text(d.next + ' de ' + d.total + ' procesados');
+					$status.text(t('%s de %s procesados', d.next, d.total));
 					if (d.done) { purged = d.purged || []; notes = d.notes || []; finish(null); }
 					else step(d.next);
 				})
 				.fail(function (xhr, textStatus) {
 					// Re-running a batch is safe: rows already applied come back as "sin cambios".
-					var why = textStatus === 'parsererror' ? 'respuesta no válida' : textStatus === 'timeout' ? 'tiempo agotado' : (xhr.status || 'sin conexión');
+					var why = textStatus === 'parsererror' ? t('respuesta no válida') : textStatus === 'timeout' ? t('tiempo agotado') : (xhr.status || t('sin conexión'));
 					if (attempt < 2) {
-						$status.text('El servidor ha fallado (' + why + '). Reintentando…');
+						$status.text(t('El servidor ha fallado (%s). Reintentando…', why));
 						setTimeout(function () { step(offset, attempt + 1); }, 3000 * (attempt + 1));
 						return;
 					}
-					finish('El servidor ha fallado (' + why + ') en el registro ' + (offset + 1) + '. Lo ya procesado está guardado en el Historial.', function () {
+					finish(t('El servidor ha fallado (%s) en el registro %s. Lo ya procesado está guardado en el Historial.', why, offset + 1), function () {
 						window.onbeforeunload = function () { return true; };
 						step(offset);
 					});
@@ -511,25 +521,25 @@
 			if (error) {
 				$status.empty().append(txt('span', error, 'log-error'));
 				if (resume) {
-					$status.append(' ', $('<button type="button" class="button">').text('Reanudar').on('click', function () { $(this).remove(); resume(); }));
+					$status.append(' ', $('<button type="button" class="button">').text(t('Reanudar')).on('click', function () { $(this).remove(); resume(); }));
 				}
 				return;
 			}
-			$status.text('Terminado: ' + counts.ok + ' correctos, ' + counts.partial + ' parciales, ' + counts.error + ' errores, ' + counts.skip + ' sin cambios.');
+			$status.text(t('Terminado: %s correctos, %s parciales, %s errores, %s sin cambios.', counts.ok, counts.partial, counts.error, counts.skip));
 			if (before > after) {
 				var mb = function (b) { return (b / 1048576).toFixed(1).replace('.', ',') + ' MB'; };
-				$status.append($('<br>'), txt('strong', 'Ahorro: ' + mb(before - after) + ' (' + mb(before) + ' → ' + mb(after) + ', −' + Math.round((1 - after / before) * 100) + ' %)'));
+				$status.append($('<br>'), txt('strong', t('Ahorro: %s (%s → %s, −%s %)', mb(before - after), mb(before), mb(after), Math.round((1 - after / before) * 100))));
 			}
-			if (purged.length) $status.append($('<br>'), txt('span', 'Cachés vaciadas: ' + purged.join(', ') + '.', 'muted'));
+			if (purged.length) $status.append($('<br>'), txt('span', t('Cachés vaciadas: %s.', purged.join(', ')), 'muted'));
 			$.each(notes, function (_, n) { $status.append($('<br>'), txt('span', n, 'muted')); });
 			if (action === 'inpulsia_medios_undo') {
 				setTimeout(function () { location.reload(); }, 1500);
 				return;
 			}
-			$status.append(' ', $('<a>').attr('href', cfg.history).text('Ver historial / deshacer'));
+			$status.append(' ', $('<a>').attr('href', cfg.history).text(t('Ver historial / deshacer')));
 			$('#inpulsia-medios-file').val('');
 			if ($grid.length) {
-				$status.append(' · ', $('<a href="#">').text('Volver a la tabla').on('click', function (e) { e.preventDefault(); location.reload(); }));
+				$status.append(' · ', $('<a href="#">').text(t('Volver a la tabla')).on('click', function (e) { e.preventDefault(); location.reload(); }));
 			}
 		}
 	}

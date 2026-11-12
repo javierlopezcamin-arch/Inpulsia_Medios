@@ -1,0 +1,1304 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Inpulsia Medios\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ca\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Inicio"
+msgstr "Inici"
+
+msgid "Editar"
+msgstr "Edita"
+
+msgid "Importar"
+msgstr "Importa"
+
+msgid "Exportar"
+msgstr "Exporta"
+
+msgid "Historial"
+msgstr "Historial"
+
+msgid "Redirecciones"
+msgstr "Redireccions"
+
+msgid "Ajustes"
+msgstr "Configuració"
+
+msgid "Vista previa"
+msgstr "Previsualització"
+
+msgid "Mostrar solo filas con avisos"
+msgstr "Mostra només les files amb avisos"
+
+msgid "Cambios"
+msgstr "Canvis"
+
+msgid "Avisos"
+msgstr "Avisos"
+
+msgid "Aplicar cambios"
+msgstr "Aplica els canvis"
+
+msgid "Cancelar"
+msgstr "Cancel·la"
+
+msgid "Procesando"
+msgstr "Processant"
+
+msgid "Subir CSV o Excel"
+msgstr "Puja un CSV o Excel"
+
+msgid "Columnas:"
+msgstr "Columnes:"
+
+msgid "(obligatoria),"
+msgstr "(obligatòria),"
+
+msgid ". Las demás se ignoran."
+msgstr ". La resta s'ignoren."
+
+msgid "Descargar plantilla"
+msgstr "Baixa la plantilla"
+
+msgid "Exportar medios actuales"
+msgstr "Exporta els mitjans actuals"
+
+msgid "Celda vacía = no cambiar. Escribe"
+msgstr "Cel·la buida = no canviar. Escriu"
+
+msgid "para vaciar un campo."
+msgstr "per buidar un camp."
+
+msgid "El nombre de archivo se normaliza para SEO (minúsculas, guiones, sin tildes) y conserva la extensión original."
+msgstr "El nom de fitxer es normalitza per a SEO (minúscules, guions, sense accents) i conserva l'extensió original."
+
+msgid "Al renombrar se actualizan las URLs en todo el sitio, se renombran las copias WebP/AVIF y se crean redirecciones 301 desde las URLs antiguas."
+msgstr "En canviar el nom s'actualitzen les URL a tot el lloc, es reanomenen les còpies WebP/AVIF i es creen redireccions 301 des de les URL antigues."
+
+msgid "Al cambiar el alt también se actualiza en las imágenes ya insertadas en entradas y páginas."
+msgstr "En canviar l'alt també s'actualitza a les imatges ja inserides en entrades i pàgines."
+
+msgid "Ver vista previa"
+msgstr "Previsualitza"
+
+msgid "Buscar medios"
+msgstr "Cerca mitjans"
+
+msgid "Uso"
+msgstr "Ús"
+
+msgid "Cualquier uso"
+msgstr "Qualsevol ús"
+
+msgid "En uso en la web"
+msgstr "En ús al web"
+
+msgid "Sin uso detectado"
+msgstr "Sense ús detectat"
+
+msgid "Formato"
+msgstr "Format"
+
+msgid "Todos los formatos"
+msgstr "Tots els formats"
+
+msgid "Peso"
+msgstr "Pes"
+
+msgid "Cualquier peso"
+msgstr "Qualsevol pes"
+
+msgid "Idioma"
+msgstr "Idioma"
+
+msgid "Idioma activo"
+msgstr "Idioma actiu"
+
+msgid "Todos los idiomas"
+msgstr "Tots els idiomes"
+
+msgid "Sin alt"
+msgstr "Sense alt"
+
+msgid "Nombre poco amigable"
+msgstr "Nom poc amigable"
+
+msgid "Filtrar"
+msgstr "Filtra"
+
+msgid "Quitar filtros"
+msgstr "Treu els filtres"
+
+msgid "imágenes"
+msgstr "imatges"
+
+msgid "Recalcular uso"
+msgstr "Recalcula l'ús"
+
+msgid "Optimizar imágenes"
+msgstr "Optimitza les imatges"
+
+msgid "convertir, reducir peso, nombres amigables y alt"
+msgstr "convertir, reduir pes, noms amigables i alt"
+
+msgid "Esta web ya usa"
+msgstr "Aquest web ja fa servir"
+
+msgid ". Optimizar también aquí puede comprimir dos veces: revisa su configuración antes."
+msgstr ". Optimitzar també aquí pot comprimir dues vegades: revisa'n abans la configuració."
+
+msgid "WebP (≈30 % menos peso)"
+msgstr "WebP (≈30 % menys pes)"
+
+msgid "Ancho máximo"
+msgstr "Amplada màxima"
+
+msgid "Calidad"
+msgstr "Qualitat"
+
+msgid "Copia de seguridad (permite deshacer)"
+msgstr "Còpia de seguretat (permet desfer)"
+
+msgid "Borrar del servidor la imagen anterior al sustituirla"
+msgstr "Esborra del servidor la imatge anterior en substituir-la"
+
+msgid "Configura la clave de Claude en Ajustes"
+msgstr "Configura la clau de Claude a Configuració"
+
+msgid "Nombre y alt con IA si faltan o son de cámara"
+msgstr "Nom i alt amb IA si falten o són de càmera"
+
+msgid "Los PNG con transparencia (logos, iconos) se mantienen en PNG. Los GIF animados no se tocan. Las URLs antiguas redirigen a las nuevas."
+msgstr "Els PNG amb transparència (logotips, icones) es mantenen en PNG. Els GIF animats no es toquen. Les URL antigues redirigeixen a les noves."
+
+msgid "Optimizar las"
+msgstr "Optimitza les"
+
+msgid "del filtro"
+msgstr "del filtre"
+
+msgid "Rellenar con plantilla"
+msgstr "Omple amb plantilla"
+
+msgid "el mismo patrón para muchas imágenes, sin IA"
+msgstr "el mateix patró per a moltes imatges, sense IA"
+
+msgid "Campo"
+msgstr "Camp"
+
+msgid "Plantilla"
+msgstr "Plantilla"
+
+msgid "Solo donde esté vacío o tenga nombre de cámara"
+msgstr "Només on estigui buit o tingui nom de càmera"
+
+msgid "Aplicar"
+msgstr "Aplica"
+
+msgid "Variables:"
+msgstr "Variables:"
+
+msgid "título de la página donde se usa"
+msgstr "títol de la pàgina on s'utilitza"
+
+msgid "palabra clave de Rank Math, Yoast o SEOPress de esa página"
+msgstr "paraula clau de Rank Math, Yoast o SEOPress d'aquesta pàgina"
+
+msgid "título de la imagen"
+msgstr "títol de la imatge"
+
+msgid "número 1, 2, 3…"
+msgstr "número 1, 2, 3…"
+
+msgid "· Se aplica a las seleccionadas, o a toda la página si no hay ninguna. Después revisa y aplica."
+msgstr "· S'aplica a les seleccionades, o a tota la pàgina si no n'hi ha cap. Després revisa i aplica."
+
+msgid "Guardar automáticamente alt, título, leyenda y descripción"
+msgstr "Desa automàticament alt, títol, llegenda i descripció"
+
+msgid "Intro: fila siguiente · Pega una columna de Excel para rellenar hacia abajo"
+msgstr "Intro: fila següent · Enganxa una columna d'Excel per omplir cap avall"
+
+msgid "Revisar cambios"
+msgstr "Revisa els canvis"
+
+msgid "Configura la IA en Ajustes"
+msgstr "Configura la IA a Configuració"
+
+msgid "Seleccionar todas las imágenes de la página"
+msgstr "Selecciona totes les imatges de la pàgina"
+
+msgid "Nombre de archivo"
+msgstr "Nom de fitxer"
+
+msgid "Título"
+msgstr "Títol"
+
+msgid "Leyenda"
+msgstr "Llegenda"
+
+msgid "Descripción"
+msgstr "Descripció"
+
+msgid "Seleccionar imagen %d"
+msgstr "Selecciona la imatge %d"
+
+msgid "Sugerir alt, nombre y título con IA"
+msgstr "Suggereix alt, nom i títol amb IA"
+
+msgid "Sugerir textos con IA para la imagen %d"
+msgstr "Suggereix textos amb IA per a la imatge %d"
+
+msgid "No hay imágenes con estos filtros."
+msgstr "No hi ha imatges amb aquests filtres."
+
+msgid "Acciones con las imágenes seleccionadas"
+msgstr "Accions amb les imatges seleccionades"
+
+msgid "Sugerir con IA"
+msgstr "Suggereix amb IA"
+
+msgid "Optimizar"
+msgstr "Optimitza"
+
+msgid "Copia el campo en el que estabas escribiendo a todas las seleccionadas"
+msgstr "Copia el camp on escrivies a totes les seleccionades"
+
+msgid "Copiar campo a seleccionadas"
+msgstr "Copia el camp a les seleccionades"
+
+msgid "Quitar selección"
+msgstr "Treu la selecció"
+
+msgid "Exportar biblioteca a CSV"
+msgstr "Exporta la biblioteca a CSV"
+
+msgid "Tipo"
+msgstr "Tipus"
+
+msgid "Solo imágenes"
+msgstr "Només imatges"
+
+msgid "Todos los medios"
+msgstr "Tots els mitjans"
+
+msgid "Filtro"
+msgstr "Filtre"
+
+msgid "Solo imágenes sin texto alternativo"
+msgstr "Només imatges sense text alternatiu"
+
+msgid "Subidas entre"
+msgstr "Pujades entre"
+
+msgid "Contexto"
+msgstr "Context"
+
+msgid "Incluir columna"
+msgstr "Inclou la columna"
+
+msgid "Indica en qué páginas, entradas, productos o plantillas de Elementor aparece cada imagen. En bibliotecas muy grandes la exportación tarda más."
+msgstr "Indica en quines pàgines, entrades, productes o plantilles d'Elementor apareix cada imatge. En biblioteques molt grans l'exportació triga més."
+
+msgid "Descargar CSV"
+msgstr "Baixa el CSV"
+
+msgid "Últimas importaciones"
+msgstr "Últimes importacions"
+
+msgid "Se guardan las 20 últimas. Deshacer restaura los valores anteriores, incluidos los nombres de archivo y sus URLs."
+msgstr "Es desen les 20 últimes. Desfer restaura els valors anteriors, inclosos els noms de fitxer i les seves URL."
+
+msgid "Todavía no hay importaciones."
+msgstr "Encara no hi ha importacions."
+
+msgid "Fecha"
+msgstr "Data"
+
+msgid "Origen"
+msgstr "Origen"
+
+msgid "Usuario"
+msgstr "Usuari"
+
+msgid "Filas"
+msgstr "Files"
+
+msgid "Medios cambiados"
+msgstr "Mitjans canviats"
+
+msgid "Estado"
+msgstr "Estat"
+
+msgid "aplicado"
+msgstr "aplicat"
+
+msgid "deshecho"
+msgstr "desfet"
+
+msgid "incompleto"
+msgstr "incomplet"
+
+msgid "Deshacer"
+msgstr "Desfés"
+
+msgid "Deshaciendo"
+msgstr "Desfent"
+
+msgid "Redirecciones 301 de archivos renombrados"
+msgstr "Redireccions 301 de fitxers reanomenats"
+
+msgid "Cuando alguien (o Google Imágenes) pide la URL antigua de un archivo renombrado, se le redirige a la nueva. Funciona en servidores donde las peticiones a archivos que no existen llegan a WordPress, que es lo habitual en Apache y en la mayoría de configuraciones de Nginx."
+msgstr "Quan algú (o Google Imatges) demana la URL antiga d'un fitxer reanomenat, se'l redirigeix a la nova. Funciona en servidors on les peticions a fitxers que no existeixen arriben a WordPress, cosa habitual a Apache i a la majoria de configuracions de Nginx."
+
+msgid "Redirecciones eliminadas."
+msgstr "Redireccions eliminades."
+
+msgid "No hay redirecciones."
+msgstr "No hi ha redireccions."
+
+msgid "%d redirecciones"
+msgstr "%d redireccions"
+
+msgid "(se muestran las %d más recientes)"
+msgstr "(es mostren les %d més recents)"
+
+msgid "Destino"
+msgstr "Destí"
+
+msgid "Visitas"
+msgstr "Visites"
+
+msgid "Creada"
+msgstr "Creada"
+
+msgid "Eliminar"
+msgstr "Elimina"
+
+msgid "Eliminar todas"
+msgstr "Elimina-les totes"
+
+msgid "Solo los administradores pueden eliminar redirecciones."
+msgstr "Només els administradors poden eliminar redireccions."
+
+msgid "Sugerencias con IA"
+msgstr "Suggeriments amb IA"
+
+msgid "Ajustes guardados."
+msgstr "Configuració desada."
+
+msgid "Clave de la API de Claude"
+msgstr "Clau de l'API de Claude"
+
+msgid "Se usa la clave definida en"
+msgstr "S'utilitza la clau definida a"
+
+msgid "Guardada (…%s)"
+msgstr "Desada (…%s)"
+
+msgid "Borrar la clave guardada"
+msgstr "Esborra la clau desada"
+
+msgid "Déjalo en blanco para mantener la actual. Es más seguro definirla en"
+msgstr "Deixa-ho en blanc per mantenir l'actual. És més segur definir-la a"
+
+msgid "Modelo"
+msgstr "Model"
+
+msgid "Contexto SEO de la web"
+msgstr "Context SEO del web"
+
+msgid "Ej.: Reformas integrales en Santander. Palabras clave: reformas de cocina, baños, Cantabria."
+msgstr "Ex.: Reformes integrals a Girona. Paraules clau: reformes de cuina, banys, Catalunya."
+
+msgid "Negocio, ubicación y palabras clave. Se envía en cada sugerencia junto con la imagen y las páginas donde aparece."
+msgstr "Negoci, ubicació i paraules clau. S'envia amb cada suggeriment juntament amb la imatge i les pàgines on apareix."
+
+msgid "Imágenes nuevas"
+msgstr "Imatges noves"
+
+msgid "Optimizar automáticamente cada imagen que se suba"
+msgstr "Optimitza automàticament cada imatge que es pugi"
+
+msgid "Se hace en segundo plano a los pocos segundos de subirla, con las opciones de"
+msgstr "Es fa en segon pla pocs segons després de pujar-la, amb les opcions d'"
+
+msgid "(ahora:"
+msgstr "(ara:"
+
+msgid "). Queda en el Historial y se puede deshacer."
+msgstr "). Queda a l'Historial i es pot desfer."
+
+msgid "Guardar ajustes"
+msgstr "Desa la configuració"
+
+msgid "Copias de seguridad de imágenes optimizadas"
+msgstr "Còpies de seguretat d'imatges optimitzades"
+
+msgid "archivos antiguos eliminados."
+msgstr "fitxers antics eliminats."
+
+msgid "copias eliminadas."
+msgstr "còpies eliminades."
+
+msgid "copias,"
+msgstr "còpies,"
+
+msgid "en"
+msgstr "a"
+
+msgid ". Sin copia, una optimización ya no se puede deshacer."
+msgstr ". Sense còpia, una optimització ja no es pot desfer."
+
+msgid "archivos antiguos ("
+msgstr "fitxers antics ("
+
+msgid ") se conservan durante"
+msgstr ") es conserven durant"
+
+msgid "días tras renombrar u optimizar, para que las cachés y los enlaces externos no muestren imágenes rotas. Se borran solos."
+msgstr "dies després de reanomenar o optimitzar, perquè les memòries cau i els enllaços externs no mostrin imatges trencades. S'esborren sols."
+
+msgid "Borrar ya los archivos antiguos"
+msgstr "Esborra ara els fitxers antics"
+
+msgid "Borrar las de más de 30 días ("
+msgstr "Esborra les de més de 30 dies ("
+
+msgid "Borrar todas"
+msgstr "Esborra-les totes"
+
+msgid "Solo los administradores pueden borrar copias."
+msgstr "Només els administradors poden esborrar còpies."
+
+msgid "No tienes permisos para editar medios."
+msgstr "No tens permisos per editar mitjans."
+
+msgid "Error al subir el archivo."
+msgstr "Error en pujar el fitxer."
+
+msgid "El archivo está vacío o no tiene columna ID."
+msgstr "El fitxer és buit o no té columna ID."
+
+msgid "No hay cambios que revisar."
+msgstr "No hi ha canvis per revisar."
+
+msgid "La sesión ha caducado. Vuelve a cargar los cambios."
+msgstr "La sessió ha caducat. Torna a carregar els canvis."
+
+msgid "Esta importación no se puede deshacer."
+msgstr "Aquesta importació no es pot desfer."
+
+msgid "No hay imágenes seleccionadas."
+msgstr "No hi ha imatges seleccionades."
+
+msgid "La sesión ha caducado. Vuelve a lanzar la optimización."
+msgstr "La sessió ha caducat. Torna a llançar l'optimització."
+
+msgid "Este campo no se guarda automáticamente."
+msgstr "Aquest camp no es desa automàticament."
+
+msgid "Claude Opus 5.5 (mejor calidad)"
+msgstr "Claude Opus 5.5 (millor qualitat)"
+
+msgid "Claude Sonnet 5.5 (equilibrado)"
+msgstr "Claude Sonnet 5.5 (equilibrat)"
+
+msgid "Claude Haiku 5.5 (más barato)"
+msgstr "Claude Haiku 5.5 (més econòmic)"
+
+msgid "No tienes permisos."
+msgstr "No tens permisos."
+
+msgid "No tienes permisos para editar este medio."
+msgstr "No tens permisos per editar aquest mitjà."
+
+msgid "Falta la clave de la API de Claude en Ajustes."
+msgstr "Falta la clau de l'API de Claude a Configuració."
+
+msgid "No se pudo conectar con Claude: %s"
+msgstr "No s'ha pogut connectar amb Claude: %s"
+
+msgid "La clave de la API no es válida."
+msgstr "La clau de l'API no és vàlida."
+
+msgid "La clave no tiene permiso para este modelo."
+msgstr "La clau no té permís per a aquest model."
+
+msgid "Límite de uso de la API alcanzado. Espera un momento."
+msgstr "S'ha arribat al límit d'ús de l'API. Espera un moment."
+
+msgid "Error de la API (%1$d). %2$s"
+msgstr "Error de l'API (%1$d). %2$s"
+
+msgid "Claude no ha querido describir esta imagen."
+msgstr "Claude no ha volgut descriure aquesta imatge."
+
+msgid "La respuesta se cortó. Vuelve a intentarlo."
+msgstr "La resposta s'ha tallat. Torna-ho a provar."
+
+msgid "Respuesta inesperada de Claude."
+msgstr "Resposta inesperada de Claude."
+
+msgid "No hay administradores. Indica un usuario con --user=<id|login>."
+msgstr "No hi ha administradors. Indica un usuari amb --user=<id|login>."
+
+msgid "No se puede leer %s."
+msgstr "No es pot llegir %s."
+
+msgid "(vacío)"
+msgstr "(buit)"
+
+msgid "%d medios con cambios."
+msgstr "%d mitjans amb canvis."
+
+msgid "¿Aplicar los cambios?"
+msgstr "Vols aplicar els canvis?"
+
+msgid "Cachés vaciadas: %s."
+msgstr "Memòries cau buidades: %s."
+
+msgid "No se puede escribir %s."
+msgstr "No es pot escriure %s."
+
+msgid "%1$d medios exportados a %2$s."
+msgstr "%1$d mitjans exportats a %2$s."
+
+msgid "Esta importación no existe o ya se deshizo."
+msgstr "Aquesta importació no existeix o ja s'ha desfet."
+
+msgid "¿Deshacer %1$d cambios de «%2$s»?"
+msgstr "Vols desfer %1$d canvis de «%2$s»?"
+
+msgid "%d medios restaurados."
+msgstr "%d mitjans restaurats."
+
+msgid "Nombre"
+msgstr "Nom"
+
+msgid "No existe un medio con este ID."
+msgstr "No existeix cap mitjà amb aquest ID."
+
+msgid "ID repetido: se usa solo la primera fila."
+msgstr "ID repetit: només s'utilitza la primera fila."
+
+msgid "Sin texto alternativo."
+msgstr "Sense text alternatiu."
+
+msgid "Alt de %d caracteres (recomendado ≤ 125)."
+msgstr "Alt de %d caràcters (recomanat ≤ 125)."
+
+msgid "El alt repite el nombre de archivo."
+msgstr "L'alt repeteix el nom de fitxer."
+
+msgid "Ya existe un archivo con ese nombre en la carpeta: no se renombrará."
+msgstr "Ja existeix un fitxer amb aquest nom a la carpeta: no es reanomenarà."
+
+msgid "Nombre repetido (IDs %s)."
+msgstr "Nom repetit (ID %s)."
+
+msgid "Medio no encontrado."
+msgstr "No s'ha trobat el mitjà."
+
+msgid "Sin cambios."
+msgstr "Sense canvis."
+
+msgid "(%d en contenido)"
+msgstr "(%d al contingut)"
+
+msgid "(%d contenidos actualizados)"
+msgstr "(%d continguts actualitzats)"
+
+msgid "Imagen original restaurada."
+msgstr "Imatge original restaurada."
+
+msgid "archivo no encontrado en el servidor."
+msgstr "no s'ha trobat el fitxer al servidor."
+
+msgid "nombre vacío."
+msgstr "nom buit."
+
+msgid "ya existe «%s» en la carpeta."
+msgstr "ja existeix «%s» a la carpeta."
+
+msgid "no se pudo renombrar (permisos del servidor)."
+msgstr "no s'ha pogut reanomenar (permisos del servidor)."
+
+msgid "Elementor (CSS regenerado)"
+msgstr "Elementor (CSS regenerat)"
+
+msgid "Edición en tabla"
+msgstr "Edició a la taula"
+
+msgid "Guardado automático en tabla"
+msgstr "Desament automàtic a la taula"
+
+msgid "Optimización automática al subir"
+msgstr "Optimització automàtica en pujar"
+
+msgid "Optimización (%1$s, %2$d px)"
+msgstr "Optimització (%1$s, %2$d px)"
+
+msgid "Reforma de cocina en Santander"
+msgstr "Reforma de cuina a Girona"
+
+msgid "Cocina reformada con encimera de madera y muebles blancos"
+msgstr "Cuina reformada amb taulell de fusta i mobles blancs"
+
+msgid "No tienes permisos para exportar medios."
+msgstr "No tens permisos per exportar mitjans."
+
+msgid "Destacada"
+msgstr "Destacada"
+
+msgid "Galería"
+msgstr "Galeria"
+
+msgid "Contenido"
+msgstr "Contingut"
+
+msgid "Subida en"
+msgstr "Pujada a"
+
+msgid "La web pasa por Cloudflare: vacía su caché desde el panel de Cloudflare para que las visitas vean ya las imágenes nuevas."
+msgstr "El web passa per Cloudflare: buida'n la memòria cau des del tauler de Cloudflare perquè les visites vegin ja les imatges noves."
+
+msgid "Los archivos antiguos se conservan %d días para que ninguna caché muestre una imagen rota; después se borran solos."
+msgstr "Els fitxers antics es conserven %d dies perquè cap memòria cau mostri una imatge trencada; després s'esborren sols."
+
+msgid "Las imágenes anteriores se han borrado del servidor. Vacía también la caché del hosting o de Cloudflare si alguna página sigue pidiéndolas."
+msgstr "Les imatges anteriors s'han esborrat del servidor. Buida també la memòria cau de l'allotjament o de Cloudflare si alguna pàgina encara les demana."
+
+msgid "Atención: la imagen nueva responde con error %d al abrirla desde la web; revisa los permisos de uploads o las reglas del servidor para .%s."
+msgstr "Atenció: la imatge nova respon amb error %d en obrir-la des del web; revisa els permisos d'uploads o les regles del servidor per a .%s."
+
+msgid "WPML (muestra solo las imágenes del idioma activo)"
+msgstr "WPML (mostra només les imatges de l'idioma actiu)"
+
+msgid "Polylang (muestra solo las imágenes del idioma activo)"
+msgstr "Polylang (mostra només les imatges de l'idioma actiu)"
+
+msgid "FileBird (muestra solo la carpeta seleccionada)"
+msgstr "FileBird (mostra només la carpeta seleccionada)"
+
+msgid "Real Media Library (muestra solo la carpeta seleccionada)"
+msgstr "Real Media Library (mostra només la carpeta seleccionada)"
+
+msgid "HappyFiles (muestra solo la carpeta seleccionada)"
+msgstr "HappyFiles (mostra només la carpeta seleccionada)"
+
+msgid "Media Library Folders (muestra solo la carpeta seleccionada)"
+msgstr "Media Library Folders (mostra només la carpeta seleccionada)"
+
+msgid "Hay 1 imagen más en la base de datos que no aparece aquí."
+msgstr "Hi ha 1 imatge més a la base de dades que no apareix aquí."
+
+msgid "Hay %s imágenes más en la base de datos que no aparecen aquí."
+msgstr "Hi ha %s imatges més a la base de dades que no apareixen aquí."
+
+msgid "Las filtra"
+msgstr "Les filtra"
+
+msgid "Ver las de todos los idiomas"
+msgstr "Mostra les de tots els idiomes"
+
+msgid "o cambia el idioma en la barra superior."
+msgstr "o canvia l'idioma a la barra superior."
+
+msgid "Cambia la carpeta en la barra superior de WordPress para verlas y trabajar con ellas."
+msgstr "Canvia la carpeta a la barra superior de WordPress per veure-les i treballar-hi."
+
+msgid "Otro plugin está filtrando la biblioteca de medios (por idioma, carpetas o permisos). Las cifras de esta página son las de las imágenes visibles."
+msgstr "Un altre connector filtra la biblioteca de mitjans (per idioma, carpetes o permisos). Les xifres d'aquesta pàgina són les de les imatges visibles."
+
+msgid "Imágenes más ligeras, mejor posicionadas y sin romper nada"
+msgstr "Imatges més lleugeres, més ben posicionades i sense trencar res"
+
+msgid "Inpulsia Medios revisa las imágenes de la biblioteca de medios y las deja listas para Google: pesan menos, tienen nombres que se entienden y un texto alternativo que describe lo que se ve. Todo se revisa antes de aplicarse y se puede deshacer."
+msgstr "Inpulsia Medios revisa les imatges de la biblioteca de mitjans i les deixa a punt per a Google: pesen menys, tenen noms que s'entenen i un text alternatiu que descriu el que s'hi veu. Tot es revisa abans d'aplicar-se i es pot desfer."
+
+msgid "Aligerar las imágenes pesadas"
+msgstr "Alleugereix les imatges pesades"
+
+msgid "Las de más de 1 MB ralentizan la web. Se convierten y comprimen; antes ves qué se hará con cada una."
+msgstr "Les de més d'1 MB alenteixen el web. Es converteixen i es comprimeixen; abans veus què es farà amb cadascuna."
+
+msgid "No hay imágenes de más de 1 MB."
+msgstr "No hi ha imatges de més d'1 MB."
+
+msgid "Optimizar %s"
+msgstr "Optimitza'n %s"
+
+msgid "Escribir los textos alternativos que faltan"
+msgstr "Escriu els textos alternatius que falten"
+
+msgid "La IA mira cada imagen y propone el alt. Lo revisas en la tabla y aplicas."
+msgstr "La IA mira cada imatge i proposa l'alt. El revises a la taula i l'apliques."
+
+msgid "Escríbelos en la tabla, o usa una plantilla. Con la IA activada se proponen solos."
+msgstr "Escriu-los a la taula o fes servir una plantilla. Amb la IA activada es proposen sols."
+
+msgid "Todas las imágenes tienen alt."
+msgstr "Totes les imatges tenen alt."
+
+msgid "Proponer con IA"
+msgstr "Proposa amb IA"
+
+msgid "Completar"
+msgstr "Completa"
+
+msgid "Poner nombres de archivo claros"
+msgstr "Posa noms de fitxer clars"
+
+msgid "Cambia IMG_2041.jpg y similares por nombres que describan la imagen. Las URLs antiguas redirigen a las nuevas."
+msgstr "Canvia IMG_2041.jpg i similars per noms que descriguin la imatge. Les URL antigues redirigeixen a les noves."
+
+msgid "Todos los nombres de archivo son claros."
+msgstr "Tots els noms de fitxer són clars."
+
+msgid "Renombrar"
+msgstr "Reanomena"
+
+msgid "Salud de la biblioteca: %d de 100"
+msgstr "Salut de la biblioteca: %d de 100"
+
+msgid "de 100"
+msgstr "de 100"
+
+msgid "Salud de las imágenes"
+msgstr "Salut de les imatges"
+
+msgid "La biblioteca está en buena forma. Revisa de vez en cuando las imágenes nuevas."
+msgstr "La biblioteca està en bona forma. Revisa de tant en tant les imatges noves."
+
+msgid "Bien encaminada: completa los pasos del asistente para subir la nota."
+msgstr "Ben encaminada: completa els passos de l'assistent per pujar la nota."
+
+msgid "Hay margen de mejora: cada paso del asistente sube la nota y mejora el SEO y la velocidad."
+msgstr "Hi ha marge de millora: cada pas de l'assistent puja la nota i millora el SEO i la velocitat."
+
+msgid "Cuenta el alt (40 %), el peso (30 %), los nombres (20 %) y el formato (10 %)."
+msgstr "Compta l'alt (40 %), el pes (30 %), els noms (20 %) i el format (10 %)."
+
+msgid "Asistente rápido"
+msgstr "Assistent ràpid"
+
+msgid "Estado de esta web"
+msgstr "Estat d'aquest web"
+
+msgid "imágenes visibles en la biblioteca"
+msgstr "imatges visibles a la biblioteca"
+
+msgid "imágenes en la biblioteca"
+msgstr "imatges a la biblioteca"
+
+msgid "Ver todas"
+msgstr "Mostra-les totes"
+
+msgid "se usan en la web"
+msgstr "s'utilitzen al web"
+
+msgid "Ver las que se usan"
+msgstr "Mostra les que s'utilitzen"
+
+msgid "sin texto alternativo"
+msgstr "sense text alternatiu"
+
+msgid "Completarlas"
+msgstr "Completa-les"
+
+msgid "pesan más de 1 MB"
+msgstr "pesen més d'1 MB"
+
+msgid "Verlas y optimizarlas"
+msgstr "Mostra-les i optimitza-les"
+
+msgid "con nombre poco amigable"
+msgstr "amb nom poc amigable"
+
+msgid "Verlas y renombrarlas"
+msgstr "Mostra-les i reanomena-les"
+
+msgid "en PNG, GIF u otros formatos pesados"
+msgstr "en PNG, GIF o altres formats pesats"
+
+msgid "Qué puedes hacer"
+msgstr "Què pots fer"
+
+msgid "Aligerar las imágenes"
+msgstr "Alleugerir les imatges"
+
+msgid "Convierte a JPG o WebP, reduce las fotos enormes a un tamaño razonable y las comprime sin que se note. Los logos con fondo transparente se respetan."
+msgstr "Converteix a JPG o WebP, redueix les fotos enormes a una mida raonable i les comprimeix sense que es noti. Els logotips amb fons transparent es respecten."
+
+msgid "Nombres y textos para Google"
+msgstr "Noms i textos per a Google"
+
+msgid "Cambia"
+msgstr "Canvia"
+
+msgid "por"
+msgstr "per"
+
+msgid "y añade el texto alternativo. Puedes escribirlos tú o pedir a la IA que los proponga mirando la imagen."
+msgstr "i afegeix el text alternatiu. Els pots escriure tu o demanar a la IA que els proposi mirant la imatge."
+
+msgid "Cambios en bloque"
+msgstr "Canvis en bloc"
+
+msgid "Edita decenas de imágenes en una tabla, o descarga un Excel, rellénalo (o pásaselo al equipo de SEO) y vuelve a subirlo."
+msgstr "Edita desenes d'imatges en una taula, o baixa un Excel, omple'l (o passa'l a l'equip de SEO) i torna'l a pujar."
+
+msgid "Sin romper nada"
+msgstr "Sense trencar res"
+
+msgid "Al cambiar un archivo se actualizan las páginas que lo usan, las direcciones antiguas redirigen a las nuevas y cualquier cambio se puede deshacer desde el Historial."
+msgstr "En canviar un fitxer s'actualitzen les pàgines que l'utilitzen, les adreces antigues redirigeixen a les noves i qualsevol canvi es pot desfer des de l'Historial."
+
+msgid "Cómo empezar"
+msgstr "Com començar"
+
+msgid "Elige qué imágenes revisar."
+msgstr "Tria quines imatges revisar."
+
+msgid "En"
+msgstr "A"
+
+msgid ", filtra por"
+msgstr ", filtra per"
+
+msgid "para centrarte en las que de verdad ven tus visitas."
+msgstr "per centrar-te en les que realment veuen les teves visites."
+
+msgid "Optimízalas."
+msgstr "Optimitza-les."
+
+msgid "Abre"
+msgstr "Obre"
+
+msgid "y pulsa"
+msgstr "i prem"
+
+msgid "Optimizar las del filtro"
+msgstr "Optimitza les del filtre"
+
+msgid ". Verás qué se va a hacer con cada una antes de confirmar y, al terminar, cuánto peso has ahorrado."
+msgstr ". Veuràs què es farà amb cadascuna abans de confirmar i, en acabar, quant pes has estalviat."
+
+msgid "Completa nombres y textos alternativos."
+msgstr "Completa noms i textos alternatius."
+
+msgid "Escríbelos en la tabla (pulsa Intro para bajar de fila o pega una columna de Excel), usa una plantilla o pulsa"
+msgstr "Escriu-los a la taula (prem Intro per baixar de fila o enganxa una columna d'Excel), fes servir una plantilla o prem"
+
+msgid ". Revisa y pulsa"
+msgstr ". Revisa i prem"
+
+msgid "y después"
+msgstr "i després"
+
+msgid "¿Algo no te convence?"
+msgstr "Alguna cosa no et convenç?"
+
+msgid "pulsa"
+msgstr "prem"
+
+msgid "y todo vuelve a como estaba."
+msgstr "i tot torna a com estava."
+
+msgid "Puesta a punto"
+msgstr "Posada a punt"
+
+msgid "Sugerencias con IA activadas."
+msgstr "Suggeriments amb IA activats."
+
+msgid "Sugerencias con IA desactivadas."
+msgstr "Suggeriments amb IA desactivats."
+
+msgid "Añadir la clave de Claude"
+msgstr "Afegeix la clau de Claude"
+
+msgid "Sugerencias con IA desactivadas: pide a un administrador que las configure."
+msgstr "Suggeriments amb IA desactivats: demana a un administrador que els configuri."
+
+msgid "Copia de seguridad activada al optimizar."
+msgstr "Còpia de seguretat activada en optimitzar."
+
+msgid "La copia de seguridad está desactivada: las optimizaciones no se podrán deshacer."
+msgstr "La còpia de seguretat està desactivada: les optimitzacions no es podran desfer."
+
+msgid "El servidor puede generar WebP."
+msgstr "El servidor pot generar WebP."
+
+msgid "El servidor no genera WebP: se usará JPG."
+msgstr "El servidor no genera WebP: s'utilitzarà JPG."
+
+msgid "redirecciones activas de archivos renombrados."
+msgstr "redireccions actives de fitxers reanomenats."
+
+msgid "Último cambio:"
+msgstr "Últim canvi:"
+
+msgid "Preguntas frecuentes"
+msgstr "Preguntes freqüents"
+
+msgid "¿Puedo romper la web?"
+msgstr "Puc trencar el web?"
+
+msgid "No debería: antes de aplicar ves una vista previa, las páginas que usan la imagen se actualizan solas y las direcciones antiguas redirigen a las nuevas. Aun así, todo se puede deshacer desde el Historial."
+msgstr "No hauria: abans d'aplicar veus una previsualització, les pàgines que utilitzen la imatge s'actualitzen soles i les adreces antigues redirigeixen a les noves. Tot i així, tot es pot desfer des de l'Historial."
+
+msgid "¿Se pierde calidad?"
+msgstr "Es perd qualitat?"
+
+msgid "Con la calidad 82 que viene por defecto, la diferencia no se aprecia a simple vista. Si una imagen no pesa al menos un 5 % menos tras optimizarla, se deja como estaba."
+msgstr "Amb la qualitat 82 per defecte, la diferència no s'aprecia a simple vista. Si una imatge no pesa almenys un 5 % menys després d'optimitzar-la, es deixa com estava."
+
+msgid "¿Qué pasa con los logos y los iconos?"
+msgstr "Què passa amb els logotips i les icones?"
+
+msgid "Las imágenes con fondo transparente se mantienen en PNG para no perder la transparencia. Los GIF animados no se tocan."
+msgstr "Les imatges amb fons transparent es mantenen en PNG per no perdre la transparència. Els GIF animats no es toquen."
+
+msgid "¿Qué es el texto alternativo?"
+msgstr "Què és el text alternatiu?"
+
+msgid "Una frase que describe la imagen. La leen Google y las personas que usan lectores de pantalla. Mejor concreta y natural, de menos de 125 caracteres: «Cocina reformada con isla de madera en Santander»."
+msgstr "Una frase que descriu la imatge. La llegeixen Google i les persones que fan servir lectors de pantalla. Millor concreta i natural, de menys de 125 caràcters: «Cuina reformada amb illa de fusta a Girona»."
+
+msgid "¿Cuánto cuesta la IA?"
+msgstr "Quant costa la IA?"
+
+msgid "Cada sugerencia es una consulta a la API de Claude y se cobra en la cuenta de la clave configurada, normalmente céntimos por cada pocas imágenes. Solo se usa cuando pulsas"
+msgstr "Cada suggeriment és una consulta a l'API de Claude i es cobra al compte de la clau configurada, normalment cèntims per cada poques imatges. Només s'utilitza quan prems"
+
+msgid "o activas esa opción al optimizar."
+msgstr "o actives aquesta opció en optimitzar."
+
+msgid "¿Y si ya uso ShortPixel, Imagify o similares?"
+msgstr "I si ja faig servir ShortPixel, Imagify o similars?"
+
+msgid "El plugin te avisará. Puedes seguir usándolo para nombres, textos y redirecciones, y dejar la compresión al otro plugin para no comprimir dos veces."
+msgstr "El connector t'avisarà. Pots continuar fent-lo servir per a noms, textos i redireccions, i deixar la compressió a l'altre connector per no comprimir dues vegades."
+
+msgid "Cómo funciona"
+msgstr "Com funciona"
+
+msgid "<p>Inpulsia Medios mejora las imágenes de la biblioteca: menos peso, nombres de archivo claros y texto alternativo. Todo se revisa en una vista previa antes de aplicarse y se puede deshacer desde <strong>Historial</strong>.</p>"
+msgstr "<p>Inpulsia Medios millora les imatges de la biblioteca: menys pes, noms de fitxer clars i text alternatiu. Tot es revisa en una previsualització abans d'aplicar-se i es pot desfer des de l'<strong>Historial</strong>.</p>"
+
+msgid "Editar y optimizar"
+msgstr "Edita i optimitza"
+
+msgid "<p>Filtra las imágenes (por ejemplo, <em>En uso en la web</em>), escribe los cambios directamente en la tabla o pulsa <strong>IA</strong> para que se propongan, y después <strong>Revisar cambios</strong>.</p><p>Para reducir el peso, abre <strong>Optimizar imágenes</strong> y elige las seleccionadas o todas las del filtro.</p>"
+msgstr "<p>Filtra les imatges (per exemple, <em>En ús al web</em>), escriu els canvis directament a la taula o prem <strong>IA</strong> perquè es proposin, i després <strong>Revisa els canvis</strong>.</p><p>Per reduir el pes, obre <strong>Optimitza les imatges</strong> i tria les seleccionades o totes les del filtre.</p>"
+
+msgid "Importar un Excel o CSV"
+msgstr "Importa un Excel o CSV"
+
+msgid "<p>Sube un archivo con las columnas <code>ID</code>, <code>filename</code>, <code>title</code>, <code>alt</code>, <code>caption</code> y <code>description</code>. Las celdas vacías no cambian nada; escribe <code>[vaciar]</code> para borrar un campo.</p><p>La forma más cómoda es exportar primero desde <strong>Exportar</strong>, editar ese archivo y subirlo aquí.</p>"
+msgstr "<p>Puja un fitxer amb les columnes <code>ID</code>, <code>filename</code>, <code>title</code>, <code>alt</code>, <code>caption</code> i <code>description</code>. Les cel·les buides no canvien res; escriu <code>[vaciar]</code> per esborrar un camp.</p><p>El més còmode és exportar primer des d'<strong>Exporta</strong>, editar aquest fitxer i pujar-lo aquí.</p>"
+
+msgid "<p>Descarga un CSV con los datos actuales de las imágenes. La columna <code>usado_en</code> dice en qué páginas aparece cada una, útil para escribir textos alternativos con contexto.</p>"
+msgstr "<p>Baixa un CSV amb les dades actuals de les imatges. La columna <code>usado_en</code> diu en quines pàgines apareix cadascuna, útil per escriure textos alternatius amb context.</p>"
+
+msgid "Deshacer cambios"
+msgstr "Desfer canvis"
+
+msgid "<p>Cada importación, edición u optimización queda aquí. <strong>Deshacer</strong> devuelve nombres, textos y, si había copia de seguridad, los archivos originales.</p>"
+msgstr "<p>Cada importació, edició o optimització queda aquí. <strong>Desfés</strong> retorna noms, textos i, si hi havia còpia de seguretat, els fitxers originals.</p>"
+
+msgid "<p>Cuando un archivo cambia de nombre o de formato, su dirección antigua redirige a la nueva para que no haya enlaces rotos ni se pierda el posicionamiento en Google Imágenes.</p>"
+msgstr "<p>Quan un fitxer canvia de nom o de format, la seva adreça antiga redirigeix a la nova perquè no hi hagi enllaços trencats ni es perdi el posicionament a Google Imatges.</p>"
+
+msgid "Guía de inicio"
+msgstr "Guia d'inici"
+
+msgid "Inpulsia Medios está listo."
+msgstr "Inpulsia Medios està a punt."
+
+msgid "Optimiza las imágenes de la web y completa sus nombres y textos alternativos en unos minutos."
+msgstr "Optimitza les imatges del web i completa'n els noms i els textos alternatius en pocs minuts."
+
+msgid "Ver la guía de inicio"
+msgstr "Mostra la guia d'inici"
+
+msgid "%s campos rellenados. Revisa la tabla y pulsa «Revisar cambios»."
+msgstr "%s camps omplerts. Revisa la taula i prem «Revisa els canvis»."
+
+msgid "%s con avisos"
+msgstr "%s amb avisos"
+
+msgid "%s con errores"
+msgstr "%s amb errors"
+
+msgid "%s de %s procesados"
+msgstr "%s de %s processats"
+
+msgid "%s imágenes a optimizar · %s actuales"
+msgstr "%s imatges per optimitzar · %s actuals"
+
+msgid "%s imágenes con cambios sin revisar"
+msgstr "%s imatges amb canvis sense revisar"
+
+msgid "%s medios con cambios"
+msgstr "%s mitjans amb canvis"
+
+msgid "%s se omiten"
+msgstr "%s s'ometen"
+
+msgid "%s seleccionadas"
+msgstr "%s seleccionades"
+
+msgid "1 seleccionada"
+msgstr "1 seleccionada"
+
+msgid "Ahorro: %s (%s → %s, −%s %)"
+msgstr "Estalvi: %s (%s → %s, −%s %)"
+
+msgid "Alt repetido en otra imagen de esta página."
+msgstr "Alt repetit en una altra imatge d'aquesta pàgina."
+
+msgid "Aplicando cambios"
+msgstr "Aplicant els canvis"
+
+msgid "Aplicar %s cambios"
+msgstr "Aplica %s canvis"
+
+msgid "Demasiado largo: mejor 3-6 palabras."
+msgstr "Massa llarg: millor 3-6 paraules."
+
+msgid "Deshaciendo importación"
+msgstr "Desfent la importació"
+
+msgid "El servidor ha devuelto una respuesta no válida. Revisa el registro de errores de PHP."
+msgstr "El servidor ha retornat una resposta no vàlida. Revisa el registre d'errors de PHP."
+
+msgid "El servidor ha fallado (%s) en el registro %s. Lo ya procesado está guardado en el Historial."
+msgstr "El servidor ha fallat (%s) al registre %s. El que ja s'ha processat està desat a l'Historial."
+
+msgid "El servidor ha fallado (%s). Reintentando…"
+msgstr "El servidor ha fallat (%s). Reintentant…"
+
+msgid "Error"
+msgstr "Error"
+
+msgid "Error al procesar el archivo."
+msgstr "Error en processar el fitxer."
+
+msgid "Error de conexión"
+msgstr "Error de connexió"
+
+msgid "Error de conexión con el servidor."
+msgstr "Error de connexió amb el servidor."
+
+msgid "Error de conexión: no se ha guardado"
+msgstr "Error de connexió: no s'ha desat"
+
+msgid "Error."
+msgstr "Error."
+
+msgid "Escribe primero en el campo que quieres copiar."
+msgstr "Escriu primer al camp que vols copiar."
+
+msgid "Falta el alt."
+msgstr "Falta l'alt."
+
+msgid "Los nombres de archivo deben ser distintos: usa una plantilla con {n}."
+msgstr "Els noms de fitxer han de ser diferents: fes servir una plantilla amb {n}."
+
+msgid "Muy corto: describe qué se ve."
+msgstr "Massa curt: descriu què s'hi veu."
+
+msgid "No empieces por «imagen de»: describe directamente."
+msgstr "No comencis per «imatge de»: descriu directament."
+
+msgid "No había ningún campo que rellenar con esas condiciones."
+msgstr "No hi havia cap camp per omplir amb aquestes condicions."
+
+msgid "No has cambiado nada."
+msgstr "No has canviat res."
+
+msgid "Nombre de cámara o genérico: no dice nada a Google."
+msgstr "Nom de càmera o genèric: no diu res a Google."
+
+msgid "Optimizando imágenes"
+msgstr "Optimitzant les imatges"
+
+msgid "Optimizar %s imágenes"
+msgstr "Optimitza %s imatges"
+
+msgid "Parece un nombre de archivo, no una frase."
+msgstr "Sembla un nom de fitxer, no una frase."
+
+msgid "Reanudar"
+msgstr "Reprèn"
+
+msgid "Se guardará como «%s»."
+msgstr "Es desarà com a «%s»."
+
+msgid "Se van a revisar %s imágenes. Puede tardar varios minutos. ¿Seguir?"
+msgstr "Es revisaran %s imatges. Pot trigar uns quants minuts. Vols continuar?"
+
+msgid "Selecciona al menos una imagen."
+msgstr "Selecciona almenys una imatge."
+
+msgid "Sin cambios"
+msgstr "Sense canvis"
+
+msgid "Terminado: %s correctos, %s parciales, %s errores, %s sin cambios."
+msgstr "Acabat: %s correctes, %s parcials, %s errors, %s sense canvis."
+
+msgid "Ver historial / deshacer"
+msgstr "Mostra l'historial / desfés"
+
+msgid "Volver a la tabla"
+msgstr "Torna a la taula"
+
+msgid "respuesta no válida"
+msgstr "resposta no vàlida"
+
+msgid "se muestran %s de %s"
+msgstr "es mostren %s de %s"
+
+msgid "sin conexión"
+msgstr "sense connexió"
+
+msgid "tiempo agotado"
+msgstr "temps esgotat"
+
+msgid "¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial."
+msgstr "Vols aplicar els canvis? Els podràs desfer des de la pestanya Historial."
+
+msgid "¿Deshacer esta importación y restaurar los valores anteriores?"
+msgstr "Vols desfer aquesta importació i restaurar els valors anteriors?"
+
+msgid "SEO de imagen"
+msgstr "SEO d'imatge"
+
+msgid "Falta el texto alternativo"
+msgstr "Falta el text alternatiu"
+
+msgid "Pesa más de 1 MB"
+msgstr "Pesa més d'1 MB"
+
+msgid "Nombre de archivo poco amigable"
+msgstr "Nom de fitxer poc amigable"
+
+msgid "Correcto"
+msgstr "Correcte"
+
+msgid "Editar textos en Inpulsia Medios"
+msgstr "Edita els textos a Inpulsia Medios"
+
+msgid "Optimizar con Inpulsia Medios"
+msgstr "Optimitza amb Inpulsia Medios"
+
+msgid "Archivo no encontrado en el servidor."
+msgstr "No s'ha trobat el fitxer al servidor."
+
+msgid "Formato no compatible (%s)."
+msgstr "Format no compatible (%s)."
+
+msgid "GIF animado: se deja como está."
+msgstr "GIF animat: es deixa com està."
+
+msgid "Formato: %1$s → %2$s"
+msgstr "Format: %1$s → %2$s"
+
+msgid "Formato: %1$s → %2$s (si no tiene transparencia)"
+msgstr "Format: %1$s → %2$s (si no té transparència)"
+
+msgid "Tamaño: %d×%d → %d×%d"
+msgstr "Mida: %d×%d → %d×%d"
+
+msgid "Compresión: calidad %d y sin metadatos EXIF"
+msgstr "Compressió: qualitat %d i sense metadades EXIF"
+
+msgid "Nombre: «%s» → propuesto por IA"
+msgstr "Nom: «%s» → proposat per IA"
+
+msgid "Alt: vacío → propuesto por IA"
+msgstr "Alt: buit → proposat per IA"
+
+msgid "Sin copia de seguridad: no se podrá deshacer."
+msgstr "Sense còpia de seguretat: no es podrà desfer."
+
+msgid "La imagen anterior se borra del servidor al momento"
+msgstr "La imatge anterior s'esborra del servidor a l'instant"
+
+msgid "alt «%s»"
+msgstr "alt «%s»"
+
+msgid "No se pudo abrir la imagen: %s"
+msgstr "No s'ha pogut obrir la imatge: %s"
+
+msgid "No se pudo guardar la imagen: %s"
+msgstr "No s'ha pogut desar la imatge: %s"
+
+msgid "renombrada a «%s»"
+msgstr "reanomenada a «%s»"
+
+msgid "Tiene transparencia: se mantiene en %s y ya estaba optimizada"
+msgstr "Té transparència: es manté en %s i ja estava optimitzada"
+
+msgid "Ya estaba optimizada"
+msgstr "Ja estava optimitzada"
+
+msgid "Se mantiene en %s: convertirla no reduce el peso"
+msgstr "Es manté en %s: convertir-la no en redueix el pes"
+
+msgid "No se pudo escribir la imagen nueva en uploads (permisos o espacio); el original no se ha tocado."
+msgstr "No s'ha pogut escriure la imatge nova a uploads (permisos o espai); l'original no s'ha tocat."
+
+msgid "No hay archivos que copiar."
+msgstr "No hi ha fitxers per copiar."
+
+msgid "No se pudo crear la copia de seguridad (permisos de uploads)."
+msgstr "No s'ha pogut crear la còpia de seguretat (permisos d'uploads)."
+
+msgid "No se pudo crear la copia de seguridad (¿espacio en disco?)."
+msgstr "No s'ha pogut crear la còpia de seguretat (espai al disc?)."
+
+msgid "La copia de seguridad ya no existe."
+msgstr "La còpia de seguretat ja no existeix."
+
+msgid "No se pudo restaurar %s."
+msgstr "No s'ha pogut restaurar %s."
+
+msgid "El servidor no tiene la extensión ZIP de PHP. Guarda el archivo como CSV."
+msgstr "El servidor no té l'extensió ZIP de PHP. Desa el fitxer com a CSV."
+
+msgid "No se pudo abrir el archivo Excel."
+msgstr "No s'ha pogut obrir el fitxer Excel."
+
+msgid "El archivo Excel no tiene hojas legibles."
+msgstr "El fitxer Excel no té fulls llegibles."
+
+msgid "Más de 300 KB"
+msgstr "Més de 300 KB"
+
+msgid "Más de 1 MB"
+msgstr "Més d'1 MB"
+
+msgid "Más de 2 MB"
+msgstr "Més de 2 MB"
+
+msgid "PNG, GIF y otros pesados"
+msgstr "PNG, GIF i altres pesats"
+
+msgid "<p>Edición masiva de los medios de WordPress: nombre de archivo, título, texto alternativo, leyenda y descripción desde CSV, Excel, una tabla editable o WP-CLI, con sugerencias de IA.</p>"
+msgstr "<p>Edició massiva dels mitjans de WordPress: nom de fitxer, títol, text alternatiu, llegenda i descripció des de CSV, Excel, una taula editable o WP-CLI, amb suggeriments d'IA.</p>"
+
+msgid "<p>Optimiza imágenes (JPG o WebP, ancho máximo y compresión) manteniendo las transparentes. Al renombrar o convertir actualiza las URLs en todo el sitio, crea redirecciones 301, vacía cachés y permite deshacer desde el historial.</p>"
+msgstr "<p>Optimitza imatges (JPG o WebP, amplada màxima i compressió) mantenint les transparents. En reanomenar o convertir actualitza les URL a tot el lloc, crea redireccions 301, buida memòries cau i permet desfer des de l'historial.</p>"
+
+msgid "<p>Sin notas de versión.</p>"
+msgstr "<p>Sense notes de versió.</p>"
+
+msgid "No se pudo preparar la carpeta del plugin."
+msgstr "No s'ha pogut preparar la carpeta del connector."

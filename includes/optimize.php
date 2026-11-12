@@ -12,6 +12,7 @@ function inpulsia_medios_opt_settings() {
 		'backup'    => true,
 		'ai'        => false,
 		'keep_old'  => true,
+		'auto'      => false,
 	] );
 	return inpulsia_medios_opt_sanitize( $s );
 }
@@ -24,6 +25,7 @@ function inpulsia_medios_opt_sanitize( $s ) {
 		'backup'    => ! empty( $s['backup'] ),
 		'ai'        => ! empty( $s['ai'] ),
 		'keep_old'  => ! isset( $s['keep_old'] ) || ! empty( $s['keep_old'] ),
+		'auto'      => ! empty( $s['auto'] ),
 	];
 }
 
@@ -114,15 +116,15 @@ function inpulsia_medios_opt_plan( $id, $opts ) {
 	$fmt  = strtoupper( str_replace( [ 'image/', 'jpeg' ], [ '', 'jpg' ], (string) $mime ) );
 
 	if ( ! $file || ! file_exists( $file ) ) {
-		$plan['error'] = 'Archivo no encontrado en el servidor.';
+		$plan['error'] = __( 'Archivo no encontrado en el servidor.', 'inpulsia-medios' );
 		return $plan;
 	}
 	if ( ! in_array( $mime, inpulsia_medios_opt_mimes(), true ) ) {
-		$plan['error'] = 'Formato no compatible (' . $fmt . ').';
+		$plan['error'] = sprintf( __( 'Formato no compatible (%s).', 'inpulsia-medios' ), $fmt );
 		return $plan;
 	}
 	if ( $mime === 'image/gif' && inpulsia_medios_is_animated_gif( $file ) ) {
-		$plan['error'] = 'GIF animado: se deja como está.';
+		$plan['error'] = __( 'GIF animado: se deja como está.', 'inpulsia-medios' );
 		return $plan;
 	}
 
@@ -133,27 +135,27 @@ function inpulsia_medios_opt_plan( $id, $opts ) {
 	}
 
 	if ( $fmt !== $to ) {
-		$plan['lines'][] = $mime === 'image/jpeg' ? "Formato: {$fmt} → {$to}" : "Formato: {$fmt} → {$to} (si no tiene transparencia)";
+		$plan['lines'][] = $mime === 'image/jpeg' ? sprintf( __( 'Formato: %1$s → %2$s', 'inpulsia-medios' ), $fmt, $to ) : sprintf( __( 'Formato: %1$s → %2$s (si no tiene transparencia)', 'inpulsia-medios' ), $fmt, $to );
 	}
 	if ( $width > $opts['max_width'] ) {
-		$plan['lines'][] = sprintf( 'Tamaño: %d×%d → %d×%d', $width, $height, $opts['max_width'], round( $height * $opts['max_width'] / $width ) );
+		$plan['lines'][] = sprintf( __( 'Tamaño: %d×%d → %d×%d', 'inpulsia-medios' ), $width, $height, $opts['max_width'], round( $height * $opts['max_width'] / $width ) );
 	}
-	$plan['lines'][] = 'Compresión: calidad ' . $opts['quality'] . ' y sin metadatos EXIF';
+	$plan['lines'][] = sprintf( __( 'Compresión: calidad %d y sin metadatos EXIF', 'inpulsia-medios' ), $opts['quality'] );
 
 	$stem = inpulsia_medios_stem( $id );
 	if ( $opts['ai'] ) {
 		if ( inpulsia_medios_is_camera_name( $stem ) ) {
-			$plan['lines'][] = 'Nombre: «' . $stem . '» → propuesto por IA';
+			$plan['lines'][] = sprintf( __( 'Nombre: «%s» → propuesto por IA', 'inpulsia-medios' ), $stem );
 		}
 		if ( (string) get_post_meta( $id, '_wp_attachment_image_alt', true ) === '' ) {
-			$plan['lines'][] = 'Alt: vacío → propuesto por IA';
+			$plan['lines'][] = __( 'Alt: vacío → propuesto por IA', 'inpulsia-medios' );
 		}
 	}
 	if ( ! $opts['backup'] ) {
-		$plan['warnings'][] = 'Sin copia de seguridad: no se podrá deshacer.';
+		$plan['warnings'][] = __( 'Sin copia de seguridad: no se podrá deshacer.', 'inpulsia-medios' );
 	}
 	if ( ! $opts['keep_old'] ) {
-		$plan['lines'][] = 'La imagen anterior se borra del servidor al momento';
+		$plan['lines'][] = __( 'La imagen anterior se borra del servidor al momento', 'inpulsia-medios' );
 	}
 	return $plan;
 }
@@ -167,10 +169,10 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	$opts = inpulsia_medios_opt_sanitize( $opts );
 	$post = get_post( $id );
 	if ( ! $post || $post->post_type !== 'attachment' ) {
-		return [ 'status' => 'error', 'msg' => 'Medio no encontrado.' ];
+		return [ 'status' => 'error', 'msg' => __( 'Medio no encontrado.', 'inpulsia-medios' ) ];
 	}
 	if ( ! current_user_can( 'edit_post', $id ) ) {
-		return [ 'status' => 'error', 'msg' => 'No tienes permisos para editar este medio.' ];
+		return [ 'status' => 'error', 'msg' => __( 'No tienes permisos para editar este medio.', 'inpulsia-medios' ) ];
 	}
 	$plan = inpulsia_medios_opt_plan( $id, $opts );
 	if ( isset( $plan['error'] ) ) {
@@ -211,7 +213,7 @@ function inpulsia_medios_optimize( $id, $opts ) {
 					$r    = inpulsia_medios_apply_row( $id, $row );
 					$prev = $r['prev'] ?? [];
 					if ( isset( $row['alt'] ) ) {
-						$notes[] = 'alt «' . $row['alt'] . '»';
+						$notes[] = sprintf( __( 'alt «%s»', 'inpulsia-medios' ), $row['alt'] );
 					}
 				}
 			}
@@ -232,7 +234,7 @@ function inpulsia_medios_optimize( $id, $opts ) {
 
 	$editor = wp_get_image_editor( $source );
 	if ( is_wp_error( $editor ) ) {
-		return [ 'status' => 'error', 'msg' => 'No se pudo abrir la imagen: ' . $editor->get_error_message(), 'prev' => $prev ];
+		return [ 'status' => 'error', 'msg' => sprintf( __( 'No se pudo abrir la imagen: %s', 'inpulsia-medios' ), $editor->get_error_message() ), 'prev' => $prev ];
 	}
 	if ( method_exists( $editor, 'maybe_exif_rotate' ) ) {
 		$editor->maybe_exif_rotate();
@@ -247,7 +249,7 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	$tmp   = trailingslashit( get_temp_dir() ) . 'inpulsia-' . $id . '-' . wp_generate_password( 6, false ) . '.' . $ext;
 	$saved = $editor->save( $tmp, $target );
 	if ( is_wp_error( $saved ) ) {
-		return [ 'status' => 'error', 'msg' => 'No se pudo guardar la imagen: ' . $saved->get_error_message(), 'prev' => $prev ];
+		return [ 'status' => 'error', 'msg' => sprintf( __( 'No se pudo guardar la imagen: %s', 'inpulsia-medios' ), $saved->get_error_message() ), 'prev' => $prev ];
 	}
 	$tmp = $saved['path'];
 
@@ -258,12 +260,12 @@ function inpulsia_medios_optimize( $id, $opts ) {
 			$r = inpulsia_medios_rename( $id, $new_stem, $opts['keep_old'] );
 			if ( ! is_wp_error( $r ) ) {
 				$prev['filename'] = $old_stem;
-				$notes[]          = 'renombrada a «' . $new_stem . '»';
+				$notes[]          = sprintf( __( 'renombrada a «%s»', 'inpulsia-medios' ), $new_stem );
 			}
 		}
 		return [
 			'status' => $notes ? 'ok' : 'skip',
-			'msg'    => ( $alpha ? 'Tiene transparencia: se mantiene en ' . strtoupper( str_replace( 'image/', '', $mime ) ) . ' y ya estaba optimizada' : ( $target === $mime ? 'Ya estaba optimizada' : 'Se mantiene en ' . strtoupper( str_replace( [ 'image/', 'jpeg' ], [ '', 'jpg' ], $mime ) ) . ': convertirla no reduce el peso' ) ) . ( $notes ? '; ' . implode( ', ', $notes ) : '' ) . '.',
+			'msg'    => ( $alpha ? sprintf( __( 'Tiene transparencia: se mantiene en %s y ya estaba optimizada', 'inpulsia-medios' ), strtoupper( str_replace( 'image/', '', $mime ) ) ) : ( $target === $mime ? __( 'Ya estaba optimizada', 'inpulsia-medios' ) : sprintf( __( 'Se mantiene en %s: convertirla no reduce el peso', 'inpulsia-medios' ), strtoupper( str_replace( [ 'image/', 'jpeg' ], [ '', 'jpg' ], $mime ) ) ) ) ) . ( $notes ? '; ' . implode( ', ', $notes ) : '' ) . '.',
 			'before' => $before,
 			'after'  => $before,
 			'prev'   => $prev,
@@ -298,7 +300,7 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	@unlink( $tmp );
 	if ( ! $moved || ! file_exists( $staged ) || ! filesize( $staged ) ) {
 		@unlink( $staged );
-		return [ 'status' => 'error', 'msg' => 'No se pudo escribir la imagen nueva en uploads (permisos o espacio); el original no se ha tocado.', 'prev' => $prev ];
+		return [ 'status' => 'error', 'msg' => __( 'No se pudo escribir la imagen nueva en uploads (permisos o espacio); el original no se ha tocado.', 'inpulsia-medios' ), 'prev' => $prev ];
 	}
 	// Optimizer copies (.webp/.avif next to the file) would serve the old picture: remove them now.
 	list( , $old_meta_files ) = inpulsia_medios_meta_files( $id );
@@ -381,7 +383,7 @@ function inpulsia_medios_optimize( $id, $opts ) {
 		$msg .= ', redimensionada a ' . $opts['max_width'] . ' px';
 	}
 	if ( $new_stem !== $old_stem ) {
-		$notes[] = 'renombrada a «' . pathinfo( $new_main, PATHINFO_FILENAME ) . '»';
+		$notes[] = sprintf( __( 'renombrada a «%s»', 'inpulsia-medios' ), pathinfo( $new_main, PATHINFO_FILENAME ) );
 	}
 	if ( $updated ) {
 		$notes[] = $updated . ' contenidos actualizados';
@@ -412,17 +414,17 @@ function inpulsia_medios_backup_dir() {
 function inpulsia_medios_backup_create( $id ) {
 	list( $src, $files ) = inpulsia_medios_attachment_files( $id );
 	if ( ! $files ) {
-		return new WP_Error( 'backup', 'No hay archivos que copiar.' );
+		return new WP_Error( 'backup', __( 'No hay archivos que copiar.', 'inpulsia-medios' ) );
 	}
 	$key  = $id . '-' . gmdate( 'YmdHis' ) . '-' . strtolower( wp_generate_password( 4, false ) );
 	$dest = inpulsia_medios_backup_dir() . '/' . $key;
 	if ( ! wp_mkdir_p( $dest ) ) {
-		return new WP_Error( 'backup', 'No se pudo crear la copia de seguridad (permisos de uploads).' );
+		return new WP_Error( 'backup', __( 'No se pudo crear la copia de seguridad (permisos de uploads).', 'inpulsia-medios' ) );
 	}
 	foreach ( $files as $f ) {
 		if ( ! @copy( $src . '/' . $f, $dest . '/' . $f ) ) {
 			inpulsia_medios_rmdir( $dest );
-			return new WP_Error( 'backup', 'No se pudo crear la copia de seguridad (¿espacio en disco?).' );
+			return new WP_Error( 'backup', __( 'No se pudo crear la copia de seguridad (¿espacio en disco?).', 'inpulsia-medios' ) );
 		}
 	}
 	file_put_contents( $dest . '/backup.json', wp_json_encode( [
@@ -443,7 +445,7 @@ function inpulsia_medios_backup_restore( $key ) {
 	$path = inpulsia_medios_backup_dir() . '/' . $key;
 	$data = is_file( $path . '/backup.json' ) ? json_decode( file_get_contents( $path . '/backup.json' ), true ) : null;
 	if ( ! $data ) {
-		return new WP_Error( 'no_backup', 'La copia de seguridad ya no existe.' );
+		return new WP_Error( 'no_backup', __( 'La copia de seguridad ya no existe.', 'inpulsia-medios' ) );
 	}
 	$id = (int) $data['id'];
 
@@ -462,7 +464,7 @@ function inpulsia_medios_backup_restore( $key ) {
 	inpulsia_medios_orphans_release( $id, $dir, $data['files'] );
 	foreach ( $data['files'] as $f ) {
 		if ( ! @copy( $path . '/' . $f, $dir . '/' . $f ) ) {
-			return new WP_Error( 'restore', 'No se pudo restaurar ' . $f . '.' );
+			return new WP_Error( 'restore', sprintf( __( 'No se pudo restaurar %s.', 'inpulsia-medios' ), $f ) );
 		}
 		inpulsia_medios_fix_perms( $dir . '/' . $f );
 	}
