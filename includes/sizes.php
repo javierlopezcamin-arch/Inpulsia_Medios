@@ -35,6 +35,7 @@ function inpulsia_medios_store_size( $id ) {
 function inpulsia_medios_track_size( $data, $id ) {
 	clearstatcache();
 	inpulsia_medios_store_size( $id );
+	delete_post_meta( $id, '_inpulsia_medios_md5' ); // The file changed: recompute its duplicate hash.
 	return $data;
 }
 

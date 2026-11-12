@@ -262,6 +262,11 @@ function inpulsia_medios_undo_rows( $entries ) {
 	foreach ( $entries as $item ) {
 		$prev     = $item['prev'];
 		$restored = null;
+		if ( isset( $prev['undelete'] ) ) {
+			$back      = inpulsia_medios_undelete( $prev['undelete'] );
+			$results[] = [ 'id' => $item['id'] ] + ( is_wp_error( $back ) ? [ 'status' => 'error', 'msg' => $back->get_error_message() ] : [ 'status' => 'ok', 'msg' => __( 'Imagen recuperada.', 'inpulsia-medios' ) ] );
+			continue;
+		}
 		if ( isset( $prev['restore'] ) ) {
 			$restored = inpulsia_medios_backup_restore( $prev['restore'] );
 			unset( $prev['restore'] );
@@ -415,17 +420,19 @@ function inpulsia_medios_replace_in_value( $value, $pairs ) {
 }
 
 // Rewrites file references in posts, post/term meta and options. Returns how many items changed.
-function inpulsia_medios_replace_urls( $rel, $old_stem, $map, $exclude_id = 0 ) {
+// $new_rel: folder of the new files when it differs from $rel (merging duplicates).
+function inpulsia_medios_replace_urls( $rel, $old_stem, $map, $exclude_id = 0, $new_rel = null ) {
 	global $wpdb;
 
 	$prefix = '/' . ( $rel === '' ? '' : $rel . '/' );
+	$to     = $new_rel === null ? $prefix : '/' . ( $new_rel === '' ? '' : $new_rel . '/' );
 	$esc    = function ( $s ) {
 		return str_replace( '/', '\/', $s );
 	};
 	$pairs  = [];
 	foreach ( $map as $o => $n ) {
-		$pairs[ $prefix . $o ]          = $prefix . $n;
-		$pairs[ $esc( $prefix . $o ) ] = $esc( $prefix . $n );
+		$pairs[ $prefix . $o ]          = $to . $n;
+		$pairs[ $esc( $prefix . $o ) ] = $esc( $to . $n );
 	}
 	$like_a  = '%' . $wpdb->esc_like( $prefix . $old_stem ) . '%';
 	$like_b  = '%' . $wpdb->esc_like( $esc( $prefix . $old_stem ) ) . '%';
@@ -696,6 +703,10 @@ function inpulsia_medios_history_label( $label ) {
 		'Edición en tabla'                 => __( 'Edición en tabla', 'inpulsia-medios' ),
 		'Guardado automático en tabla'     => __( 'Guardado automático en tabla', 'inpulsia-medios' ),
 		'Optimización automática al subir' => __( 'Optimización automática al subir', 'inpulsia-medios' ),
+		'Limpieza: imágenes sin uso'       => __( 'Limpieza: imágenes sin uso', 'inpulsia-medios' ),
+		'Limpieza: duplicados'             => __( 'Limpieza: duplicados', 'inpulsia-medios' ),
+		'Limpieza: imágenes rotas'         => __( 'Limpieza: imágenes rotas', 'inpulsia-medios' ),
+		'Optimización desde el editor'     => __( 'Optimización desde el editor', 'inpulsia-medios' ),
 	];
 	if ( isset( $known[ $label ] ) ) {
 		return $known[ $label ];

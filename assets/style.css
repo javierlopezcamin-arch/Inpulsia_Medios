@@ -156,3 +156,17 @@
 .im-wizard .is-done h3 { color: var(--im-muted); }
 @media (max-width: 600px) { .im-wizard li, .im-health { flex-direction: column; align-items: flex-start; } .im-tools { grid-template-columns: 1fr; } }
 .im-actionbar .button:not(.button-primary) { background: #fff; color: var(--im-ink); border-color: #fff; }
+
+/* Limpieza */
+.im-clean-intro { margin-top: 16px; }
+#im-clean { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 0 16px; align-items: start; }
+#im-clean[hidden] { display: none; }
+#im-clean .im-clean-intro { grid-column: 1 / -1; }
+#im-clean .im-clean-card:last-child { grid-column: 1 / -1; }
+.im-clean-card h2 { display: flex; gap: 6px; align-items: center; }
+.im-clean-card h2 .dashicons { color: var(--im-blue); }
+.im-clean-figure strong { font-size: 24px; color: var(--im-ink); }
+.im-dupe-groups { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.im-dupe-group { display: flex; align-items: center; gap: 6px; border: 1px solid var(--im-line); border-radius: 6px; padding: 4px 8px 4px 4px; background: #fff; }
+.im-dupe-group img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; display: block; }
+.im-broken code { word-break: break-all; }

@@ -19,6 +19,9 @@ msgstr "Import"
 msgid "Exportar"
 msgstr "Export"
 
+msgid "Limpieza"
+msgstr "Cleanup"
+
 msgid "Historial"
 msgstr "History"
 
@@ -544,6 +547,135 @@ msgstr "The response was cut off. Try again."
 msgid "Respuesta inesperada de Claude."
 msgstr "Unexpected response from Claude."
 
+msgid "Antes de borrar o cambiar nada verás la lista completa. Las imágenes borradas se guardan en una copia y se pueden recuperar desde el Historial."
+msgstr "Before anything is deleted or changed you will see the full list. Deleted images are kept in a backup and can be recovered from History."
+
+msgid "Imágenes sin uso"
+msgstr "Unused images"
+
+msgid "No aparecen en ninguna página, entrada, producto, plantilla de Elementor ni ajuste del tema. Se excluyen las subidas en los últimos 7 días."
+msgstr "They do not appear on any page, post, product, Elementor template or theme setting. Images uploaded in the last 7 days are excluded."
+
+msgid "Si alguna imagen se usa desde código del tema, un CSS propio o una web externa, aquí no se detecta: revisa la lista antes de confirmar."
+msgstr "Images used from theme code, custom CSS or an external site are not detected here: check the list before confirming."
+
+msgid "Revisar y mandar a la papelera"
+msgstr "Review and move to trash"
+
+msgid "Verlas en Editar"
+msgstr "See them in Edit"
+
+msgid "Imágenes duplicadas"
+msgstr "Duplicate images"
+
+msgid "copias sobrantes"
+msgstr "redundant copies"
+
+msgid "La misma foto subida varias veces. Se conserva la que se usa (o la más antigua); las páginas que usan las copias pasan a usar esa y las direcciones antiguas redirigen a ella."
+msgstr "The same photo uploaded several times. The one in use (or the oldest) is kept; pages using the copies switch to it and the old addresses redirect to it."
+
+msgid "Se conserva"
+msgstr "Kept"
+
+msgid "Revisar y unificar"
+msgstr "Review and merge"
+
+msgid "Imágenes rotas"
+msgstr "Broken images"
+
+msgid "Páginas y plantillas de Elementor que enlazan a imágenes que ya no existen en el servidor. Cuando se encuentra la misma imagen con otro nombre, tamaño o formato, se propone el cambio."
+msgstr "Pages and Elementor templates that link to images no longer on the server. When the same image is found under another name, size or format, a fix is suggested."
+
+msgid "Analizar la web"
+msgstr "Scan the site"
+
+msgid "enlaces rotos"
+msgstr "broken links"
+
+msgid "%d con arreglo propuesto"
+msgstr "%d with a suggested fix"
+
+msgid "analizado hace %s"
+msgstr "scanned %s ago"
+
+msgid "Volver a analizar"
+msgstr "Scan again"
+
+msgid "Página"
+msgstr "Page"
+
+msgid "Imagen que falta"
+msgstr "Missing image"
+
+msgid "Propuesta"
+msgstr "Suggestion"
+
+msgid "Sin propuesta: cámbiala a mano"
+msgstr "No suggestion: change it manually"
+
+msgid "Reparar las %d con propuesta"
+msgstr "Fix the %d with a suggestion"
+
+msgid "Se borra (con copia para recuperarla)"
+msgstr "Will be deleted (with a backup to recover it)"
+
+msgid "Se subió en «%s»: comprueba que no la necesitas."
+msgstr "Uploaded to “%s”: make sure you don't need it."
+
+msgid "Igual que %1$s (ID %2$d), que se conserva"
+msgstr "Same as %1$s (ID %2$d), which is kept"
+
+msgid "Acción no válida."
+msgstr "Invalid action."
+
+msgid "No hay nada que limpiar."
+msgstr "Nothing to clean up."
+
+msgid "Mandar %d imágenes a la papelera"
+msgstr "Move %d images to trash"
+
+msgid "Unificar %d duplicados"
+msgstr "Merge %d duplicates"
+
+msgid "Reparar %d enlaces"
+msgstr "Fix %d links"
+
+msgid "Limpiando"
+msgstr "Cleaning up"
+
+msgid "Sin cambios."
+msgstr "No changes."
+
+msgid "Medio no encontrado."
+msgstr "Media item not found."
+
+msgid "No tienes permisos para borrar este medio."
+msgstr "You do not have permission to delete this media item."
+
+msgid "Tiene traducciones que usan el mismo archivo: bórrala desde el plugin de idiomas."
+msgstr "It has translations that use the same file: delete it from the language plugin."
+
+msgid "WordPress no ha podido borrar la imagen."
+msgstr "WordPress could not delete the image."
+
+msgid "Enviada a la papelera (%s liberados). Se puede deshacer desde el Historial."
+msgstr "Moved to trash (%s freed). It can be undone from History."
+
+msgid "La copia de seguridad ya no existe."
+msgstr "The backup no longer exists."
+
+msgid "Ya existe un medio con este ID."
+msgstr "A media item with this ID already exists."
+
+msgid "No se pudo restaurar %s."
+msgstr "Could not restore %s."
+
+msgid "La imagen que se conserva ya no existe."
+msgstr "The image to keep no longer exists."
+
+msgid "Unificada con la imagen %1$d (%2$d usos actualizados). %3$s"
+msgstr "Merged into image %1$d (%2$d uses updated). %3$s"
+
 msgid "No hay administradores. Indica un usuario con --user=<id|login>."
 msgstr "There are no administrators. Pass a user with --user=<id|login>."
 
@@ -601,17 +733,14 @@ msgstr "A file with that name already exists in the folder: it will not be renam
 msgid "Nombre repetido (IDs %s)."
 msgstr "Duplicate name (IDs %s)."
 
-msgid "Medio no encontrado."
-msgstr "Media item not found."
-
-msgid "Sin cambios."
-msgstr "No changes."
-
 msgid "(%d en contenido)"
 msgstr "(%d in content)"
 
 msgid "(%d contenidos actualizados)"
 msgstr "(%d items of content updated)"
+
+msgid "Imagen recuperada."
+msgstr "Image recovered."
 
 msgid "Imagen original restaurada."
 msgstr "Original image restored."
@@ -640,8 +769,59 @@ msgstr "Table autosave"
 msgid "Optimización automática al subir"
 msgstr "Automatic optimization on upload"
 
+msgid "Limpieza: imágenes sin uso"
+msgstr "Cleanup: unused images"
+
+msgid "Limpieza: duplicados"
+msgstr "Cleanup: duplicates"
+
+msgid "Limpieza: imágenes rotas"
+msgstr "Cleanup: broken images"
+
+msgid "Optimización desde el editor"
+msgstr "Optimization from the editor"
+
 msgid "Optimización (%1$s, %2$d px)"
 msgstr "Optimization (%1$s, %2$d px)"
+
+msgid "Pesa más de 300 KB: conviene optimizarla."
+msgstr "Over 300 KB: worth optimizing."
+
+msgid "Nombre poco amigable para Google."
+msgstr "Name not friendly for Google."
+
+msgid "Falta el texto alternativo."
+msgstr "Missing alt text."
+
+msgid "Todo correcto."
+msgstr "All good."
+
+msgid "Sugerir alt con IA"
+msgstr "Suggest alt with AI"
+
+msgid "Usar el alt de la biblioteca"
+msgstr "Use the library alt"
+
+msgid "Guardar este alt en la biblioteca"
+msgstr "Save this alt to the library"
+
+msgid "Alt en la biblioteca"
+msgstr "Library alt"
+
+msgid "Guardado."
+msgstr "Saved."
+
+msgid "Trabajando…"
+msgstr "Working…"
+
+msgid "Error de conexión con el servidor."
+msgstr "Could not connect to the server."
+
+msgid "Abrir en Inpulsia Medios"
+msgstr "Open in Inpulsia Medios"
+
+msgid "Guarda la página para conservar el cambio."
+msgstr "Save the page to keep the change."
 
 msgid "Reforma de cocina en Santander"
 msgstr "Kitchen renovation in Santander"
@@ -1093,9 +1273,6 @@ msgstr "Error processing the file."
 msgid "Error de conexión"
 msgstr "Connection error"
 
-msgid "Error de conexión con el servidor."
-msgstr "Could not connect to the server."
-
 msgid "Error de conexión: no se ha guardado"
 msgstr "Connection error: not saved"
 
@@ -1155,6 +1332,9 @@ msgstr "Done: %s succeeded, %s partial, %s errors, %s unchanged."
 
 msgid "Ver historial / deshacer"
 msgstr "See history / undo"
+
+msgid "Volver a Limpieza"
+msgstr "Back to Cleanup"
 
 msgid "Volver a la tabla"
 msgstr "Back to the table"
@@ -1264,12 +1444,6 @@ msgstr "Could not create the backup (uploads permissions)."
 msgid "No se pudo crear la copia de seguridad (¿espacio en disco?)."
 msgstr "Could not create the backup (disk space?)."
 
-msgid "La copia de seguridad ya no existe."
-msgstr "The backup no longer exists."
-
-msgid "No se pudo restaurar %s."
-msgstr "Could not restore %s."
-
 msgid "El servidor no tiene la extensión ZIP de PHP. Guarda el archivo como CSV."
 msgstr "The server does not have the PHP ZIP extension. Save the file as CSV."
 
@@ -1302,3 +1476,13 @@ msgstr "<p>No release notes.</p>"
 
 msgid "No se pudo preparar la carpeta del plugin."
 msgstr "Could not prepare the plugin folder."
+
+msgid "%d copia"
+msgid_plural "%d copias"
+msgstr[0] "%d copy"
+msgstr[1] "%d copies"
+
+msgid "%d elemento"
+msgid_plural "%d elementos"
+msgstr[0] "%d item"
+msgstr[1] "%d items"

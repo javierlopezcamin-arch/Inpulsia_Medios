@@ -22,6 +22,8 @@ tests_add_filter( 'muplugins_loaded', function () use ( $root ) {
 	require_once $root . '/includes/media.php';
 	require_once $root . '/includes/guide.php';
 	require_once $root . '/includes/i18n-js.php';
+	require_once $root . '/includes/cleanup.php';
+	require_once $root . '/includes/cleanup-admin.php';
 } );
 
 require $tests_dir . '/includes/bootstrap.php';

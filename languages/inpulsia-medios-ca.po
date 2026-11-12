@@ -19,6 +19,9 @@ msgstr "Importa"
 msgid "Exportar"
 msgstr "Exporta"
 
+msgid "Limpieza"
+msgstr "Neteja"
+
 msgid "Historial"
 msgstr "Historial"
 
@@ -544,6 +547,135 @@ msgstr "La resposta s'ha tallat. Torna-ho a provar."
 msgid "Respuesta inesperada de Claude."
 msgstr "Resposta inesperada de Claude."
 
+msgid "Antes de borrar o cambiar nada verás la lista completa. Las imágenes borradas se guardan en una copia y se pueden recuperar desde el Historial."
+msgstr "Abans d'esborrar o canviar res veuràs la llista completa. Les imatges esborrades es desen en una còpia i es poden recuperar des de l'Historial."
+
+msgid "Imágenes sin uso"
+msgstr "Imatges sense ús"
+
+msgid "No aparecen en ninguna página, entrada, producto, plantilla de Elementor ni ajuste del tema. Se excluyen las subidas en los últimos 7 días."
+msgstr "No apareixen a cap pàgina, entrada, producte, plantilla d'Elementor ni ajust del tema. S'exclouen les pujades els últims 7 dies."
+
+msgid "Si alguna imagen se usa desde código del tema, un CSS propio o una web externa, aquí no se detecta: revisa la lista antes de confirmar."
+msgstr "Si alguna imatge s'utilitza des del codi del tema, un CSS propi o un web extern, aquí no es detecta: revisa la llista abans de confirmar."
+
+msgid "Revisar y mandar a la papelera"
+msgstr "Revisa i envia a la paperera"
+
+msgid "Verlas en Editar"
+msgstr "Mostra-les a Edita"
+
+msgid "Imágenes duplicadas"
+msgstr "Imatges duplicades"
+
+msgid "copias sobrantes"
+msgstr "còpies sobrants"
+
+msgid "La misma foto subida varias veces. Se conserva la que se usa (o la más antigua); las páginas que usan las copias pasan a usar esa y las direcciones antiguas redirigen a ella."
+msgstr "La mateixa foto pujada diverses vegades. Es conserva la que s'utilitza (o la més antiga); les pàgines que fan servir les còpies passen a fer servir aquesta i les adreces antigues hi redirigeixen."
+
+msgid "Se conserva"
+msgstr "Es conserva"
+
+msgid "Revisar y unificar"
+msgstr "Revisa i unifica"
+
+msgid "Imágenes rotas"
+msgstr "Imatges trencades"
+
+msgid "Páginas y plantillas de Elementor que enlazan a imágenes que ya no existen en el servidor. Cuando se encuentra la misma imagen con otro nombre, tamaño o formato, se propone el cambio."
+msgstr "Pàgines i plantilles d'Elementor que enllacen a imatges que ja no existeixen al servidor. Quan es troba la mateixa imatge amb un altre nom, mida o format, es proposa el canvi."
+
+msgid "Analizar la web"
+msgstr "Analitza el web"
+
+msgid "enlaces rotos"
+msgstr "enllaços trencats"
+
+msgid "%d con arreglo propuesto"
+msgstr "%d amb arranjament proposat"
+
+msgid "analizado hace %s"
+msgstr "analitzat fa %s"
+
+msgid "Volver a analizar"
+msgstr "Torna a analitzar"
+
+msgid "Página"
+msgstr "Pàgina"
+
+msgid "Imagen que falta"
+msgstr "Imatge que falta"
+
+msgid "Propuesta"
+msgstr "Proposta"
+
+msgid "Sin propuesta: cámbiala a mano"
+msgstr "Sense proposta: canvia-la a mà"
+
+msgid "Reparar las %d con propuesta"
+msgstr "Repara les %d amb proposta"
+
+msgid "Se borra (con copia para recuperarla)"
+msgstr "S'esborra (amb còpia per recuperar-la)"
+
+msgid "Se subió en «%s»: comprueba que no la necesitas."
+msgstr "Es va pujar a «%s»: comprova que no la necessites."
+
+msgid "Igual que %1$s (ID %2$d), que se conserva"
+msgstr "Igual que %1$s (ID %2$d), que es conserva"
+
+msgid "Acción no válida."
+msgstr "Acció no vàlida."
+
+msgid "No hay nada que limpiar."
+msgstr "No hi ha res per netejar."
+
+msgid "Mandar %d imágenes a la papelera"
+msgstr "Envia %d imatges a la paperera"
+
+msgid "Unificar %d duplicados"
+msgstr "Unifica %d duplicats"
+
+msgid "Reparar %d enlaces"
+msgstr "Repara %d enllaços"
+
+msgid "Limpiando"
+msgstr "Netejant"
+
+msgid "Sin cambios."
+msgstr "Sense canvis."
+
+msgid "Medio no encontrado."
+msgstr "No s'ha trobat el mitjà."
+
+msgid "No tienes permisos para borrar este medio."
+msgstr "No tens permisos per esborrar aquest mitjà."
+
+msgid "Tiene traducciones que usan el mismo archivo: bórrala desde el plugin de idiomas."
+msgstr "Té traduccions que fan servir el mateix fitxer: esborra-la des del connector d'idiomes."
+
+msgid "WordPress no ha podido borrar la imagen."
+msgstr "WordPress no ha pogut esborrar la imatge."
+
+msgid "Enviada a la papelera (%s liberados). Se puede deshacer desde el Historial."
+msgstr "Enviada a la paperera (%s alliberats). Es pot desfer des de l'Historial."
+
+msgid "La copia de seguridad ya no existe."
+msgstr "La còpia de seguretat ja no existeix."
+
+msgid "Ya existe un medio con este ID."
+msgstr "Ja existeix un mitjà amb aquest ID."
+
+msgid "No se pudo restaurar %s."
+msgstr "No s'ha pogut restaurar %s."
+
+msgid "La imagen que se conserva ya no existe."
+msgstr "La imatge que es conserva ja no existeix."
+
+msgid "Unificada con la imagen %1$d (%2$d usos actualizados). %3$s"
+msgstr "Unificada amb la imatge %1$d (%2$d usos actualitzats). %3$s"
+
 msgid "No hay administradores. Indica un usuario con --user=<id|login>."
 msgstr "No hi ha administradors. Indica un usuari amb --user=<id|login>."
 
@@ -601,17 +733,14 @@ msgstr "Ja existeix un fitxer amb aquest nom a la carpeta: no es reanomenarà."
 msgid "Nombre repetido (IDs %s)."
 msgstr "Nom repetit (ID %s)."
 
-msgid "Medio no encontrado."
-msgstr "No s'ha trobat el mitjà."
-
-msgid "Sin cambios."
-msgstr "Sense canvis."
-
 msgid "(%d en contenido)"
 msgstr "(%d al contingut)"
 
 msgid "(%d contenidos actualizados)"
 msgstr "(%d continguts actualitzats)"
+
+msgid "Imagen recuperada."
+msgstr "Imatge recuperada."
 
 msgid "Imagen original restaurada."
 msgstr "Imatge original restaurada."
@@ -640,8 +769,59 @@ msgstr "Desament automàtic a la taula"
 msgid "Optimización automática al subir"
 msgstr "Optimització automàtica en pujar"
 
+msgid "Limpieza: imágenes sin uso"
+msgstr "Neteja: imatges sense ús"
+
+msgid "Limpieza: duplicados"
+msgstr "Neteja: duplicats"
+
+msgid "Limpieza: imágenes rotas"
+msgstr "Neteja: imatges trencades"
+
+msgid "Optimización desde el editor"
+msgstr "Optimització des de l'editor"
+
 msgid "Optimización (%1$s, %2$d px)"
 msgstr "Optimització (%1$s, %2$d px)"
+
+msgid "Pesa más de 300 KB: conviene optimizarla."
+msgstr "Pesa més de 300 KB: convé optimitzar-la."
+
+msgid "Nombre poco amigable para Google."
+msgstr "Nom poc amigable per a Google."
+
+msgid "Falta el texto alternativo."
+msgstr "Falta el text alternatiu."
+
+msgid "Todo correcto."
+msgstr "Tot correcte."
+
+msgid "Sugerir alt con IA"
+msgstr "Suggereix l'alt amb IA"
+
+msgid "Usar el alt de la biblioteca"
+msgstr "Fes servir l'alt de la biblioteca"
+
+msgid "Guardar este alt en la biblioteca"
+msgstr "Desa aquest alt a la biblioteca"
+
+msgid "Alt en la biblioteca"
+msgstr "Alt a la biblioteca"
+
+msgid "Guardado."
+msgstr "Desat."
+
+msgid "Trabajando…"
+msgstr "Treballant…"
+
+msgid "Error de conexión con el servidor."
+msgstr "Error de connexió amb el servidor."
+
+msgid "Abrir en Inpulsia Medios"
+msgstr "Obre a Inpulsia Medios"
+
+msgid "Guarda la página para conservar el cambio."
+msgstr "Desa la pàgina per conservar el canvi."
 
 msgid "Reforma de cocina en Santander"
 msgstr "Reforma de cuina a Girona"
@@ -1093,9 +1273,6 @@ msgstr "Error en processar el fitxer."
 msgid "Error de conexión"
 msgstr "Error de connexió"
 
-msgid "Error de conexión con el servidor."
-msgstr "Error de connexió amb el servidor."
-
 msgid "Error de conexión: no se ha guardado"
 msgstr "Error de connexió: no s'ha desat"
 
@@ -1155,6 +1332,9 @@ msgstr "Acabat: %s correctes, %s parcials, %s errors, %s sense canvis."
 
 msgid "Ver historial / deshacer"
 msgstr "Mostra l'historial / desfés"
+
+msgid "Volver a Limpieza"
+msgstr "Torna a Neteja"
 
 msgid "Volver a la tabla"
 msgstr "Torna a la taula"
@@ -1264,12 +1444,6 @@ msgstr "No s'ha pogut crear la còpia de seguretat (permisos d'uploads)."
 msgid "No se pudo crear la copia de seguridad (¿espacio en disco?)."
 msgstr "No s'ha pogut crear la còpia de seguretat (espai al disc?)."
 
-msgid "La copia de seguridad ya no existe."
-msgstr "La còpia de seguretat ja no existeix."
-
-msgid "No se pudo restaurar %s."
-msgstr "No s'ha pogut restaurar %s."
-
 msgid "El servidor no tiene la extensión ZIP de PHP. Guarda el archivo como CSV."
 msgstr "El servidor no té l'extensió ZIP de PHP. Desa el fitxer com a CSV."
 
@@ -1302,3 +1476,13 @@ msgstr "<p>Sense notes de versió.</p>"
 
 msgid "No se pudo preparar la carpeta del plugin."
 msgstr "No s'ha pogut preparar la carpeta del connector."
+
+msgid "%d copia"
+msgid_plural "%d copias"
+msgstr[0] "%d còpia"
+msgstr[1] "%d còpies"
+
+msgid "%d elemento"
+msgid_plural "%d elementos"
+msgstr[0] "%d element"
+msgstr[1] "%d elements"

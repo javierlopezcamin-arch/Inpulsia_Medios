@@ -41,14 +41,15 @@ function inpulsia_medios_uploads_path() {
 }
 
 // $map: old file name => new file name, both inside the uploads sub-folder $rel.
-function inpulsia_medios_redirects_add( $rel, $map ) {
+function inpulsia_medios_redirects_add( $rel, $map, $new_rel = null ) {
 	global $wpdb;
 	$table = inpulsia_medios_redirects_table();
 	$dir   = inpulsia_medios_uploads_path() . '/' . ( $rel === '' ? '' : $rel . '/' );
+	$to    = $new_rel === null ? $dir : inpulsia_medios_uploads_path() . '/' . ( $new_rel === '' ? '' : $new_rel . '/' );
 
 	foreach ( $map as $old => $new ) {
 		$source = $dir . $old;
-		$target = $dir . $new;
+		$target = $to . $new;
 		if ( strlen( $source ) > 191 || strlen( $target ) > 191 ) {
 			continue;
 		}

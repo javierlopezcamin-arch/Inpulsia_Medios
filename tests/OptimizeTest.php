@@ -407,4 +407,84 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertSame( 'Optimizar imágenes', $check( 'es_ES' ) );
 		$this->assertArrayHasKey( '%s seleccionadas', inpulsia_medios_js_i18n() );
 	}
+
+	private function age( $id, $days = 30 ) {
+		$date = gmdate( 'Y-m-d H:i:s', time() - $days * DAY_IN_SECONDS );
+		wp_update_post( [ 'ID' => $id, 'post_date' => $date, 'post_date_gmt' => $date ] );
+	}
+
+	public function test_trash_keeps_a_backup_and_undo_brings_the_image_back() {
+		$id   = $this->upload( 'papelera.jpg', 300, 200 );
+		update_post_meta( $id, '_wp_attachment_image_alt', 'Texto alternativo' );
+		$file = get_attached_file( $id );
+		$r    = inpulsia_medios_trash_image( $id );
+		$this->assertSame( 'ok', $r['status'], $r['msg'] );
+		$this->assertNull( get_post( $id ) );
+		$this->assertFileDoesNotExist( $file );
+
+		$this->assertTrue( inpulsia_medios_undelete( $r['prev']['undelete'] ) );
+		$this->assertSame( 'attachment', get_post_type( $id ) );
+		$this->assertFileExists( get_attached_file( $id ) );
+		$this->assertSame( 'Texto alternativo', get_post_meta( $id, '_wp_attachment_image_alt', true ) );
+		$this->assertNotEmpty( wp_get_attachment_metadata( $id )['sizes'] );
+	}
+
+	public function test_unused_list_skips_used_and_recent_images() {
+		$old    = $this->upload( 'vieja.jpg', 40, 40 );
+		$used   = $this->upload( 'usada.jpg', 40, 40 );
+		$recent = $this->upload( 'reciente.jpg', 40, 40 );
+		$this->age( $old );
+		$this->age( $used );
+		self::factory()->post->create( [ 'post_content' => '<img class="wp-image-' . $used . '" src="x.jpg">' ] );
+		inpulsia_medios_used_ids( true );
+		$ids = inpulsia_medios_unused_ids();
+		$this->assertContains( $old, $ids );
+		$this->assertNotContains( $used, $ids );
+		$this->assertNotContains( $recent, $ids );
+	}
+
+	public function test_duplicates_are_merged_into_the_used_copy() {
+		$a = $this->upload( 'foto-original.jpg', 400, 300 );
+		$b = $this->upload( 'foto-copia.jpg', 400, 300 ); // Same pixels, same bytes.
+		$this->assertSame( md5_file( get_attached_file( $a ) ), md5_file( get_attached_file( $b ) ) );
+		$b_url  = wp_get_attachment_url( $b );
+		$b_med  = wp_get_attachment_image_url( $b, 'medium' );
+		$post   = self::factory()->post->create( [ 'post_content' => '<!-- wp:image {"id":' . $b . '} --><img class="wp-image-' . $b . '" src="' . $b_med . '"><!-- /wp:image --> <a href="' . $b_url . '">x</a>' ] );
+		$other  = self::factory()->post->create();
+		set_post_thumbnail( $other, $b );
+		inpulsia_medios_used_ids( true );
+
+		$groups = inpulsia_medios_duplicate_groups();
+		$this->assertCount( 1, $groups );
+		$this->assertSame( $b, $groups[0]['keep'] === $b ? $b : $groups[0]['dupes'][0] );
+		// $b is the one in use, so it is kept; merge the other way to test the rewrite.
+		$r = inpulsia_medios_dedupe( $b, $a );
+		$this->assertSame( 'ok', $r['status'], $r['msg'] );
+		$content = get_post_field( 'post_content', $post );
+		$this->assertStringContainsString( 'wp-image-' . $a . '"', $content );
+		$this->assertStringContainsString( '"id":' . $a . '}', $content );
+		$this->assertStringContainsString( wp_get_attachment_image_url( $a, 'medium' ), $content );
+		$this->assertStringContainsString( wp_get_attachment_url( $a ), $content );
+		$this->assertSame( $a, (int) get_post_thumbnail_id( $other ) );
+		$this->assertNull( get_post( $b ) );
+		global $wpdb;
+		$target = $wpdb->get_var( $wpdb->prepare( 'SELECT target FROM %i WHERE source = %s', inpulsia_medios_redirects_table(), wp_parse_url( $b_url, PHP_URL_PATH ) ) );
+		$this->assertSame( wp_parse_url( wp_get_attachment_url( $a ), PHP_URL_PATH ), $target );
+	}
+
+	public function test_broken_image_links_are_found_and_repaired() {
+		$id   = $this->upload( 'renombrada.jpg', 600, 400 );
+		$meta = wp_get_attachment_metadata( $id );
+		$up   = wp_get_upload_dir();
+		$rel  = dirname( get_post_meta( $id, '_wp_attached_file', true ) );
+		$gone = $up['baseurl'] . '/' . $rel . '/renombrada-' . $meta['sizes']['medium']['width'] . 'x' . $meta['sizes']['medium']['height'] . '.png';
+		$post = self::factory()->post->create( [ 'post_content' => '<img src="' . $gone . '">' ] );
+
+		$items = wp_list_filter( inpulsia_medios_broken_scan(), [ 'post' => $post ] );
+		$this->assertCount( 1, $items );
+		$item = array_values( $items )[0];
+		$this->assertSame( $rel . '/' . $meta['sizes']['medium']['file'], $item['fix'] );
+		$this->assertTrue( inpulsia_medios_broken_repair( $post, $item['path'], $item['fix'] ) );
+		$this->assertStringContainsString( wp_get_attachment_image_url( $id, 'medium' ), get_post_field( 'post_content', $post ) );
+	}
 }

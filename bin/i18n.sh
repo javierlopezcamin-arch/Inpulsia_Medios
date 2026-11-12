@@ -4,7 +4,7 @@
 set -e
 cd "$(dirname "$0")/.."
 xgettext --language=PHP --from-code=UTF-8 --no-wrap \
-	--keyword=__ --keyword=_e --keyword=esc_html__ --keyword=esc_html_e --keyword=esc_attr__ --keyword=esc_attr_e \
+	--keyword=__ --keyword=_e --keyword=esc_html__ --keyword=esc_html_e --keyword=esc_attr__ --keyword=esc_attr_e --keyword=_n:1,2 \
 	--package-name="Inpulsia Medios" -o languages/inpulsia-medios.pot inpulsia-medios.php includes/*.php
 for po in languages/*.po; do
 	msgmerge --quiet --update --no-fuzzy-matching --backup=none "$po" languages/inpulsia-medios.pot

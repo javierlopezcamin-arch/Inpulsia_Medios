@@ -26,6 +26,7 @@ function inpulsia_medios_tabs() {
 		'editar'        => __( 'Editar', 'inpulsia-medios' ),
 		'importar'      => __( 'Importar', 'inpulsia-medios' ),
 		'exportar'      => __( 'Exportar', 'inpulsia-medios' ),
+		'limpieza'      => __( 'Limpieza', 'inpulsia-medios' ),
 		'historial'     => __( 'Historial', 'inpulsia-medios' ),
 		'redirecciones' => __( 'Redirecciones', 'inpulsia-medios' ),
 	];

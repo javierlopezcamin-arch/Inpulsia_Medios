@@ -4,6 +4,7 @@
 	var cfg = window.inpulsiaMedios;
 	var token = null;
 	var applyAction = 'inpulsia_medios_apply';
+	var runTitle = '';
 
 	// Translations come from PHP (wp_localize_script); %s placeholders are filled in order.
 	function t(text) {
@@ -369,13 +370,29 @@
 		optimize('filter');
 	});
 
+	/* ---------- Cleanup ---------- */
+
+	$('.im-clean-stage').on('click', function () {
+		var $btn = $(this).prop('disabled', true).addClass('is-loading');
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_clean_stage', nonce: cfg.nonce, kind: $(this).data('kind') }, null, 'json')
+			.done(function (res) {
+				if (!res.success) return alert(res.data || t('Error.'));
+				token = res.data.token;
+				$('#im-clean').prop('hidden', true);
+				renderPreview(res.data);
+			})
+			.fail(function () { alert(t('Error de conexión con el servidor.')); })
+			.always(function () { $btn.prop('disabled', false).removeClass('is-loading'); });
+	});
+
 	/* ---------- Preview ---------- */
 
 	function renderPreview(data) {
 		var $tbody = $('#inpulsia-medios-table tbody').empty();
 		var warnCount = 0, errCount = 0;
 		var isOpt = data.mode === 'optimize';
-		applyAction = isOpt ? 'inpulsia_medios_opt_apply' : 'inpulsia_medios_apply';
+		applyAction = data.action || (isOpt ? 'inpulsia_medios_opt_apply' : 'inpulsia_medios_apply');
+		runTitle = data.title || '';
 
 		$.each(data.items, function (i, item) {
 			var $tr = $('<tr>');
@@ -432,13 +449,13 @@
 		});
 
 		$('#inpulsia-medios-summary').empty().append(
-			txt('span', isOpt ? t('%s imágenes a optimizar · %s actuales', data.total, data.bytes) : t('%s medios con cambios', data.total), 'pill pill-ok'),
+			txt('span', data.summary || (isOpt ? t('%s imágenes a optimizar · %s actuales', data.total, data.bytes) : t('%s medios con cambios', data.total)), 'pill pill-ok'),
 			isOpt && data.listed > data.total ? txt('span', t('%s se omiten', data.listed - data.total), 'pill') : '',
 			isOpt && data.listed > data.items.length ? txt('span', t('se muestran %s de %s', data.items.length, data.listed), 'pill') : '',
 			warnCount ? txt('span', t('%s con avisos', warnCount), 'pill pill-warn') : '',
 			errCount ? txt('span', t('%s con errores', errCount), 'pill pill-error') : ''
 		);
-		$('#inpulsia-medios-apply').prop('disabled', !data.total).text(isOpt ? t('Optimizar %s imágenes', data.total) : t('Aplicar %s cambios', data.total));
+		$('#inpulsia-medios-apply').prop('disabled', !data.total).text(data.label || (isOpt ? t('Optimizar %s imágenes', data.total) : t('Aplicar %s cambios', data.total)));
 		$('#inpulsia-medios-only-warn').prop('checked', false);
 		$('#inpulsia-medios-preview').prop('hidden', false);
 	}
@@ -449,7 +466,7 @@
 
 	$('#inpulsia-medios-cancel').on('click', function () {
 		$('#inpulsia-medios-preview').prop('hidden', true);
-		$('#inpulsia-medios-grid-wrap').prop('hidden', false);
+		$('#inpulsia-medios-grid-wrap, #im-clean').prop('hidden', false);
 		token = null;
 	});
 
@@ -457,7 +474,7 @@
 		if (!token || !confirm(t('¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial.'))) return;
 		$('#inpulsia-medios-preview').prop('hidden', true);
 		window.inpulsiaMediosSaving = true;
-		run(applyAction, token, applyAction === 'inpulsia_medios_opt_apply' ? t('Optimizando imágenes') : t('Aplicando cambios'));
+		run(applyAction, token, runTitle || (applyAction === 'inpulsia_medios_opt_apply' ? t('Optimizando imágenes') : t('Aplicando cambios')));
 	});
 
 	$(document).on('click', '.inpulsia-medios-undo', function () {
@@ -538,8 +555,8 @@
 			}
 			$status.append(' ', $('<a>').attr('href', cfg.history).text(t('Ver historial / deshacer')));
 			$('#inpulsia-medios-file').val('');
-			if ($grid.length) {
-				$status.append(' · ', $('<a href="#">').text(t('Volver a la tabla')).on('click', function (e) { e.preventDefault(); location.reload(); }));
+			if ($grid.length || $('#im-clean').length) {
+				$status.append(' · ', $('<a href="#">').text($grid.length ? t('Volver a la tabla') : t('Volver a Limpieza')).on('click', function (e) { e.preventDefault(); location.reload(); }));
 			}
 		}
 	}
