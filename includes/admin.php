@@ -201,7 +201,8 @@ function inpulsia_medios_tab_editar() {
 	}
 	$params = inpulsia_medios_editar_params();
 	$paged  = max( 1, absint( $_GET['paged'] ?? 1 ) );
-	$query  = new WP_Query( inpulsia_medios_editar_args( $params ) + [ 'posts_per_page' => 20, 'paged' => $paged ] );
+	$per_page = inpulsia_medios_per_page();
+	$query  = new WP_Query( inpulsia_medios_editar_args( $params ) + [ 'posts_per_page' => $per_page, 'paged' => $paged ] );
 	$has_ai = inpulsia_medios_api_key() !== '';
 	$opt    = inpulsia_medios_opt_settings();
 	$labels = inpulsia_medios_field_labels();
@@ -249,6 +250,11 @@ function inpulsia_medios_tab_editar() {
 		<?php if ( array_filter( $params ) ) : ?>
 			<a href="<?php echo esc_url( inpulsia_medios_url( 'editar' ) ); ?>"><?php esc_html_e( 'Quitar filtros', 'inpulsia-medios' ); ?></a>
 		<?php endif; ?>
+		<select name="per_page" aria-label="<?php esc_attr_e( 'Imágenes por página', 'inpulsia-medios' ); ?>" onchange="this.form.submit()">
+			<?php foreach ( inpulsia_medios_per_page_options() as $pp ) : ?>
+				<option value="<?php echo (int) $pp; ?>" <?php selected( $per_page, $pp ); ?>><?php echo esc_html( sprintf( __( '%d por página', 'inpulsia-medios' ), $pp ) ); ?></option>
+			<?php endforeach; ?>
+		</select>
 		<span class="inpulsia-medios-count"><?php echo (int) $query->found_posts; ?> <?php esc_html_e( 'imágenes', 'inpulsia-medios' ); ?></span>
 		<?php if ( $params['usage'] ) : ?>
 			<a href="<?php echo esc_url( add_query_arg( 'refresh_usage', 1 ) ); ?>" class="inpulsia-medios-refresh"><?php esc_html_e( 'Recalcular uso', 'inpulsia-medios' ); ?></a>
@@ -304,7 +310,8 @@ function inpulsia_medios_tab_editar() {
 				</label>
 				<label class="im-tpl-input"><?php esc_html_e( 'Plantilla', 'inpulsia-medios' ); ?> <input type="text" id="im-tpl" value="{pagina} - {web}" /></label>
 				<label><input type="checkbox" id="im-tpl-empty" checked /> <?php esc_html_e( 'Solo donde esté vacío o tenga nombre de cámara', 'inpulsia-medios' ); ?></label>
-				<button type="button" class="button button-primary" id="im-tpl-apply"><?php esc_html_e( 'Aplicar', 'inpulsia-medios' ); ?></button>
+				<button type="button" class="button" id="im-tpl-apply"><?php esc_html_e( 'Aplicar en esta página', 'inpulsia-medios' ); ?></button>
+				<button type="button" class="button button-primary" id="im-tpl-filter"><?php echo esc_html( sprintf( __( 'Aplicar a las %d del filtro', 'inpulsia-medios' ), $query->found_posts ) ); ?></button>
 			</div>
 			<p class="description"><?php esc_html_e( 'Variables:', 'inpulsia-medios' ); ?>
 				<?php foreach ( [ '{pagina}' => __( 'título de la página donde se usa', 'inpulsia-medios' ), '{keyword}' => __( 'palabra clave de Rank Math, Yoast o SEOPress de esa página', 'inpulsia-medios' ), '{titulo}' => __( 'título de la imagen', 'inpulsia-medios' ), '{web}' => 'nombre de la web', '{nombre}' => 'nombre de archivo actual', '{alt}' => 'alt actual', '{n}' => __( 'número 1, 2, 3…', 'inpulsia-medios' ) ] as $var => $help ) : ?>
@@ -319,6 +326,9 @@ function inpulsia_medios_tab_editar() {
 			<label class="im-autosave"><input type="checkbox" id="im-autosave" /> <?php esc_html_e( 'Guardar automáticamente alt, título, leyenda y descripción', 'inpulsia-medios' ); ?></label>
 			<span class="muted im-keys"><?php esc_html_e( 'Intro: fila siguiente · Pega una columna de Excel para rellenar hacia abajo', 'inpulsia-medios' ); ?></span>
 			<span id="inpulsia-medios-dirty"></span>
+			<?php if ( $has_ai ) : ?>
+				<button type="button" id="im-ai-filter" class="button"><?php echo esc_html( sprintf( __( 'Completar con IA las %d del filtro', 'inpulsia-medios' ), $query->found_posts ) ); ?></button>
+			<?php endif; ?>
 			<button type="button" id="inpulsia-medios-review" class="button button-primary"><?php esc_html_e( 'Revisar cambios', 'inpulsia-medios' ); ?></button>
 			<?php if ( ! $has_ai && current_user_can( 'manage_options' ) ) : ?>
 				<a href="<?php echo esc_url( admin_url( 'upload.php?page=inpulsia-medios&tab=ajustes' ) ); ?>"><?php esc_html_e( 'Configura la IA en Ajustes', 'inpulsia-medios' ); ?></a>

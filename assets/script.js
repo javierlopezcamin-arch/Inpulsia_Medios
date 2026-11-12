@@ -370,6 +370,36 @@
 		optimize('filter');
 	});
 
+	/* ---------- Whole filter (not only the visible page) ---------- */
+
+	function filterParams(data) {
+		var params = new URLSearchParams(location.search);
+		['s', 'usage', 'missing_alt', 'format', 'weight', 'names', 'lang', 'ids'].forEach(function (k) { data[k] = params.get(k) || ''; });
+		return data;
+	}
+
+	function stageFilter($btn, data) {
+		$btn.prop('disabled', true).addClass('is-loading');
+		$.post(cfg.ajax_url, filterParams($.extend({ nonce: cfg.nonce }, data)), null, 'json')
+			.done(function (res) {
+				if (!res.success) return alert(res.data || t('Error.'));
+				token = res.data.token;
+				$('#inpulsia-medios-grid-wrap').prop('hidden', true);
+				renderPreview(res.data);
+			})
+			.fail(function () { alert(t('Error de conexión con el servidor.')); })
+			.always(function () { $btn.prop('disabled', false).removeClass('is-loading'); });
+	}
+
+	$('#im-tpl-filter').on('click', function () {
+		if (!$('#im-tpl').val().trim()) return;
+		stageFilter($(this), { action: 'inpulsia_medios_tpl_stage', field: $('#im-tpl-field').val(), tpl: $('#im-tpl').val(), only_empty: $('#im-tpl-empty').is(':checked') });
+	});
+
+	$('#im-ai-filter').on('click', function () {
+		stageFilter($(this), { action: 'inpulsia_medios_ai_stage' });
+	});
+
 	/* ---------- Cleanup ---------- */
 
 	$('.im-clean-stage').on('click', function () {

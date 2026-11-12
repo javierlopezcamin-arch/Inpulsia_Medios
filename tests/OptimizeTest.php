@@ -509,4 +509,18 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertSame( (string) $a, $saved[0]['settings']['background_image']['id'] );
 		$this->assertSame( [], inpulsia_medios_elementor_orphans( false, $page ) );
 	}
+
+	public function test_template_runs_on_the_server_for_the_whole_filter() {
+		$id   = $this->upload( 'IMG_3001.jpg', 40, 40 );
+		$page = self::factory()->post->create( [ 'post_type' => 'page', 'post_title' => 'Piscinas en Girona', 'post_content' => '<img class="wp-image-' . $id . '" src="' . wp_get_attachment_url( $id ) . '">' ] );
+		update_post_meta( $page, 'rank_math_focus_keyword', 'piscinas girona' );
+		update_option( 'blogname', 'Riviera' );
+		$this->assertSame( 'Piscinas en Girona - Riviera 3', inpulsia_medios_template_value( $id, '{pagina} - {web} {n}', 'alt', 3 ) );
+		$this->assertSame( 'piscinas-girona-riviera', inpulsia_medios_template_value( $id, '{keyword} {web}', 'filename', 1 ) );
+
+		$_GET['per_page'] = '100';
+		$this->assertSame( 100, inpulsia_medios_per_page() );
+		unset( $_GET['per_page'] );
+		$this->assertSame( 100, inpulsia_medios_per_page() );
+	}
 }

@@ -136,6 +136,12 @@ msgstr "Filtra"
 msgid "Quitar filtros"
 msgstr "Treu els filtres"
 
+msgid "Imágenes por página"
+msgstr "Imatges per pàgina"
+
+msgid "%d por página"
+msgstr "%d per pàgina"
+
 msgid "imágenes"
 msgstr "imatges"
 
@@ -199,8 +205,11 @@ msgstr "Plantilla"
 msgid "Solo donde esté vacío o tenga nombre de cámara"
 msgstr "Només on estigui buit o tingui nom de càmera"
 
-msgid "Aplicar"
-msgstr "Aplica"
+msgid "Aplicar en esta página"
+msgstr "Aplica en aquesta pàgina"
+
+msgid "Aplicar a las %d del filtro"
+msgstr "Aplica a les %d del filtre"
 
 msgid "Variables:"
 msgstr "Variables:"
@@ -225,6 +234,9 @@ msgstr "Desa automàticament alt, títol, llegenda i descripció"
 
 msgid "Intro: fila siguiente · Pega una columna de Excel para rellenar hacia abajo"
 msgstr "Intro: fila següent · Enganxa una columna d'Excel per omplir cap avall"
+
+msgid "Completar con IA las %d del filtro"
+msgstr "Completa amb IA les %d del filtre"
 
 msgid "Revisar cambios"
 msgstr "Revisa els canvis"
@@ -547,6 +559,30 @@ msgstr "La resposta s'ha tallat. Torna-ho a provar."
 msgid "Respuesta inesperada de Claude."
 msgstr "Resposta inesperada de Claude."
 
+msgid "Acción no válida."
+msgstr "Acció no vàlida."
+
+msgid "No había ningún campo que rellenar con esas condiciones."
+msgstr "No hi havia cap camp per omplir amb aquestes condicions."
+
+msgid "Alt: vacío → propuesto por IA"
+msgstr "Alt: buit → proposat per IA"
+
+msgid "Nombre: «%s» → propuesto por IA"
+msgstr "Nom: «%s» → proposat per IA"
+
+msgid "Todas las imágenes del filtro tienen alt y nombre claros."
+msgstr "Totes les imatges del filtre tenen alt i nom clars."
+
+msgid "Completar %d imágenes con IA"
+msgstr "Completa %d imatges amb IA"
+
+msgid "%d imágenes · una consulta a Claude por imagen"
+msgstr "%d imatges · una consulta a Claude per imatge"
+
+msgid "Completando con IA"
+msgstr "Completant amb IA"
+
 msgid "Antes de borrar o cambiar nada verás la lista completa. Las imágenes borradas se guardan en una copia y se pueden recuperar desde el Historial."
 msgstr "Abans d'esborrar o canviar res veuràs la llista completa. Les imatges esborrades es desen en una còpia i es poden recuperar des de l'Historial."
 
@@ -624,9 +660,6 @@ msgstr "Es va pujar a «%s»: comprova que no la necessites."
 
 msgid "Igual que %1$s (ID %2$d), que se conserva"
 msgstr "Igual que %1$s (ID %2$d), que es conserva"
-
-msgid "Acción no válida."
-msgstr "Acció no vàlida."
 
 msgid "No hay nada que limpiar."
 msgstr "No hi ha res per netejar."
@@ -780,6 +813,12 @@ msgstr "Neteja: imatges trencades"
 
 msgid "Optimización desde el editor"
 msgstr "Optimització des de l'editor"
+
+msgid "Completar con IA"
+msgstr "Completa amb IA"
+
+msgid "Plantilla: %s"
+msgstr "Plantilla: %s"
 
 msgid "Optimización (%1$s, %2$d px)"
 msgstr "Optimització (%1$s, %2$d px)"
@@ -1081,6 +1120,9 @@ msgstr ". Revisa i prem"
 msgid "y después"
 msgstr "i després"
 
+msgid "Aplicar"
+msgstr "Aplica"
+
 msgid "¿Algo no te convence?"
 msgstr "Alguna cosa no et convenç?"
 
@@ -1294,9 +1336,6 @@ msgstr "Massa curt: descriu què s'hi veu."
 msgid "No empieces por «imagen de»: describe directamente."
 msgstr "No comencis per «imatge de»: descriu directament."
 
-msgid "No había ningún campo que rellenar con esas condiciones."
-msgstr "No hi havia cap camp per omplir amb aquestes condicions."
-
 msgid "No has cambiado nada."
 msgstr "No has canviat res."
 
@@ -1398,12 +1437,6 @@ msgstr "Mida: %d×%d → %d×%d"
 
 msgid "Compresión: calidad %d y sin metadatos EXIF"
 msgstr "Compressió: qualitat %d i sense metadades EXIF"
-
-msgid "Nombre: «%s» → propuesto por IA"
-msgstr "Nom: «%s» → proposat per IA"
-
-msgid "Alt: vacío → propuesto por IA"
-msgstr "Alt: buit → proposat per IA"
 
 msgid "Sin copia de seguridad: no se podrá deshacer."
 msgstr "Sense còpia de seguretat: no es podrà desfer."

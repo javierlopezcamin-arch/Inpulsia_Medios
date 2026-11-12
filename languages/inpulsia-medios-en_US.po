@@ -136,6 +136,12 @@ msgstr "Filter"
 msgid "Quitar filtros"
 msgstr "Clear filters"
 
+msgid "Imágenes por página"
+msgstr "Images per page"
+
+msgid "%d por página"
+msgstr "%d per page"
+
 msgid "imágenes"
 msgstr "images"
 
@@ -199,8 +205,11 @@ msgstr "Template"
 msgid "Solo donde esté vacío o tenga nombre de cámara"
 msgstr "Only where empty or a camera name"
 
-msgid "Aplicar"
-msgstr "Apply"
+msgid "Aplicar en esta página"
+msgstr "Apply on this page"
+
+msgid "Aplicar a las %d del filtro"
+msgstr "Apply to the %d in the filter"
 
 msgid "Variables:"
 msgstr "Variables:"
@@ -225,6 +234,9 @@ msgstr "Autosave alt, title, caption and description"
 
 msgid "Intro: fila siguiente · Pega una columna de Excel para rellenar hacia abajo"
 msgstr "Enter: next row · Paste an Excel column to fill downwards"
+
+msgid "Completar con IA las %d del filtro"
+msgstr "Complete the %d in the filter with AI"
 
 msgid "Revisar cambios"
 msgstr "Review changes"
@@ -547,6 +559,30 @@ msgstr "The response was cut off. Try again."
 msgid "Respuesta inesperada de Claude."
 msgstr "Unexpected response from Claude."
 
+msgid "Acción no válida."
+msgstr "Invalid action."
+
+msgid "No había ningún campo que rellenar con esas condiciones."
+msgstr "No fields matched those conditions."
+
+msgid "Alt: vacío → propuesto por IA"
+msgstr "Alt: empty → suggested by AI"
+
+msgid "Nombre: «%s» → propuesto por IA"
+msgstr "Name: “%s” → suggested by AI"
+
+msgid "Todas las imágenes del filtro tienen alt y nombre claros."
+msgstr "All images in the filter have alt text and clear names."
+
+msgid "Completar %d imágenes con IA"
+msgstr "Complete %d images with AI"
+
+msgid "%d imágenes · una consulta a Claude por imagen"
+msgstr "%d images · one Claude request per image"
+
+msgid "Completando con IA"
+msgstr "Completing with AI"
+
 msgid "Antes de borrar o cambiar nada verás la lista completa. Las imágenes borradas se guardan en una copia y se pueden recuperar desde el Historial."
 msgstr "Before anything is deleted or changed you will see the full list. Deleted images are kept in a backup and can be recovered from History."
 
@@ -624,9 +660,6 @@ msgstr "Uploaded to “%s”: make sure you don't need it."
 
 msgid "Igual que %1$s (ID %2$d), que se conserva"
 msgstr "Same as %1$s (ID %2$d), which is kept"
-
-msgid "Acción no válida."
-msgstr "Invalid action."
 
 msgid "No hay nada que limpiar."
 msgstr "Nothing to clean up."
@@ -780,6 +813,12 @@ msgstr "Cleanup: broken images"
 
 msgid "Optimización desde el editor"
 msgstr "Optimization from the editor"
+
+msgid "Completar con IA"
+msgstr "Complete with AI"
+
+msgid "Plantilla: %s"
+msgstr "Template: %s"
 
 msgid "Optimización (%1$s, %2$d px)"
 msgstr "Optimization (%1$s, %2$d px)"
@@ -1081,6 +1120,9 @@ msgstr ". Review and click"
 msgid "y después"
 msgstr "and then"
 
+msgid "Aplicar"
+msgstr "Apply"
+
 msgid "¿Algo no te convence?"
 msgstr "Not convinced?"
 
@@ -1294,9 +1336,6 @@ msgstr "Too short: describe what is shown."
 msgid "No empieces por «imagen de»: describe directamente."
 msgstr "Don't start with “image of”: describe it directly."
 
-msgid "No había ningún campo que rellenar con esas condiciones."
-msgstr "No fields matched those conditions."
-
 msgid "No has cambiado nada."
 msgstr "You haven't changed anything."
 
@@ -1398,12 +1437,6 @@ msgstr "Size: %d×%d → %d×%d"
 
 msgid "Compresión: calidad %d y sin metadatos EXIF"
 msgstr "Compression: quality %d, EXIF metadata removed"
-
-msgid "Nombre: «%s» → propuesto por IA"
-msgstr "Name: “%s” → suggested by AI"
-
-msgid "Alt: vacío → propuesto por IA"
-msgstr "Alt: empty → suggested by AI"
 
 msgid "Sin copia de seguridad: no se podrá deshacer."
 msgstr "No backup: it cannot be undone."

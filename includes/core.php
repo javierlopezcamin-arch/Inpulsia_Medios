@@ -707,9 +707,14 @@ function inpulsia_medios_history_label( $label ) {
 		'Limpieza: duplicados'             => __( 'Limpieza: duplicados', 'inpulsia-medios' ),
 		'Limpieza: imágenes rotas'         => __( 'Limpieza: imágenes rotas', 'inpulsia-medios' ),
 		'Optimización desde el editor'     => __( 'Optimización desde el editor', 'inpulsia-medios' ),
+		'Completar con IA'                 => __( 'Completar con IA', 'inpulsia-medios' ),
 	];
 	if ( isset( $known[ $label ] ) ) {
 		return $known[ $label ];
+	}
+	if ( strpos( $label, 'Plantilla: ' ) === 0 ) {
+		/* translators: %s: the template text. */
+		return sprintf( __( 'Plantilla: %s', 'inpulsia-medios' ), substr( $label, 11 ) );
 	}
 	if ( preg_match( '/^Optimización \((\w+), (\d+) px\)$/u', $label, $m ) ) {
 		/* translators: 1: image format, 2: max width in pixels. */
