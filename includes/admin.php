@@ -15,13 +15,15 @@ add_action( 'admin_post_inpulsia_medios_backups', 'inpulsia_medios_backups_actio
 add_action( 'admin_post_inpulsia_medios_redirects', 'inpulsia_medios_redirects_action' );
 
 function inpulsia_medios_menu() {
-	add_media_page( 'Inpulsia Medios', 'Inpulsia Medios', 'upload_files', 'inpulsia-medios', 'inpulsia_medios_page' );
+	$hook = add_media_page( 'Inpulsia Medios', 'Inpulsia Medios', 'upload_files', 'inpulsia-medios', 'inpulsia_medios_page' );
+	add_action( 'load-' . $hook, 'inpulsia_medios_help_tabs' );
 }
 
 function inpulsia_medios_tabs() {
 	$tabs = [
-		'importar'      => 'Importar',
+		'inicio'        => 'Inicio',
 		'editar'        => 'Editar',
+		'importar'      => 'Importar',
 		'exportar'      => 'Exportar',
 		'historial'     => 'Historial',
 		'redirecciones' => 'Redirecciones',
@@ -51,7 +53,7 @@ function inpulsia_medios_assets( $hook ) {
 function inpulsia_medios_page() {
 	$tabs = inpulsia_medios_tabs();
 	$tab  = sanitize_key( wp_unslash( $_GET['tab'] ?? '' ) );
-	$tab  = isset( $tabs[ $tab ] ) ? $tab : 'importar';
+	$tab  = isset( $tabs[ $tab ] ) ? $tab : 'inicio';
 	?>
 	<div class="wrap inpulsia-medios-wrap">
 		<h1>Inpulsia Medios <span class="inpulsia-medios-version">v<?php echo esc_html( INPULSIA_MEDIOS_VERSION ); ?></span></h1>

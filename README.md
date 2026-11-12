@@ -6,7 +6,7 @@ Requiere WordPress 6.2 y PHP 7.4 o superiores.
 
 ## Uso
 
-En **Medios → Inpulsia Medios**:
+En **Medios → Inpulsia Medios**. La pestaña **Inicio** muestra el estado de la web (imágenes en uso, sin alt, en formatos pesados), una guía de 4 pasos y preguntas frecuentes; cada pestaña tiene además ayuda en el botón «Ayuda» de WordPress.
 
 - **Importar**: sube un CSV o `.xlsx`, revisa la vista previa con sus avisos y aplica los cambios. Se procesan por lotes con barra de progreso.
 - **Editar**: tabla de 20 imágenes por página con búsqueda y filtro «solo sin alt». Los cambios se revisan en la misma vista previa antes de aplicarse. El botón **IA** propone alt, nombre y título para una imagen; también se puede pedir para todas las seleccionadas.
