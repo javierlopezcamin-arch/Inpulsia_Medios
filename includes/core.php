@@ -283,7 +283,7 @@ function inpulsia_medios_undo_rows( $entries ) {
 }
 
 // Renames the file, its sub-sizes, original image and WebP/AVIF copies, then rewrites URLs and adds redirects.
-function inpulsia_medios_rename( $id, $new_stem ) {
+function inpulsia_medios_rename( $id, $new_stem, $keep_old = true ) {
 	global $wpdb;
 
 	$file = get_attached_file( $id );
@@ -358,7 +358,7 @@ function inpulsia_medios_rename( $id, $new_stem ) {
 
 	// Keep the old names working during the grace period (hard link: no extra disk space).
 	$kept = [];
-	foreach ( $moved as $old => $new ) {
+	foreach ( $keep_old ? $moved : [] as $old => $new ) {
 		if ( isset( $map[ $old ] ) && in_array( $old, $map, true ) ) {
 			continue;
 		}

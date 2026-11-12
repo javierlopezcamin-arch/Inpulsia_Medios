@@ -122,27 +122,46 @@ function inpulsia_medios_tab_importar() {
 }
 
 function inpulsia_medios_editar_params() {
-	$usage = sanitize_key( $_REQUEST['usage'] ?? '' );
+	$usage  = sanitize_key( $_REQUEST['usage'] ?? '' );
+	$format = sanitize_key( $_REQUEST['format'] ?? '' );
+	$weight = sanitize_key( $_REQUEST['weight'] ?? '' );
 	return [
 		's'           => sanitize_text_field( wp_unslash( $_REQUEST['s'] ?? '' ) ),
 		'missing_alt' => ! empty( $_REQUEST['missing_alt'] ),
 		'usage'       => in_array( $usage, [ 'used', 'unused' ], true ) ? $usage : '',
+		'format'      => isset( inpulsia_medios_formats()[ $format ] ) ? $format : '',
+		'weight'      => isset( inpulsia_medios_weights()[ $weight ] ) ? $weight : '',
 	];
 }
 
 function inpulsia_medios_editar_args( $params ) {
-	$args = [
+	$params = wp_parse_args( $params, [ 's' => '', 'missing_alt' => false, 'usage' => '', 'format' => '', 'weight' => '' ] );
+	$args   = [
 		'post_type'      => 'attachment',
 		'post_status'    => 'inherit',
-		'post_mime_type' => 'image',
+		'post_mime_type' => $params['format'] ? inpulsia_medios_formats()[ $params['format'] ][0] : 'image',
 		's'              => $params['s'],
 	];
+	$meta = [];
 	if ( $params['missing_alt'] ) {
-		$args['meta_query'] = [
+		$meta[] = [
 			'relation' => 'OR',
 			[ 'key' => '_wp_attachment_image_alt', 'compare' => 'NOT EXISTS' ],
 			[ 'key' => '_wp_attachment_image_alt', 'value' => '' ],
 		];
+	}
+	if ( $params['weight'] ) {
+		inpulsia_medios_sizes_sync();
+		$meta['peso'] = [
+			'key'     => INPULSIA_MEDIOS_BYTES_KEY,
+			'value'   => inpulsia_medios_weights()[ $params['weight'] ][0],
+			'compare' => '>',
+			'type'    => 'NUMERIC',
+		];
+		$args['orderby'] = [ 'peso' => 'DESC' ];
+	}
+	if ( $meta ) {
+		$args['meta_query'] = [ 'relation' => 'AND' ] + $meta;
 	}
 	if ( $params['usage'] ) {
 		$used = inpulsia_medios_used_ids();
@@ -178,9 +197,21 @@ function inpulsia_medios_tab_editar() {
 		<input type="hidden" name="tab" value="editar" />
 		<input type="search" name="s" value="<?php echo esc_attr( $params['s'] ); ?>" placeholder="Buscar medios" />
 		<select name="usage">
-			<option value="">Todas las imágenes</option>
+			<option value="">Cualquier uso</option>
 			<option value="used" <?php selected( $params['usage'], 'used' ); ?>>En uso en la web</option>
 			<option value="unused" <?php selected( $params['usage'], 'unused' ); ?>>Sin uso detectado</option>
+		</select>
+		<select name="format" aria-label="Formato">
+			<option value="">Todos los formatos</option>
+			<?php foreach ( inpulsia_medios_formats() as $key => $f ) : ?>
+				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $params['format'], $key ); ?>><?php echo esc_html( $f[1] ); ?></option>
+			<?php endforeach; ?>
+		</select>
+		<select name="weight" aria-label="Peso">
+			<option value="">Cualquier peso</option>
+			<?php foreach ( inpulsia_medios_weights() as $key => $w ) : ?>
+				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $params['weight'], $key ); ?>><?php echo esc_html( $w[1] ); ?></option>
+			<?php endforeach; ?>
 		</select>
 		<label><input type="checkbox" name="missing_alt" value="1" <?php checked( $params['missing_alt'] ); ?> /> Solo sin alt</label>
 		<button class="button">Filtrar</button>
@@ -191,14 +222,14 @@ function inpulsia_medios_tab_editar() {
 	</form>
 
 	<?php
-	if ( ! $params['s'] && ! $params['missing_alt'] && ! $params['usage'] && $paged === 1 ) {
+	if ( ! array_filter( $params ) && $paged === 1 ) {
 		global $wpdb;
 		$stored = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_status <> 'trash' AND post_mime_type LIKE 'image/%'" );
 		inpulsia_medios_hidden_notice( $stored - (int) $query->found_posts );
 	}
 	?>
 	<div id="inpulsia-medios-grid-wrap">
-		<details class="inpulsia-medios-card inpulsia-medios-opt" <?php echo $params['usage'] ? 'open' : ''; ?>>
+		<details class="inpulsia-medios-card inpulsia-medios-opt" <?php echo $params['usage'] || $params['format'] || $params['weight'] ? 'open' : ''; ?>>
 			<summary><strong>Optimizar imágenes</strong> — convertir, reducir peso, nombres amigables y alt</summary>
 			<?php if ( $others ) : ?>
 				<div class="notice notice-warning inline"><p>Esta web ya usa <?php echo esc_html( implode( ', ', $others ) ); ?>. Optimizar también aquí puede comprimir dos veces: revisa su configuración antes.</p></div>
@@ -213,6 +244,9 @@ function inpulsia_medios_tab_editar() {
 				<label>Ancho máximo <input type="number" id="im-opt-width" min="320" max="8000" step="10" value="<?php echo (int) $opt['max_width']; ?>" /> px</label>
 				<label>Calidad <input type="number" id="im-opt-quality" min="40" max="100" value="<?php echo (int) $opt['quality']; ?>" /></label>
 				<label><input type="checkbox" id="im-opt-backup" <?php checked( $opt['backup'] ); ?> /> Copia de seguridad (permite deshacer)</label>
+				<label title="Si no se marca, la imagen anterior se conserva <?php echo (int) INPULSIA_MEDIOS_GRACE_DAYS; ?> días para que ninguna caché muestre una imagen rota.">
+					<input type="checkbox" id="im-opt-delete-old" <?php checked( ! $opt['keep_old'] ); ?> /> Borrar del servidor la imagen anterior al sustituirla
+				</label>
 				<label title="<?php echo $has_ai ? '' : esc_attr( 'Configura la clave de Claude en Ajustes' ); ?>">
 					<input type="checkbox" id="im-opt-ai" <?php checked( $opt['ai'] && $has_ai ); ?> <?php disabled( ! $has_ai ); ?> /> Nombre y alt con IA si faltan o son de cámara
 				</label>
@@ -668,6 +702,7 @@ function inpulsia_medios_ajax_opt_stage() {
 		'quality'   => absint( $_POST['quality'] ?? 82 ),
 		'backup'    => ! empty( $_POST['backup'] ) && $_POST['backup'] !== 'false',
 		'ai'        => ! empty( $_POST['ai'] ) && $_POST['ai'] !== 'false' && inpulsia_medios_api_key() !== '',
+		'keep_old'  => empty( $_POST['delete_old'] ) || $_POST['delete_old'] === 'false',
 	] );
 	update_option( 'inpulsia_medios_opt', $opts, false );
 
@@ -755,6 +790,6 @@ function inpulsia_medios_ajax_opt_apply() {
 		delete_transient( 'inpulsia_medios_opt_' . $token );
 		$purged = inpulsia_medios_purge_caches();
 	}
-	$notes = $done ? inpulsia_medios_done_notes() : [];
+	$notes = $done ? inpulsia_medios_done_notes( $data['opts']['keep_old'] ) : [];
 	wp_send_json_success( compact( 'results', 'next', 'done', 'purged', 'notes' ) + [ 'total' => count( $ids ) ] );
 }

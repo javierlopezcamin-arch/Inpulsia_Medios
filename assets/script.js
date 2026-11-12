@@ -156,7 +156,8 @@
 			max_width: $('#im-opt-width').val(),
 			quality: $('#im-opt-quality').val(),
 			backup: $('#im-opt-backup').is(':checked'),
-			ai: $('#im-opt-ai').is(':checked')
+			ai: $('#im-opt-ai').is(':checked'),
+			delete_old: $('#im-opt-delete-old').is(':checked')
 		};
 		if (mode === 'selected') {
 			data.ids = $grid.find('.inpulsia-medios-row-check:checked').closest('tr').map(function () { return $(this).data('id'); }).get();
@@ -166,6 +167,8 @@
 			data.s = params.get('s') || '';
 			data.usage = params.get('usage') || '';
 			data.missing_alt = params.get('missing_alt') || '';
+			data.format = params.get('format') || '';
+			data.weight = params.get('weight') || '';
 		}
 		var $btns = $('#inpulsia-medios-opt-selected, #inpulsia-medios-opt-all').prop('disabled', true).addClass('is-loading');
 		$.post(cfg.ajax_url, data, null, 'json')

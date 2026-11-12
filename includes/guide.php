@@ -12,7 +12,7 @@ function inpulsia_medios_url( $tab = 'inicio', $args = [] ) {
 
 // Same query as the Editar tab, so every number matches what the user sees after clicking it.
 function inpulsia_medios_count( $params ) {
-	$q = new WP_Query( inpulsia_medios_editar_args( wp_parse_args( $params, [ 's' => '', 'missing_alt' => false, 'usage' => '' ] ) ) + [
+	$q = new WP_Query( inpulsia_medios_editar_args( $params ) + [
 		'posts_per_page' => 1,
 		'fields'         => 'ids',
 	] );
@@ -23,17 +23,13 @@ function inpulsia_medios_stats() {
 	global $wpdb;
 	$visible = inpulsia_medios_count( [] );
 	$stored  = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_status <> 'trash' AND post_mime_type LIKE 'image/%'" );
-	$heavy   = new WP_Query( array_merge( inpulsia_medios_editar_args( [ 's' => '', 'missing_alt' => false, 'usage' => '' ] ), [
-		'post_mime_type' => [ 'image/png', 'image/gif', 'image/bmp', 'image/tiff' ],
-		'posts_per_page' => 1,
-		'fields'         => 'ids',
-	] ) );
 	return [
 		'total'     => $visible,
 		'hidden'    => max( 0, $stored - $visible ),
 		'missing'   => inpulsia_medios_count( [ 'missing_alt' => true ] ),
 		'used'      => inpulsia_medios_count( [ 'usage' => 'used' ] ),
-		'png'       => (int) $heavy->found_posts,
+		'png'       => inpulsia_medios_count( [ 'format' => 'heavy' ] ),
+		'big'       => inpulsia_medios_count( [ 'weight' => '1m' ] ),
 		'redirects' => inpulsia_medios_redirects_count(),
 	];
 }
@@ -88,7 +84,8 @@ function inpulsia_medios_tab_inicio() {
 			inpulsia_medios_stat_card( $s['total'], $s['hidden'] ? 'imágenes visibles en la biblioteca' : 'imágenes en la biblioteca', 'Ver todas', inpulsia_medios_url( 'editar' ) );
 			inpulsia_medios_stat_card( $s['used'], 'se usan en la web', 'Ver las que se usan', inpulsia_medios_url( 'editar', [ 'usage' => 'used' ] ) );
 			inpulsia_medios_stat_card( $s['missing'], 'sin texto alternativo', $s['missing'] ? 'Completarlas' : '', inpulsia_medios_url( 'editar', [ 'missing_alt' => 1 ] ), $s['missing'] ? 'warn' : 'ok' );
-			inpulsia_medios_stat_card( $s['png'], 'en PNG u otros formatos pesados', $s['png'] ? 'Optimizarlas' : '', inpulsia_medios_url( 'editar', [ 'usage' => 'used' ] ), $s['png'] ? 'warn' : 'ok' );
+			inpulsia_medios_stat_card( $s['big'], 'pesan más de 1 MB', $s['big'] ? 'Verlas y optimizarlas' : '', inpulsia_medios_url( 'editar', [ 'weight' => '1m' ] ), $s['big'] ? 'warn' : 'ok' );
+			inpulsia_medios_stat_card( $s['png'], 'en PNG, GIF u otros formatos pesados', $s['png'] ? 'Verlas y optimizarlas' : '', inpulsia_medios_url( 'editar', [ 'format' => 'heavy' ] ), $s['png'] ? 'warn' : 'ok' );
 			?>
 		</div>
 

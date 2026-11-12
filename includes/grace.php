@@ -106,12 +106,14 @@ function inpulsia_medios_orphans_cleanup( $all = false ) {
 	return $deleted;
 }
 
-function inpulsia_medios_done_notes() {
+function inpulsia_medios_done_notes( $kept_old = true ) {
 	$notes = [];
 	if ( get_transient( 'inpulsia_medios_cloudflare' ) && empty( $GLOBALS['inpulsia_medios_cloudflare_purged'] ) ) {
 		$notes[] = 'La web pasa por Cloudflare: vacía su caché desde el panel de Cloudflare para que las visitas vean ya las imágenes nuevas.';
 	}
-	$notes[] = 'Los archivos antiguos se conservan ' . INPULSIA_MEDIOS_GRACE_DAYS . ' días para que ninguna caché muestre una imagen rota; después se borran solos.';
+	$notes[] = $kept_old
+		? 'Los archivos antiguos se conservan ' . INPULSIA_MEDIOS_GRACE_DAYS . ' días para que ninguna caché muestre una imagen rota; después se borran solos.'
+		: 'Las imágenes anteriores se han borrado del servidor. Vacía también la caché del hosting o de Cloudflare si alguna página sigue pidiéndolas.';
 	return $notes;
 }
 

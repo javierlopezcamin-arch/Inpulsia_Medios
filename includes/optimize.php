@@ -11,6 +11,7 @@ function inpulsia_medios_opt_settings() {
 		'quality'   => 82,
 		'backup'    => true,
 		'ai'        => false,
+		'keep_old'  => true,
 	] );
 	return inpulsia_medios_opt_sanitize( $s );
 }
@@ -22,6 +23,7 @@ function inpulsia_medios_opt_sanitize( $s ) {
 		'quality'   => min( 100, max( 40, (int) ( $s['quality'] ?? 82 ) ) ),
 		'backup'    => ! empty( $s['backup'] ),
 		'ai'        => ! empty( $s['ai'] ),
+		'keep_old'  => ! isset( $s['keep_old'] ) || ! empty( $s['keep_old'] ),
 	];
 }
 
@@ -150,6 +152,9 @@ function inpulsia_medios_opt_plan( $id, $opts ) {
 	if ( ! $opts['backup'] ) {
 		$plan['warnings'][] = 'Sin copia de seguridad: no se podrá deshacer.';
 	}
+	if ( ! $opts['keep_old'] ) {
+		$plan['lines'][] = 'La imagen anterior se borra del servidor al momento';
+	}
 	return $plan;
 }
 
@@ -250,7 +255,7 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	if ( filesize( $tmp ) >= $before * 0.95 ) {
 		@unlink( $tmp );
 		if ( $new_stem !== $old_stem ) {
-			$r = inpulsia_medios_rename( $id, $new_stem );
+			$r = inpulsia_medios_rename( $id, $new_stem, $opts['keep_old'] );
 			if ( ! is_wp_error( $r ) ) {
 				$prev['filename'] = $old_stem;
 				$notes[]          = 'renombrada a «' . $new_stem . '»';
@@ -318,8 +323,14 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	foreach ( $new_meta_files as $f ) {
 		inpulsia_medios_fix_perms( $dir . '/' . $f );
 	}
-	// Old files stay reachable during the grace period; the daily cleanup removes them.
-	inpulsia_medios_orphans_add( $id, $dir, array_diff( $old_meta_files, $new_meta_files ) );
+	// Old files stay reachable during the grace period (the daily cleanup removes them) unless asked to delete them now.
+	if ( $opts['keep_old'] ) {
+		inpulsia_medios_orphans_add( $id, $dir, array_diff( $old_meta_files, $new_meta_files ) );
+	} else {
+		foreach ( array_diff( $old_meta_files, $new_meta_files ) as $f ) {
+			@unlink( $dir . '/' . $f );
+		}
+	}
 	$wpdb->update( $wpdb->posts, [ 'guid' => wp_get_attachment_url( $id ) ], [ 'ID' => $id ] );
 	clean_post_cache( $id );
 

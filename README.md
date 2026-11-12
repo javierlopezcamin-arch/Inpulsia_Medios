@@ -9,7 +9,7 @@ Requiere WordPress 6.2 y PHP 7.4 o superiores.
 En **Medios → Inpulsia Medios**. La pestaña **Inicio** muestra el estado de la web (imágenes en uso, sin alt, en formatos pesados), una guía de 4 pasos y preguntas frecuentes; cada pestaña tiene además ayuda en el botón «Ayuda» de WordPress.
 
 - **Importar**: sube un CSV o `.xlsx`, revisa la vista previa con sus avisos y aplica los cambios. Se procesan por lotes con barra de progreso.
-- **Editar**: tabla de 20 imágenes por página con búsqueda y filtro «solo sin alt». Los cambios se revisan en la misma vista previa antes de aplicarse. El botón **IA** propone alt, nombre y título para una imagen; también se puede pedir para todas las seleccionadas.
+- **Editar**: tabla de 20 imágenes por página con búsqueda y filtros por uso (en uso / sin uso), formato (JPG, PNG, WebP, pesados), peso (más de 300 KB, 1 MB o 2 MB, de mayor a menor) y «solo sin alt». Los cambios se revisan en la misma vista previa antes de aplicarse. El botón **IA** propone alt, nombre y título para una imagen; también se puede pedir para todas las seleccionadas.
 - **Optimizar** (dentro de Editar): convierte a JPG o WebP, limita el ancho, recomprime y quita los metadatos EXIF. Opcionalmente pone nombre amigable y alt con IA cuando faltan o el nombre es de cámara (`IMG_2041`, `DSC0099`, `WhatsApp Image…`). Se aplica a las imágenes seleccionadas o a todas las del filtro, por ejemplo **En uso en la web**.
 - **Exportar**: CSV de la biblioteca filtrado por tipo, imágenes sin alt o fecha. La columna `usado_en` indica dónde aparece cada imagen (destacada, galería de WooCommerce, contenido y Elementor).
 - **Historial**: deshace cualquiera de las últimas 20 importaciones o ediciones.
@@ -48,7 +48,8 @@ Al cambiar el alt también se actualiza en las imágenes ya insertadas en Gutenb
 - La imagen se limita al ancho máximo (2560 px por defecto) y se recomprime (calidad 82). Se corrige la orientación EXIF y se regeneran las miniaturas.
 - Si el resultado no pesa al menos un 5 % menos que el original, la imagen se deja como está. En gráficos planos, un PNG suele pesar menos que un JPG.
 - Las URLs antiguas se reemplazan en todo el sitio (incluidos los fondos de Elementor, cuyo CSS se regenera) y redirigen con 301 a las nuevas, igual que al renombrar.
-- Los archivos antiguos se conservan 15 días tras renombrar u optimizar, para que ninguna caché de servidor, CDN o enlace externo muestre una imagen rota; una tarea diaria los borra después. En Ajustes se pueden borrar antes.
+- La opción **Borrar del servidor la imagen anterior al sustituirla** elimina los archivos antiguos al momento para dejar el hosting limpio (la copia de seguridad, si está activada, sigue permitiendo deshacer).
+- Si no, los archivos antiguos se conservan 15 días tras renombrar u optimizar, para que ninguna caché de servidor, CDN o enlace externo muestre una imagen rota; una tarea diaria los borra después. En Ajustes se pueden borrar antes.
 - Al terminar se comprueba que la imagen nueva se puede abrir desde la web (y se corrigen sus permisos si hace falta). Si la web pasa por Cloudflare sin su plugin, se avisa para vaciar su caché.
 - Con la copia de seguridad activada, los archivos originales se guardan en `uploads/inpulsia-medios-backups/` y la optimización se puede deshacer desde Historial. En Ajustes se pueden borrar las copias de más de 30 días.
 - Si la web ya usa ShortPixel, Imagify, EWWW, Smush u Optimole, se muestra un aviso para no comprimir dos veces.

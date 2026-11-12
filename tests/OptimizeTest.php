@@ -197,6 +197,53 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'fondo-nuevo', get_post_meta( $post, '_elementor_data', true ) );
 	}
 
+	private function ids_for( $params ) {
+		return get_posts( inpulsia_medios_editar_args( $params ) + [ 'posts_per_page' => -1, 'fields' => 'ids' ] );
+	}
+
+	public function test_weight_filter_finds_heavy_images_heaviest_first() {
+		$small  = $this->upload( 'pequena.jpg', 300, 200 );
+		$big    = $this->upload( 'grande.jpg', 300, 200 );
+		$bigger = $this->upload( 'enorme.jpg', 300, 200 );
+		delete_post_meta( $small, INPULSIA_MEDIOS_BYTES_KEY );
+		update_post_meta( $big, INPULSIA_MEDIOS_BYTES_KEY, 2 * MB_IN_BYTES );
+		update_post_meta( $bigger, INPULSIA_MEDIOS_BYTES_KEY, 5 * MB_IN_BYTES );
+
+		$ids = $this->ids_for( [ 'weight' => '1m' ] );
+
+		$this->assertSame( [ $bigger, $big ], array_map( 'intval', $ids ) );
+		$this->assertSame( filesize( get_attached_file( $small ) ), (int) get_post_meta( $small, INPULSIA_MEDIOS_BYTES_KEY, true ), 'El índice se completa solo.' );
+	}
+
+	public function test_format_filter_for_heavy_formats() {
+		$png = $this->upload( 'grafico.png', 300, 200 );
+		$jpg = $this->upload( 'foto2.jpg', 300, 200 );
+
+		$ids = array_map( 'intval', $this->ids_for( [ 'format' => 'heavy' ] ) );
+
+		$this->assertContains( $png, $ids );
+		$this->assertNotContains( $jpg, $ids );
+	}
+
+	public function test_size_index_follows_optimization() {
+		$id = $this->upload( 'indice.png', 1600, 1000 );
+		inpulsia_medios_optimize( $id, $this->opts );
+
+		$this->assertSame( filesize( get_attached_file( $id ) ), (int) get_post_meta( $id, INPULSIA_MEDIOS_BYTES_KEY, true ) );
+	}
+
+	public function test_delete_old_option_cleans_the_server_at_once() {
+		$id  = $this->upload( 'borrar.png', 1000, 600 );
+		$old = get_attached_file( $id );
+
+		$r = inpulsia_medios_optimize( $id, [ 'keep_old' => false ] + $this->opts );
+
+		$this->assertSame( 'ok', $r['status'], $r['msg'] );
+		$this->assertFileDoesNotExist( $old );
+		$this->assertSame( [], inpulsia_medios_orphans() );
+		$this->assertArrayHasKey( 'restore', $r['prev'], 'La copia de seguridad sigue permitiendo deshacer.' );
+	}
+
 	public function test_camera_names() {
 		foreach ( [ 'IMG_2041', 'DSC0099', 'PXL_20260101_123', 'WhatsApp Image 2026', '20260101_101010', 'foto-final-v2', 'Captura de pantalla' ] as $n ) {
 			$this->assertTrue( inpulsia_medios_is_camera_name( $n ), $n );
