@@ -369,6 +369,7 @@ function inpulsia_medios_rename( $id, $new_stem, $keep_old = true ) {
 	}
 	inpulsia_medios_orphans_add( $id, $dir, $kept );
 
+	$siblings = inpulsia_medios_siblings( $id );
 	update_attached_file( $id, $dir . '/' . $map[ $main_old ] );
 
 	if ( $meta ) {
@@ -387,6 +388,7 @@ function inpulsia_medios_rename( $id, $new_stem, $keep_old = true ) {
 
 	$wpdb->update( $wpdb->posts, [ 'guid' => wp_get_attachment_url( $id ) ], [ 'ID' => $id ] );
 	clean_post_cache( $id );
+	inpulsia_medios_siblings_sync( $id, $siblings );
 
 	$rel = inpulsia_medios_rel_dir( $id );
 	inpulsia_medios_redirects_add( $rel, $moved );

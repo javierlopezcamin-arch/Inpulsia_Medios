@@ -101,7 +101,8 @@ function inpulsia_medios_suggest( $id ) {
 	$usage = inpulsia_medios_usage( $id, $cur['filename'], [], [] );
 
 	$context  = "Web: " . get_bloginfo( 'name' ) . ' — ' . get_bloginfo( 'description' ) . "\n";
-	$context .= 'Idioma: ' . get_locale() . "\n";
+	$lang     = inpulsia_medios_lang( $id );
+	$context .= 'Idioma de los textos: ' . ( $lang !== '' ? $lang : get_locale() ) . "\n";
 	if ( $settings['context'] !== '' ) {
 		$context .= "Contexto del negocio:\n" . $settings['context'] . "\n";
 	}

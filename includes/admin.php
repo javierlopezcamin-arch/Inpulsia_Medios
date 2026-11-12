@@ -9,6 +9,7 @@ add_action( 'wp_ajax_inpulsia_medios_preview', 'inpulsia_medios_ajax_preview' );
 add_action( 'wp_ajax_inpulsia_medios_stage', 'inpulsia_medios_ajax_stage' );
 add_action( 'wp_ajax_inpulsia_medios_apply', 'inpulsia_medios_ajax_apply' );
 add_action( 'wp_ajax_inpulsia_medios_undo', 'inpulsia_medios_ajax_undo' );
+add_action( 'wp_ajax_inpulsia_medios_autosave', 'inpulsia_medios_ajax_autosave' );
 add_action( 'wp_ajax_inpulsia_medios_opt_stage', 'inpulsia_medios_ajax_opt_stage' );
 add_action( 'wp_ajax_inpulsia_medios_opt_apply', 'inpulsia_medios_ajax_opt_apply' );
 add_action( 'admin_post_inpulsia_medios_backups', 'inpulsia_medios_backups_action' );
@@ -47,6 +48,7 @@ function inpulsia_medios_assets( $hook ) {
 		'clear'    => INPULSIA_MEDIOS_CLEAR,
 		'edit_url' => admin_url( 'post.php?action=edit&post=' ),
 		'history'  => admin_url( 'upload.php?page=inpulsia-medios&tab=historial' ),
+		'site'     => get_bloginfo( 'name' ),
 	] );
 }
 
@@ -125,17 +127,21 @@ function inpulsia_medios_editar_params() {
 	$usage  = sanitize_key( $_REQUEST['usage'] ?? '' );
 	$format = sanitize_key( $_REQUEST['format'] ?? '' );
 	$weight = sanitize_key( $_REQUEST['weight'] ?? '' );
+	$names  = sanitize_key( $_REQUEST['names'] ?? '' );
+	$lang   = sanitize_key( $_REQUEST['lang'] ?? '' );
 	return [
 		's'           => sanitize_text_field( wp_unslash( $_REQUEST['s'] ?? '' ) ),
 		'missing_alt' => ! empty( $_REQUEST['missing_alt'] ),
 		'usage'       => in_array( $usage, [ 'used', 'unused' ], true ) ? $usage : '',
 		'format'      => isset( inpulsia_medios_formats()[ $format ] ) ? $format : '',
 		'weight'      => isset( inpulsia_medios_weights()[ $weight ] ) ? $weight : '',
+		'names'       => $names === 'bad' ? 'bad' : '',
+		'lang'        => $lang === 'all' && inpulsia_medios_multilang() ? 'all' : '',
 	];
 }
 
 function inpulsia_medios_editar_args( $params ) {
-	$params = wp_parse_args( $params, [ 's' => '', 'missing_alt' => false, 'usage' => '', 'format' => '', 'weight' => '' ] );
+	$params = wp_parse_args( $params, [ 's' => '', 'missing_alt' => false, 'usage' => '', 'format' => '', 'weight' => '', 'names' => '', 'lang' => '' ] );
 	$args   = [
 		'post_type'      => 'attachment',
 		'post_status'    => 'inherit',
@@ -163,13 +169,23 @@ function inpulsia_medios_editar_args( $params ) {
 	if ( $meta ) {
 		$args['meta_query'] = [ 'relation' => 'AND' ] + $meta;
 	}
+	$only = null;
+	if ( $params['names'] ) {
+		$only = inpulsia_medios_bad_name_ids();
+	}
 	if ( $params['usage'] ) {
 		$used = inpulsia_medios_used_ids();
 		if ( $params['usage'] === 'used' ) {
-			$args['post__in'] = $used ?: [ 0 ];
+			$only = $only === null ? $used : array_values( array_intersect( $only, $used ) );
 		} else {
 			$args['post__not_in'] = $used;
 		}
+	}
+	if ( $only !== null ) {
+		$args['post__in'] = $only ?: [ 0 ];
+	}
+	if ( $params['lang'] ) {
+		$args = inpulsia_medios_all_langs_args( $args );
 	}
 	return $args;
 }
@@ -192,11 +208,11 @@ function inpulsia_medios_tab_editar() {
 		defined( 'OPTIMOLE_VERSION' ) ? 'Optimole' : '',
 	] ) );
 	?>
-	<form method="get" class="inpulsia-medios-filters">
+	<form method="get" class="inpulsia-medios-filters im-sticky">
 		<input type="hidden" name="page" value="inpulsia-medios" />
 		<input type="hidden" name="tab" value="editar" />
-		<input type="search" name="s" value="<?php echo esc_attr( $params['s'] ); ?>" placeholder="Buscar medios" />
-		<select name="usage">
+		<input type="search" name="s" value="<?php echo esc_attr( $params['s'] ); ?>" placeholder="Buscar medios" aria-label="Buscar medios" />
+		<select name="usage" aria-label="Uso">
 			<option value="">Cualquier uso</option>
 			<option value="used" <?php selected( $params['usage'], 'used' ); ?>>En uso en la web</option>
 			<option value="unused" <?php selected( $params['usage'], 'unused' ); ?>>Sin uso detectado</option>
@@ -213,8 +229,18 @@ function inpulsia_medios_tab_editar() {
 				<option value="<?php echo esc_attr( $key ); ?>" <?php selected( $params['weight'], $key ); ?>><?php echo esc_html( $w[1] ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<label><input type="checkbox" name="missing_alt" value="1" <?php checked( $params['missing_alt'] ); ?> /> Solo sin alt</label>
+		<?php if ( inpulsia_medios_multilang() ) : ?>
+			<select name="lang" aria-label="Idioma">
+				<option value="">Idioma activo</option>
+				<option value="all" <?php selected( $params['lang'], 'all' ); ?>>Todos los idiomas</option>
+			</select>
+		<?php endif; ?>
+		<label><input type="checkbox" name="missing_alt" value="1" <?php checked( $params['missing_alt'] ); ?> /> Sin alt</label>
+		<label><input type="checkbox" name="names" value="bad" <?php checked( $params['names'], 'bad' ); ?> /> Nombre poco amigable</label>
 		<button class="button">Filtrar</button>
+		<?php if ( array_filter( $params ) ) : ?>
+			<a href="<?php echo esc_url( inpulsia_medios_url( 'editar' ) ); ?>">Quitar filtros</a>
+		<?php endif; ?>
 		<span class="inpulsia-medios-count"><?php echo (int) $query->found_posts; ?> imágenes</span>
 		<?php if ( $params['usage'] ) : ?>
 			<a href="<?php echo esc_url( add_query_arg( 'refresh_usage', 1 ) ); ?>" class="inpulsia-medios-refresh">Recalcular uso</a>
@@ -228,9 +254,10 @@ function inpulsia_medios_tab_editar() {
 		inpulsia_medios_hidden_notice( $stored - (int) $query->found_posts );
 	}
 	?>
-	<div id="inpulsia-medios-grid-wrap">
+	<div id="inpulsia-medios-grid-wrap" data-do="<?php echo esc_attr( sanitize_key( $_GET['do'] ?? '' ) ); ?>">
+		<div class="im-tools">
 		<details class="inpulsia-medios-card inpulsia-medios-opt" <?php echo $params['usage'] || $params['format'] || $params['weight'] ? 'open' : ''; ?>>
-			<summary><strong>Optimizar imágenes</strong> — convertir, reducir peso, nombres amigables y alt</summary>
+			<summary><span class="dashicons dashicons-performance" aria-hidden="true"></span> <strong>Optimizar imágenes</strong> <span class="muted">convertir, reducir peso, nombres amigables y alt</span></summary>
 			<?php if ( $others ) : ?>
 				<div class="notice notice-warning inline"><p>Esta web ya usa <?php echo esc_html( implode( ', ', $others ) ); ?>. Optimizar también aquí puede comprimir dos veces: revisa su configuración antes.</p></div>
 			<?php endif; ?>
@@ -253,20 +280,43 @@ function inpulsia_medios_tab_editar() {
 			</div>
 			<p class="description">Los PNG con transparencia (logos, iconos) se mantienen en PNG. Los GIF animados no se tocan. Las URLs antiguas redirigen a las nuevas.</p>
 			<p>
-				<button type="button" class="button" id="inpulsia-medios-opt-selected">Optimizar seleccionadas</button>
 				<button type="button" class="button button-primary" id="inpulsia-medios-opt-all" data-total="<?php echo (int) $query->found_posts; ?>">Optimizar las <?php echo (int) $query->found_posts; ?> del filtro</button>
 			</p>
 		</details>
 
-		<p class="inpulsia-medios-actions">
-			<button type="button" id="inpulsia-medios-review" class="button button-primary">Revisar cambios de texto</button>
-			<?php if ( $has_ai ) : ?>
-				<button type="button" id="inpulsia-medios-suggest-selected" class="button">Sugerir con IA para seleccionadas</button>
-			<?php elseif ( current_user_can( 'manage_options' ) ) : ?>
-				<a href="<?php echo esc_url( admin_url( 'upload.php?page=inpulsia-medios&tab=ajustes' ) ); ?>">Configura la IA en Ajustes para sugerir textos</a>
-			<?php endif; ?>
+		<details class="inpulsia-medios-card im-template">
+			<summary><span class="dashicons dashicons-editor-code" aria-hidden="true"></span> <strong>Rellenar con plantilla</strong> <span class="muted">el mismo patrón para muchas imágenes, sin IA</span></summary>
+			<div class="inpulsia-medios-opt-fields">
+				<label>Campo
+					<select id="im-tpl-field">
+						<?php foreach ( $labels as $f => $l ) : ?>
+							<option value="<?php echo esc_attr( $f ); ?>" <?php selected( $f, 'alt' ); ?>><?php echo esc_html( $l ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</label>
+				<label class="im-tpl-input">Plantilla <input type="text" id="im-tpl" value="{pagina} - {web}" /></label>
+				<label><input type="checkbox" id="im-tpl-empty" checked /> Solo donde esté vacío o tenga nombre de cámara</label>
+				<button type="button" class="button button-primary" id="im-tpl-apply">Aplicar</button>
+			</div>
+			<p class="description">Variables:
+				<?php foreach ( [ '{pagina}' => 'título de la página donde se usa', '{titulo}' => 'título de la imagen', '{web}' => 'nombre de la web', '{nombre}' => 'nombre de archivo actual', '{alt}' => 'alt actual', '{n}' => 'número 1, 2, 3…' ] as $var => $help ) : ?>
+					<button type="button" class="button-link im-var" data-var="<?php echo esc_attr( $var ); ?>" title="<?php echo esc_attr( $help ); ?>"><code><?php echo esc_html( $var ); ?></code></button>
+				<?php endforeach; ?>
+				· Se aplica a las seleccionadas, o a toda la página si no hay ninguna. Después revisa y aplica.
+			</p>
+		</details>
+		</div>
+
+		<div class="im-toolbar">
+			<label class="im-autosave"><input type="checkbox" id="im-autosave" /> Guardar automáticamente alt, título, leyenda y descripción</label>
+			<span class="muted im-keys">Intro: fila siguiente · Pega una columna de Excel para rellenar hacia abajo</span>
 			<span id="inpulsia-medios-dirty"></span>
-		</p>
+			<button type="button" id="inpulsia-medios-review" class="button button-primary">Revisar cambios</button>
+			<?php if ( ! $has_ai && current_user_can( 'manage_options' ) ) : ?>
+				<a href="<?php echo esc_url( admin_url( 'upload.php?page=inpulsia-medios&tab=ajustes' ) ); ?>">Configura la IA en Ajustes</a>
+			<?php endif; ?>
+		</div>
+
 		<div class="inpulsia-medios-scroll">
 		<table class="wp-list-table widefat striped inpulsia-medios-grid">
 			<thead>
@@ -283,17 +333,29 @@ function inpulsia_medios_tab_editar() {
 			</thead>
 			<tbody>
 			<?php foreach ( $query->posts as $post ) :
-				$cur  = inpulsia_medios_current( $post->ID );
-				$path = (string) get_attached_file( $post->ID );
-				$ext  = pathinfo( $path, PATHINFO_EXTENSION );
-				$meta = wp_get_attachment_metadata( $post->ID );
+				$cur   = inpulsia_medios_current( $post->ID );
+				$path  = (string) get_attached_file( $post->ID );
+				$ext   = pathinfo( $path, PATHINFO_EXTENSION );
+				$meta  = wp_get_attachment_metadata( $post->ID );
+				$where = inpulsia_medios_where_used( $post->ID );
+				$lang  = inpulsia_medios_lang( $post->ID );
+				$large = wp_get_attachment_image_url( $post->ID, 'medium_large' );
 				?>
-				<tr data-id="<?php echo (int) $post->ID; ?>">
+				<tr data-id="<?php echo (int) $post->ID; ?>" data-page="<?php echo esc_attr( $where ? $where[0]['title'] : '' ); ?>">
 					<th class="check-column"><input type="checkbox" class="inpulsia-medios-row-check" aria-label="<?php echo esc_attr( sprintf( 'Seleccionar imagen %d', $post->ID ) ); ?>" /></th>
 					<td class="col-thumb">
-						<a href="<?php echo esc_url( get_edit_post_link( $post->ID ) ); ?>" target="_blank" rel="noopener"><?php echo wp_get_attachment_image( $post->ID, 'thumbnail' ); ?></a>
-						<small>#<?php echo (int) $post->ID; ?> · <?php echo esc_html( strtoupper( $ext ) ); ?></small>
+						<a class="im-thumb" href="<?php echo esc_url( get_edit_post_link( $post->ID ) ); ?>" target="_blank" rel="noopener"><?php echo wp_get_attachment_image( $post->ID, 'thumbnail' ); ?>
+							<?php if ( $large ) : ?><span class="im-zoom" aria-hidden="true"><img src="<?php echo esc_url( $large ); ?>" alt="" loading="lazy" /></span><?php endif; ?>
+						</a>
+						<small>#<?php echo (int) $post->ID; ?> · <?php echo esc_html( strtoupper( $ext ) ); ?><?php echo $lang ? ' · <span class="im-lang">' . esc_html( strtoupper( $lang ) ) . '</span>' : ''; ?></small>
 						<small><?php echo (int) ( $meta['width'] ?? 0 ); ?>×<?php echo (int) ( $meta['height'] ?? 0 ); ?> · <?php echo esc_html( file_exists( $path ) ? size_format( filesize( $path ), 0 ) : '—' ); ?></small>
+						<?php if ( $where ) : ?>
+							<small class="im-where" title="<?php echo esc_attr( implode( "\n", wp_list_pluck( $where, 'title' ) ) ); ?>">
+								<a href="<?php echo esc_url( $where[0]['url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( wp_html_excerpt( $where[0]['title'], 22, '…' ) ); ?></a><?php echo count( $where ) > 1 ? ' +' . ( count( $where ) - 1 ) : ''; ?>
+							</small>
+						<?php else : ?>
+							<small class="muted">Sin uso detectado</small>
+						<?php endif; ?>
 					</td>
 					<?php foreach ( [ 'filename', 'title', 'alt', 'caption', 'description' ] as $field ) : ?>
 						<td>
@@ -304,6 +366,7 @@ function inpulsia_medios_tab_editar() {
 							<?php endif; ?>
 							<?php if ( $field === 'filename' && $ext ) : ?><small class="muted">.<?php echo esc_html( $ext ); ?></small><?php endif; ?>
 							<?php if ( $field === 'alt' ) : ?><small class="inpulsia-medios-chars"></small><?php endif; ?>
+							<small class="im-hint" data-for="<?php echo esc_attr( $field ); ?>"></small>
 						</td>
 					<?php endforeach; ?>
 					<?php if ( $has_ai ) : ?>
@@ -325,6 +388,16 @@ function inpulsia_medios_tab_editar() {
 			'total'   => max( 1, $query->max_num_pages ),
 		] ) ) . '</div></div>';
 		?>
+
+		<div class="im-actionbar" hidden role="region" aria-label="Acciones con las imágenes seleccionadas">
+			<strong id="im-selected-count"></strong>
+			<?php if ( $has_ai ) : ?>
+				<button type="button" id="inpulsia-medios-suggest-selected" class="button button-primary">Sugerir con IA</button>
+			<?php endif; ?>
+			<button type="button" class="button" id="inpulsia-medios-opt-selected">Optimizar</button>
+			<button type="button" class="button" id="im-copy-down" title="Copia el campo en el que estabas escribiendo a todas las seleccionadas">Copiar campo a seleccionadas</button>
+			<button type="button" class="button-link" id="im-clear-selection">Quitar selección</button>
+		</div>
 	</div>
 	<?php
 	inpulsia_medios_preview_markup();
@@ -792,4 +865,45 @@ function inpulsia_medios_ajax_opt_apply() {
 	}
 	$notes = $done ? inpulsia_medios_done_notes( $data['opts']['keep_old'] ) : [];
 	wp_send_json_success( compact( 'results', 'next', 'done', 'purged', 'notes' ) + [ 'total' => count( $ids ) ] );
+}
+
+// Saves one text field right away (never the file name). All autosaves of a user and day share one Historial entry.
+function inpulsia_medios_ajax_autosave() {
+	inpulsia_medios_check_ajax();
+	$id    = absint( $_POST['id'] ?? 0 );
+	$field = sanitize_key( $_POST['field'] ?? '' );
+	$value = (string) wp_unslash( $_POST['value'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized per field in apply_row.
+	if ( ! in_array( $field, [ 'title', 'alt', 'caption', 'description' ], true ) ) {
+		wp_send_json_error( 'Este campo no se guarda automáticamente.' );
+	}
+	$token = inpulsia_medios_autosave_token();
+	list( $r ) = inpulsia_medios_apply_rows( $token, [ [ 'id' => $id, $field => $value === '' ? INPULSIA_MEDIOS_CLEAR : $value ] ] );
+	if ( $r['status'] === 'error' ) {
+		wp_send_json_error( $r['msg'] );
+	}
+	$entry = inpulsia_medios_history_find( $token );
+	inpulsia_medios_history_update( $token, [ 'rows' => (int) $entry['changed'] ] );
+	wp_send_json_success( [ 'value' => inpulsia_medios_current( $id )[ $field ] ] );
+}
+
+function inpulsia_medios_autosave_token() {
+	$user  = get_current_user_id();
+	$today = current_time( 'Y-m-d' );
+	$saved = get_user_meta( $user, 'inpulsia_medios_autosave', true );
+	$entry = is_array( $saved ) && $saved['day'] === $today ? inpulsia_medios_history_find( $saved['token'] ) : null;
+	if ( $entry && $entry['status'] !== 'deshecho' ) {
+		return $saved['token'];
+	}
+	$token = inpulsia_medios_new_token();
+	inpulsia_medios_history_add( [
+		'token'   => $token,
+		'date'    => current_time( 'mysql' ),
+		'user'    => wp_get_current_user()->display_name,
+		'file'    => 'Guardado automático en tabla',
+		'rows'    => 0,
+		'changed' => 0,
+		'status'  => 'aplicado',
+	] );
+	update_user_meta( $user, 'inpulsia_medios_autosave', [ 'day' => $today, 'token' => $token ] );
+	return $token;
 }

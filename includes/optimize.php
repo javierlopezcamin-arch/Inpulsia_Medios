@@ -310,6 +310,7 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	}
 	inpulsia_medios_fix_perms( $dir . '/' . $new_name );
 
+	$siblings = inpulsia_medios_siblings( $id );
 	update_attached_file( $id, $dir . '/' . $new_name );
 	$wpdb->update( $wpdb->posts, [ 'post_mime_type' => $target ], [ 'ID' => $id ] );
 	clean_post_cache( $id );
@@ -333,6 +334,7 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	}
 	$wpdb->update( $wpdb->posts, [ 'guid' => wp_get_attachment_url( $id ) ], [ 'ID' => $id ] );
 	clean_post_cache( $id );
+	inpulsia_medios_siblings_sync( $id, $siblings );
 
 	// 5. Point every old URL at the new files.
 	$map = [ $old_main => $new_main ];
@@ -465,12 +467,14 @@ function inpulsia_medios_backup_restore( $key ) {
 		inpulsia_medios_fix_perms( $dir . '/' . $f );
 	}
 
+	$siblings = inpulsia_medios_siblings( $id );
 	update_post_meta( $id, '_wp_attached_file', $data['file'] );
 	wp_update_attachment_metadata( $id, $old_meta );
 	$wpdb->update( $wpdb->posts, [ 'post_mime_type' => $data['mime'] ], [ 'ID' => $id ] );
 	clean_post_cache( $id );
 	$wpdb->update( $wpdb->posts, [ 'guid' => wp_get_attachment_url( $id ) ], [ 'ID' => $id ] );
 	clean_post_cache( $id );
+	inpulsia_medios_siblings_sync( $id, $siblings );
 
 	$map = [ $cur_main => $old_main ];
 	if ( ! empty( $cur_meta['original_image'] ) ) {

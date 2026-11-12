@@ -47,9 +47,41 @@
 	/* ---------- Inline editing ---------- */
 
 	var $grid = $('.inpulsia-medios-grid');
+	var lastField = null;
+	var CAMERA = /^(img|dsc[nf]?|dcim|pxl|mvimg|photo|foto|pic|p)[-_ .]*\d|^(whatsapp|captura|screenshot|screen ?shot|imagen?|untitled|sin[-_ ]titulo)\b|^[\d_ -]+$|^[a-f0-9]{8}-[a-f0-9]{4}|^[a-z0-9]{24,}$|copia|copy|final|-v\d+$/i;
 
 	function fieldValue($input) {
-		return $input.is('textarea') ? $input.val() : $input.val();
+		return $input.val();
+	}
+
+	function slug(v) {
+		return v.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+	}
+
+	// Live SEO checks; they only advise, nothing is blocked.
+	function hints($tr) {
+		var out = {};
+		var name = $tr.find('[data-field="filename"]').val() || '';
+		var alt = ($tr.find('[data-field="alt"]').val() || '').trim();
+		var n = [];
+		if (name && CAMERA.test(name)) n.push('Nombre de cámara o genérico: no dice nada a Google.');
+		if (name && slug(name) !== name) n.push('Se guardará como «' + slug(name) + '».');
+		if (name.length > 60) n.push('Demasiado largo: mejor 3-6 palabras.');
+		out.filename = n;
+		var a = [];
+		if (!alt) a.push('Falta el alt.');
+		else {
+			if (/^(imagen|foto|fotograf[ií]a|image|picture|img)\b/i.test(alt)) a.push('No empieces por «imagen de»: describe directamente.');
+			if (/^[a-z0-9]+(-[a-z0-9]+)+$/i.test(alt)) a.push('Parece un nombre de archivo, no una frase.');
+			if (alt.split(/\s+/).length < 3) a.push('Muy corto: describe qué se ve.');
+			var dup = $grid.find('[data-field="alt"]').filter(function () { return this !== $tr.find('[data-field="alt"]')[0] && $(this).val().trim().toLowerCase() === alt.toLowerCase(); }).length;
+			if (dup) a.push('Alt repetido en otra imagen de esta página.');
+		}
+		out.alt = a;
+		$tr.find('.im-hint').each(function () {
+			var list = out[$(this).data('for')] || [];
+			$(this).text(list.join(' ')).toggleClass('has-hint', list.length > 0);
+		});
 	}
 
 	function updateRowState($tr) {
@@ -61,18 +93,145 @@
 		});
 		$tr.toggleClass('row-dirty', dirty);
 		var n = $grid.find('tr.row-dirty').length;
-		$('#inpulsia-medios-dirty').text(n ? n + ' imágenes modificadas' : '');
-		var $alt = $tr.find('[data-field="alt"]');
-		var len = $alt.val().length;
+		$('#inpulsia-medios-dirty').text(n ? n + ' imágenes con cambios sin revisar' : '');
+		var len = ($tr.find('[data-field="alt"]').val() || '').length;
 		$tr.find('.inpulsia-medios-chars').text(len + '/125').toggleClass('too-long', len > 125);
+		hints($tr);
+	}
+
+	function selectedRows() {
+		return $grid.find('.inpulsia-medios-row-check:checked').closest('tr');
+	}
+
+	function refreshSelection() {
+		var n = selectedRows().length;
+		$('.im-actionbar').prop('hidden', !n);
+		$('#im-selected-count').text(n === 1 ? '1 seleccionada' : n + ' seleccionadas');
+	}
+
+	function setField($f, v) {
+		$f.val(v);
+		updateRowState($f.closest('tr'));
+	}
+
+	/* Autosave (text fields only; renaming always goes through the preview) */
+	var autosave = false;
+	try { autosave = localStorage.getItem('inpulsiaMediosAutosave') === '1'; } catch (e) {}
+	$('#im-autosave').prop('checked', autosave).on('change', function () {
+		autosave = this.checked;
+		try { localStorage.setItem('inpulsiaMediosAutosave', autosave ? '1' : '0'); } catch (e) {}
+		if (autosave) $grid.find('[data-field]').not('[data-field="filename"]').filter('.is-dirty').each(function () { save($(this)); });
+	});
+
+	function save($f) {
+		var field = $f.data('field');
+		if (!autosave || field === 'filename' || $f.val() === $f.attr('data-orig')) return;
+		var $td = $f.closest('td').removeClass('is-saved is-save-error').addClass('is-saving');
+		var sent = $f.val();
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_autosave', nonce: cfg.nonce, id: $f.closest('tr').data('id'), field: field, value: sent }, null, 'json')
+			.done(function (res) {
+				if (!res.success) { $td.addClass('is-save-error').attr('title', res.data || 'Error'); return; }
+				$f.attr('data-orig', res.data.value);
+				if ($f.val() === sent) $f.val(res.data.value);
+				$td.addClass('is-saved');
+				setTimeout(function () { $td.removeClass('is-saved'); }, 1500);
+				updateRowState($f.closest('tr'));
+			})
+			.fail(function () { $td.addClass('is-save-error').attr('title', 'Error de conexión: no se ha guardado'); })
+			.always(function () { $td.removeClass('is-saving'); });
 	}
 
 	if ($grid.length) {
 		$grid.find('tbody tr[data-id]').each(function () { updateRowState($(this)); });
 		$grid.on('input', '[data-field]', function () { updateRowState($(this).closest('tr')); });
+		$grid.on('change', '[data-field]', function () { save($(this)); });
+		$grid.on('focus', '[data-field]', function () { lastField = this; });
+
+		// Enter (Ctrl+Enter in multi-line fields) moves to the same field in the next row; Shift goes back.
+		$grid.on('keydown', '[data-field]', function (e) {
+			if (e.key !== 'Enter' || e.isComposing) return;
+			var multi = $(this).is('textarea');
+			if (multi && !(e.ctrlKey || e.metaKey)) return;
+			e.preventDefault();
+			var $rows = $grid.find('tbody tr[data-id]');
+			var i = $rows.index($(this).closest('tr')) + (e.shiftKey ? -1 : 1);
+			var $next = $rows.eq(Math.max(0, i)).find('[data-field="' + $(this).data('field') + '"]');
+			if (i >= 0 && $next.length) $next.trigger('focus').trigger('select');
+			else $(this).trigger('change');
+		});
+
+		// Pasting several lines from Excel fills downward; tab-separated cells fill the next columns.
+		$grid.on('paste', '[data-field]', function (e) {
+			var text = (e.originalEvent.clipboardData || window.clipboardData).getData('text');
+			if (!/[\n\t]/.test(text.replace(/\r?\n$/, ''))) return;
+			e.preventDefault();
+			var lines = text.replace(/\r/g, '').replace(/\n$/, '').split('\n');
+			var fields = ['filename', 'title', 'alt', 'caption', 'description'];
+			var col = fields.indexOf($(this).data('field'));
+			var $rows = $grid.find('tbody tr[data-id]');
+			var start = $rows.index($(this).closest('tr'));
+			$.each(lines, function (i, line) {
+				var $tr = $rows.eq(start + i);
+				if (!$tr.length) return false;
+				$.each(line.split('\t'), function (j, cell) {
+					var f = fields[col + j];
+					if (f) { var $f = $tr.find('[data-field="' + f + '"]'); setField($f, cell.trim()); save($f); }
+				});
+			});
+		});
 
 		$('#inpulsia-medios-check-all').on('change', function () {
 			$grid.find('.inpulsia-medios-row-check').prop('checked', this.checked);
+			refreshSelection();
+		});
+		$grid.on('change', '.inpulsia-medios-row-check', refreshSelection);
+		$('#im-clear-selection').on('click', function () {
+			$grid.find('.inpulsia-medios-row-check, #inpulsia-medios-check-all').prop('checked', false);
+			refreshSelection();
+		});
+
+		$('#im-copy-down').on('click', function () {
+			if (!lastField) return alert('Escribe primero en el campo que quieres copiar.');
+			var $src = $(lastField), f = $src.data('field');
+			if (f === 'filename') return alert('Los nombres de archivo deben ser distintos: usa una plantilla con {n}.');
+			selectedRows().each(function () {
+				var $f = $(this).find('[data-field="' + f + '"]');
+				if ($f[0] !== lastField) { setField($f, $src.val()); save($f); }
+			});
+		});
+
+		/* Templates */
+		$('.im-var').on('click', function () {
+			var el = $('#im-tpl')[0], v = $(this).data('var');
+			var pos = el.selectionStart == null ? el.value.length : el.selectionStart;
+			el.value = el.value.slice(0, pos) + v + el.value.slice(el.selectionEnd || pos);
+			el.focus();
+		});
+		$('#im-tpl-apply').on('click', function () {
+			var field = $('#im-tpl-field').val(), tpl = $('#im-tpl').val(), onlyEmpty = $('#im-tpl-empty').is(':checked');
+			if (!tpl.trim()) return;
+			var $rows = selectedRows();
+			if (!$rows.length) $rows = $grid.find('tbody tr[data-id]');
+			var n = 0, changed = 0;
+			$rows.each(function () {
+				var $tr = $(this), $f = $tr.find('[data-field="' + field + '"]');
+				var cur = $f.val().trim();
+				if (onlyEmpty && cur && !(field === 'filename' || field === 'title' ? CAMERA.test(cur) : false)) return;
+				n++;
+				var vars = {
+					pagina: $tr.data('page') || $tr.find('[data-field="title"]').val() || '',
+					titulo: $tr.find('[data-field="title"]').val() || '',
+					web: cfg.site || '',
+					nombre: $tr.find('[data-field="filename"]').val() || '',
+					alt: $tr.find('[data-field="alt"]').val() || '',
+					n: String(n)
+				};
+				var v = tpl.replace(/\{(\w+)\}/g, function (m, k) { return k in vars ? vars[k] : m; })
+					.replace(/\s+-\s+-\s+/g, ' - ').replace(/^[\s-]+|[\s-]+$/g, '').replace(/\s{2,}/g, ' ');
+				if (field === 'filename') v = slug(v);
+				if (v) { setField($f, v); save($f); changed++; }
+			});
+			alert(changed ? changed + ' campos rellenados. Revisa la tabla y pulsa «Revisar cambios».' : 'No había ningún campo que rellenar con esas condiciones.');
 		});
 
 		window.addEventListener('beforeunload', function (e) {
@@ -132,7 +291,7 @@
 	$grid.on('click', '.inpulsia-medios-suggest', function () { suggest($(this).closest('tr')); });
 
 	$('#inpulsia-medios-suggest-selected').on('click', function () {
-		var queue = $grid.find('.inpulsia-medios-row-check:checked').closest('tr').toArray();
+		var queue = selectedRows().toArray();
 		if (!queue.length) return alert('Selecciona al menos una imagen.');
 		var $btn = $(this).prop('disabled', true);
 		var running = 0;
@@ -160,7 +319,7 @@
 			delete_old: $('#im-opt-delete-old').is(':checked')
 		};
 		if (mode === 'selected') {
-			data.ids = $grid.find('.inpulsia-medios-row-check:checked').closest('tr').map(function () { return $(this).data('id'); }).get();
+			data.ids = selectedRows().map(function () { return $(this).data('id'); }).get();
 			if (!data.ids.length) return alert('Selecciona al menos una imagen.');
 		} else {
 			var params = new URLSearchParams(location.search);
@@ -183,6 +342,17 @@
 	}
 
 	$('#inpulsia-medios-opt-selected').on('click', function () { optimize('selected'); });
+
+	// Shortcuts from the Inicio assistant: start the task straight away (a preview still comes first).
+	$(function () {
+		var task = $('#inpulsia-medios-grid-wrap').data('do');
+		if (task === 'optimize' && $('#inpulsia-medios-opt-all').data('total') > 0) optimize('filter');
+		if (task === 'ai') {
+			$('#inpulsia-medios-check-all').prop('checked', true).trigger('change');
+			if ($('#inpulsia-medios-suggest-selected').length) $('#inpulsia-medios-suggest-selected').trigger('click');
+			else $grid.find('[data-field="alt"]').first().trigger('focus');
+		}
+	});
 	$('#inpulsia-medios-opt-all').on('click', function () {
 		var n = $(this).data('total');
 		if (n > 50 && !confirm('Se van a revisar ' + n + ' imágenes. Puede tardar varios minutos. ¿Seguir?')) return;

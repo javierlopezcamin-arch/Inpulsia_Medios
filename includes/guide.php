@@ -30,6 +30,7 @@ function inpulsia_medios_stats() {
 		'used'      => inpulsia_medios_count( [ 'usage' => 'used' ] ),
 		'png'       => inpulsia_medios_count( [ 'format' => 'heavy' ] ),
 		'big'       => inpulsia_medios_count( [ 'weight' => '1m' ] ),
+		'names'     => inpulsia_medios_count( [ 'names' => 'bad' ] ),
 		'redirects' => inpulsia_medios_redirects_count(),
 	];
 }
@@ -55,7 +56,12 @@ function inpulsia_medios_hidden_notice( $hidden ) {
 	<div class="notice notice-info inline im-hidden-notice">
 		<p><strong><?php echo esc_html( 1 === (int) $hidden ? 'Hay 1 imagen más en la base de datos que no aparece aquí.' : 'Hay ' . number_format_i18n( $hidden ) . ' imágenes más en la base de datos que no aparecen aquí.' ); ?></strong>
 		<?php if ( $causes ) : ?>
-			Las filtra <?php echo esc_html( implode( '; ', $causes ) ); ?>. Cambia el idioma o la carpeta en la barra superior de WordPress para verlas y trabajar con ellas.
+			Las filtra <?php echo esc_html( implode( '; ', $causes ) ); ?>.
+			<?php if ( inpulsia_medios_multilang() ) : ?>
+				<a href="<?php echo esc_url( inpulsia_medios_url( 'editar', [ 'lang' => 'all' ] ) ); ?>">Ver las de todos los idiomas</a> o cambia el idioma en la barra superior.
+			<?php else : ?>
+				Cambia la carpeta en la barra superior de WordPress para verlas y trabajar con ellas.
+			<?php endif; ?>
 		<?php else : ?>
 			Otro plugin está filtrando la biblioteca de medios (por idioma, carpetas o permisos). Las cifras de esta página son las de las imágenes visibles.
 		<?php endif; ?>
@@ -77,14 +83,72 @@ function inpulsia_medios_tab_inicio() {
 			<p>Inpulsia Medios revisa las imágenes de la biblioteca de medios y las deja listas para Google: pesan menos, tienen nombres que se entienden y un texto alternativo que describe lo que se ve. Todo se revisa antes de aplicarse y se puede deshacer.</p>
 		</section>
 
-		<h2 class="im-section-title">Estado de esta web</h2>
+		<?php
+		$score = inpulsia_medios_score( $s );
+		$tone  = $score >= 85 ? 'ok' : ( $score >= 60 ? 'warn' : 'bad' );
+		$steps = [
+			[
+				'n'     => $s['big'],
+				'title' => 'Aligerar las imágenes pesadas',
+				'text'  => 'Las de más de 1 MB ralentizan la web. Se convierten y comprimen; antes ves qué se hará con cada una.',
+				'done'  => 'No hay imágenes de más de 1 MB.',
+				'cta'   => 'Optimizar ' . number_format_i18n( $s['big'] ),
+				'url'   => inpulsia_medios_url( 'editar', [ 'weight' => '1m', 'do' => 'optimize' ] ),
+			],
+			[
+				'n'     => $s['missing'],
+				'title' => 'Escribir los textos alternativos que faltan',
+				'text'  => $has_ai ? 'La IA mira cada imagen y propone el alt. Lo revisas en la tabla y aplicas.' : 'Escríbelos en la tabla, o usa una plantilla. Con la IA activada se proponen solos.',
+				'done'  => 'Todas las imágenes tienen alt.',
+				'cta'   => $has_ai ? 'Proponer con IA' : 'Completar',
+				'url'   => inpulsia_medios_url( 'editar', [ 'missing_alt' => 1, 'do' => 'ai' ] ),
+			],
+			[
+				'n'     => $s['names'],
+				'title' => 'Poner nombres de archivo claros',
+				'text'  => 'Cambia IMG_2041.jpg y similares por nombres que describan la imagen. Las URLs antiguas redirigen a las nuevas.',
+				'done'  => 'Todos los nombres de archivo son claros.',
+				'cta'   => $has_ai ? 'Proponer con IA' : 'Renombrar',
+				'url'   => inpulsia_medios_url( 'editar', [ 'names' => 'bad', 'do' => 'ai' ] ),
+			],
+		];
+		?>
+		<section class="im-health">
+			<div class="im-score is-<?php echo esc_attr( $tone ); ?>" style="--im-score:<?php echo (int) $score; ?>" role="img" aria-label="<?php echo esc_attr( 'Salud de la biblioteca: ' . $score . ' de 100' ); ?>">
+				<span><?php echo (int) $score; ?></span><small>de 100</small>
+			</div>
+			<div class="im-health-text">
+				<h2>Salud de las imágenes</h2>
+				<p><?php echo esc_html( $score >= 85 ? 'La biblioteca está en buena forma. Revisa de vez en cuando las imágenes nuevas.' : ( $score >= 60 ? 'Bien encaminada: completa los pasos del asistente para subir la nota.' : 'Hay margen de mejora: cada paso del asistente sube la nota y mejora el SEO y la velocidad.' ) ); ?></p>
+				<p class="muted">Cuenta el alt (40 %), el peso (30 %), los nombres (20 %) y el formato (10 %).</p>
+			</div>
+		</section>
+
+		<h2 class="im-section-title">Asistente rápido</h2>
 		<?php inpulsia_medios_hidden_notice( $s['hidden'] ); ?>
+		<ol class="im-wizard">
+			<?php foreach ( $steps as $i => $st ) : ?>
+				<li class="<?php echo $st['n'] ? 'is-todo' : 'is-done'; ?>">
+					<span class="im-wizard-n" aria-hidden="true"><?php echo $st['n'] ? (int) $i + 1 : '✓'; ?></span>
+					<div>
+						<h3><?php echo esc_html( $st['title'] ); ?> <?php if ( $st['n'] ) : ?><span class="pill pill-warn"><?php echo esc_html( number_format_i18n( $st['n'] ) ); ?></span><?php endif; ?></h3>
+						<p><?php echo esc_html( $st['n'] ? $st['text'] : $st['done'] ); ?></p>
+					</div>
+					<?php if ( $st['n'] ) : ?>
+						<a class="button button-primary" href="<?php echo esc_url( $st['url'] ); ?>"><?php echo esc_html( $st['cta'] ); ?></a>
+					<?php endif; ?>
+				</li>
+			<?php endforeach; ?>
+		</ol>
+
+		<h2 class="im-section-title">Estado de esta web</h2>
 		<div class="im-stats">
 			<?php
 			inpulsia_medios_stat_card( $s['total'], $s['hidden'] ? 'imágenes visibles en la biblioteca' : 'imágenes en la biblioteca', 'Ver todas', inpulsia_medios_url( 'editar' ) );
 			inpulsia_medios_stat_card( $s['used'], 'se usan en la web', 'Ver las que se usan', inpulsia_medios_url( 'editar', [ 'usage' => 'used' ] ) );
 			inpulsia_medios_stat_card( $s['missing'], 'sin texto alternativo', $s['missing'] ? 'Completarlas' : '', inpulsia_medios_url( 'editar', [ 'missing_alt' => 1 ] ), $s['missing'] ? 'warn' : 'ok' );
 			inpulsia_medios_stat_card( $s['big'], 'pesan más de 1 MB', $s['big'] ? 'Verlas y optimizarlas' : '', inpulsia_medios_url( 'editar', [ 'weight' => '1m' ] ), $s['big'] ? 'warn' : 'ok' );
+			inpulsia_medios_stat_card( $s['names'], 'con nombre poco amigable', $s['names'] ? 'Verlas y renombrarlas' : '', inpulsia_medios_url( 'editar', [ 'names' => 'bad' ] ), $s['names'] ? 'warn' : 'ok' );
 			inpulsia_medios_stat_card( $s['png'], 'en PNG, GIF u otros formatos pesados', $s['png'] ? 'Verlas y optimizarlas' : '', inpulsia_medios_url( 'editar', [ 'format' => 'heavy' ] ), $s['png'] ? 'warn' : 'ok' );
 			?>
 		</div>
@@ -125,7 +189,7 @@ function inpulsia_medios_tab_inicio() {
 			</li>
 			<li>
 				<strong>Completa nombres y textos alternativos.</strong>
-				Escríbelos en la tabla o pulsa <em>IA</em> en cada fila. Revisa y pulsa <em>Revisar cambios de texto</em> y después <em>Aplicar</em>.
+				Escríbelos en la tabla (pulsa Intro para bajar de fila o pega una columna de Excel), usa una plantilla o pulsa <em>IA</em>. Revisa y pulsa <em>Revisar cambios</em> y después <em>Aplicar</em>.
 			</li>
 			<li>
 				<strong>¿Algo no te convence?</strong>
@@ -213,7 +277,7 @@ function inpulsia_medios_help_tabs() {
 	}
 	$help = [
 		'inicio'        => [ 'Cómo funciona', '<p>Inpulsia Medios mejora las imágenes de la biblioteca: menos peso, nombres de archivo claros y texto alternativo. Todo se revisa en una vista previa antes de aplicarse y se puede deshacer desde <strong>Historial</strong>.</p>' ],
-		'editar'        => [ 'Editar y optimizar', '<p>Filtra las imágenes (por ejemplo, <em>En uso en la web</em>), escribe los cambios directamente en la tabla o pulsa <strong>IA</strong> para que se propongan, y después <strong>Revisar cambios de texto</strong>.</p><p>Para reducir el peso, abre <strong>Optimizar imágenes</strong> y elige las seleccionadas o todas las del filtro.</p>' ],
+		'editar'        => [ 'Editar y optimizar', '<p>Filtra las imágenes (por ejemplo, <em>En uso en la web</em>), escribe los cambios directamente en la tabla o pulsa <strong>IA</strong> para que se propongan, y después <strong>Revisar cambios</strong>.</p><p>Para reducir el peso, abre <strong>Optimizar imágenes</strong> y elige las seleccionadas o todas las del filtro.</p>' ],
 		'importar'      => [ 'Importar un Excel o CSV', '<p>Sube un archivo con las columnas <code>ID</code>, <code>filename</code>, <code>title</code>, <code>alt</code>, <code>caption</code> y <code>description</code>. Las celdas vacías no cambian nada; escribe <code>[vaciar]</code> para borrar un campo.</p><p>La forma más cómoda es exportar primero desde <strong>Exportar</strong>, editar ese archivo y subirlo aquí.</p>' ],
 		'exportar'      => [ 'Exportar', '<p>Descarga un CSV con los datos actuales de las imágenes. La columna <code>usado_en</code> dice en qué páginas aparece cada una, útil para escribir textos alternativos con contexto.</p>' ],
 		'historial'     => [ 'Deshacer cambios', '<p>Cada importación, edición u optimización queda aquí. <strong>Deshacer</strong> devuelve nombres, textos y, si había copia de seguridad, los archivos originales.</p>' ],

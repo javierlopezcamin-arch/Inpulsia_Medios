@@ -280,4 +280,57 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'animado', $r['msg'] );
 		@unlink( $path );
 	}
+
+	public function test_bad_names_are_detected_and_filtered() {
+		$this->assertTrue( inpulsia_medios_is_bad_name( 'IMG_2041' ) );
+		$this->assertTrue( inpulsia_medios_is_bad_name( 'Foto Cocina' ) );
+		$this->assertTrue( inpulsia_medios_is_bad_name( 'cocina_reformada' ) );
+		$this->assertTrue( inpulsia_medios_is_bad_name( 'baño-nuevo' ) );
+		$this->assertFalse( inpulsia_medios_is_bad_name( 'cocina-reformada-santander' ) );
+		$this->assertFalse( inpulsia_medios_is_bad_name( 'cocina-reformada-santander-scaled' ) );
+
+		$bad  = $this->upload( 'DSC_0042.jpg', 40, 40 );
+		$good = $this->upload( 'reforma-bano-santander.jpg', 40, 40 );
+		$ids  = $this->ids_for( [ 'names' => 'bad' ] );
+		$this->assertContains( $bad, $ids );
+		$this->assertNotContains( $good, $ids );
+	}
+
+	public function test_translations_follow_renamed_and_optimized_file() {
+		$id  = $this->upload( 'IMG_0100.png', 600, 300 );
+		$tr  = self::factory()->attachment->create( [ 'post_mime_type' => 'image/png', 'file' => get_post_meta( $id, '_wp_attached_file', true ) ] );
+		update_post_meta( $tr, '_wp_attached_file', get_post_meta( $id, '_wp_attached_file', true ) );
+		$this->assertSame( [ $tr ], inpulsia_medios_siblings( $id ) );
+
+		$this->assertNotWPError( inpulsia_medios_rename( $id, 'piscina-exterior' ) );
+		$this->assertSame( get_post_meta( $id, '_wp_attached_file', true ), get_post_meta( $tr, '_wp_attached_file', true ) );
+
+		$r = inpulsia_medios_optimize( $id, $this->opts + [ 'keep_old' => true ] );
+		$this->assertSame( 'ok', $r['status'], $r['msg'] );
+		$this->assertSame( get_attached_file( $id ), get_attached_file( $tr ) );
+		$this->assertSame( 'image/jpeg', get_post_mime_type( $tr ) );
+		$this->assertFileExists( get_attached_file( $tr ) );
+	}
+
+	public function test_autosave_groups_edits_in_one_undoable_entry() {
+		$id    = $this->upload( 'casa.jpg', 40, 40 );
+		$token = inpulsia_medios_autosave_token();
+		inpulsia_medios_apply_rows( $token, [ [ 'id' => $id, 'alt' => 'Casa con jardín' ] ] );
+		inpulsia_medios_apply_rows( inpulsia_medios_autosave_token(), [ [ 'id' => $id, 'alt' => 'Casa blanca con jardín' ] ] );
+		$this->assertSame( $token, inpulsia_medios_autosave_token() );
+		$this->assertSame( 2, inpulsia_medios_history_find( $token )['changed'] );
+
+		inpulsia_medios_undo_rows( inpulsia_medios_undo_entries( $token ) );
+		$this->assertSame( '', get_post_meta( $id, '_wp_attachment_image_alt', true ) );
+
+		inpulsia_medios_history_update( $token, [ 'status' => 'deshecho' ] );
+		$this->assertNotSame( $token, inpulsia_medios_autosave_token() );
+	}
+
+	public function test_health_score() {
+		$this->assertSame( 100, inpulsia_medios_score( [ 'total' => 0 ] ) );
+		$this->assertSame( 100, inpulsia_medios_score( [ 'total' => 10, 'missing' => 0, 'big' => 0, 'names' => 0, 'png' => 0 ] ) );
+		$this->assertSame( 60, inpulsia_medios_score( [ 'total' => 10, 'missing' => 10, 'big' => 0, 'names' => 0, 'png' => 0 ] ) );
+		$this->assertSame( 0, inpulsia_medios_score( [ 'total' => 10, 'missing' => 10, 'big' => 10, 'names' => 10, 'png' => 10 ] ) );
+	}
 }
