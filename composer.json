@@ -4,14 +4,19 @@
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "require-dev": {
+        "phpcompatibility/phpcompatibility-wp": "*",
         "phpunit/phpunit": "^9.6",
-        "yoast/phpunit-polyfills": "^4.0",
-        "wp-phpunit/wp-phpunit": "^7.1"
+        "wp-coding-standards/wpcs": "^3.1",
+        "wp-phpunit/wp-phpunit": "^7.1",
+        "yoast/phpunit-polyfills": "^4.0"
     },
     "config": {
         "sort-packages": true,
         "platform": {
             "php": "7.4.33"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "scripts": {

@@ -82,6 +82,12 @@ composer install
 WP_CORE_DIR=/ruta/a/wordpress WP_DB_NAME=wordpress_test WP_DB_USER=root WP_DB_PASS=root vendor/bin/phpunit
 ```
 
+Análisis estático (seguridad de WordPress, SQL preparado y compatibilidad con PHP 7.4):
+
+```bash
+vendor/bin/phpcs
+```
+
 Sin MySQL se puede usar SQLite: copia el drop-in del plugin `sqlite-database-integration` a `wp-content/db.php` de esa instalación y define `WP_SQLITE_DIR` con una carpeta donde guardar la base de datos.
 
 ## Publicar una versión
@@ -89,6 +95,6 @@ Sin MySQL se puede usar SQLite: copia el drop-in del plugin `sqlite-database-int
 1. Sube la versión en la cabecera y en `INPULSIA_MEDIOS_VERSION` de `inpulsia-medios.php`. Las dos tienen que coincidir.
 2. Haz commit y push a `main`.
 
-La GitHub Action [`release.yml`](.github/workflows/release.yml) ejecuta los tests con PHP 7.4 y 8.4 sobre MySQL. Si pasan y la versión es nueva, genera el zip y publica la Release `vX.Y.Z`. Las webs con el plugin instalado verán la actualización en **Plugins**, o al instante con el enlace «Buscar actualizaciones».
+La GitHub Action [`release.yml`](.github/workflows/release.yml) ejecuta el análisis estático y los tests con PHP 7.4 y 8.4 sobre MySQL. Si pasan y la versión es nueva, genera el zip y publica la Release `vX.Y.Z`. Las webs con el plugin instalado verán la actualización en **Plugins**, o al instante con el enlace «Buscar actualizaciones».
 
 Para generar el zip en local: `./build.sh`.

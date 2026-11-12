@@ -37,6 +37,10 @@ jobs:
       - name: Instalar dependencias
         run: composer install --no-interaction --no-progress
 
+      - name: Análisis estático (seguridad y compatibilidad PHP 7.4)
+        if: matrix.php == '8.4'
+        run: vendor/bin/phpcs -q
+
       - name: Descargar WordPress
         run: |
           mkdir -p /tmp/wordpress

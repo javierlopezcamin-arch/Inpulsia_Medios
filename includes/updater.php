@@ -17,6 +17,7 @@ class Inpulsia_Medios_Updater {
 		add_filter( 'upgrader_source_selection', [ $this, 'fix_folder' ], 10, 4 );
 		add_action( 'upgrader_process_complete', [ $this, 'purge' ] );
 		add_filter( 'plugin_action_links_' . $this->basename, [ $this, 'action_links' ] );
+		add_filter( 'plugin_row_meta', [ $this, 'row_meta' ], 10, 2 );
 		add_action( 'admin_init', [ $this, 'force_check' ] );
 	}
 
@@ -87,18 +88,35 @@ class Inpulsia_Medios_Updater {
 		if ( ! $release ) {
 			return $result;
 		}
+		$header = get_file_data( WP_PLUGIN_DIR . '/' . $this->basename, [ 'requires' => 'Requires at least', 'requires_php' => 'Requires PHP' ] );
 		return (object) [
 			'name'          => 'Inpulsia Medios',
 			'slug'          => self::SLUG,
 			'version'       => $release['version'],
 			'author'        => '<a href="https://inpulsia.es">Inpulsia</a>',
-			'homepage'      => $release['url'],
+			'homepage'      => 'https://github.com/' . self::REPO,
+			'requires'      => $header['requires'],
+			'requires_php'  => $header['requires_php'],
+			'tested'        => get_bloginfo( 'version' ),
 			'last_updated'  => $release['date'],
 			'download_link' => $release['package'],
 			'sections'      => [
-				'changelog' => $release['notes'] !== '' ? wpautop( esc_html( $release['notes'] ) ) : 'Sin notas de versión.',
+				'description' => '<p>Edición masiva de los medios de WordPress: nombre de archivo, título, texto alternativo, leyenda y descripción desde CSV, Excel, una tabla editable o WP-CLI, con sugerencias de IA.</p>'
+					. '<p>Optimiza imágenes (JPG o WebP, ancho máximo y compresión) manteniendo las transparentes. Al renombrar o convertir actualiza las URLs en todo el sitio, crea redirecciones 301, vacía cachés y permite deshacer desde el historial.</p>',
+				'changelog'   => $this->notes_html( $release['notes'] ),
 			],
 		];
+	}
+
+	// Release notes are "- line" bullets generated from commit subjects.
+	private function notes_html( $notes ) {
+		$items = array_filter( array_map( function ( $line ) {
+			return trim( ltrim( trim( $line ), '-*' ) );
+		}, explode( "\n", (string) $notes ) ) );
+		if ( ! $items ) {
+			return '<p>Sin notas de versión.</p>';
+		}
+		return '<ul><li>' . implode( '</li><li>', array_map( 'esc_html', $items ) ) . '</li></ul>';
 	}
 
 	// GitHub zipballs unpack to "owner-repo-hash/"; WordPress needs the plugin's own folder name.
@@ -128,6 +146,15 @@ class Inpulsia_Medios_Updater {
 			$links[] = '<a href="' . esc_url( $url ) . '">Buscar actualizaciones</a>';
 		}
 		return $links;
+	}
+
+	public function row_meta( $meta, $file ) {
+		if ( $file !== $this->basename ) {
+			return $meta;
+		}
+		$url    = admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . self::SLUG . '&TB_iframe=true&width=600&height=550' );
+		$meta[] = '<a href="' . esc_url( $url ) . '" class="thickbox open-plugin-details-modal">Ver detalles</a>';
+		return $meta;
 	}
 
 	public function force_check() {

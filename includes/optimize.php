@@ -285,12 +285,20 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	$old_main  = basename( $file );
 	$old_meta  = $meta;
 	$old_files = $own;
+
+	// Put the new file in place under a temporary name first, so a failure never leaves the attachment without a file.
+	$staged = $dir . '/.inpulsia-' . wp_generate_password( 8, false ) . '.' . $ext;
+	$moved = @rename( $tmp, $staged ) || @copy( $tmp, $staged );
+	@unlink( $tmp );
+	if ( ! $moved || ! file_exists( $staged ) || ! filesize( $staged ) ) {
+		@unlink( $staged );
+		return [ 'status' => 'error', 'msg' => 'No se pudo escribir la imagen nueva en uploads (permisos o espacio); el original no se ha tocado.', 'prev' => $prev ];
+	}
 	foreach ( $old_files as $f ) {
 		@unlink( $dir . '/' . $f );
 	}
-	if ( ! @rename( $tmp, $dir . '/' . $new_name ) ) {
-		@copy( $tmp, $dir . '/' . $new_name );
-		@unlink( $tmp );
+	if ( ! @rename( $staged, $dir . '/' . $new_name ) ) {
+		$new_name = basename( $staged );
 	}
 
 	update_attached_file( $id, $dir . '/' . $new_name );

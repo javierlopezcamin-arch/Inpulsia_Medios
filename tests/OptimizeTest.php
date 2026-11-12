@@ -52,6 +52,15 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertLessThan( $r['before'], $r['after'] );
 		$this->assertStringContainsString( wp_get_attachment_url( $id ), get_post_field( 'post_content', $post ) );
 		$this->assertArrayHasKey( 'restore', $r['prev'] );
+		$this->assertSame( [], glob( dirname( get_attached_file( $id ) ) . '/.inpulsia-*' ) );
+	}
+
+	public function test_history_entries_are_not_duplicated_on_retry() {
+		$entry = [ 'token' => 'reintento', 'date' => current_time( 'mysql' ), 'user' => 't', 'file' => 'x', 'rows' => 1, 'changed' => 0, 'status' => 'incompleto' ];
+		inpulsia_medios_history_add( $entry );
+		inpulsia_medios_history_add( $entry );
+
+		$this->assertCount( 1, wp_list_filter( inpulsia_medios_history(), [ 'token' => 'reintento' ] ) );
 	}
 
 	public function test_transparent_png_stays_png() {

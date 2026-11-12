@@ -50,7 +50,8 @@ function inpulsia_medios_assets( $hook ) {
 
 function inpulsia_medios_page() {
 	$tabs = inpulsia_medios_tabs();
-	$tab  = isset( $_GET['tab'], $tabs[ $_GET['tab'] ] ) ? $_GET['tab'] : 'importar';
+	$tab  = sanitize_key( wp_unslash( $_GET['tab'] ?? '' ) );
+	$tab  = isset( $tabs[ $tab ] ) ? $tab : 'importar';
 	?>
 	<div class="wrap inpulsia-medios-wrap">
 		<h1>Inpulsia Medios <span class="inpulsia-medios-version">v<?php echo esc_html( INPULSIA_MEDIOS_VERSION ); ?></span></h1>
@@ -161,6 +162,7 @@ function inpulsia_medios_tab_editar() {
 	$query  = new WP_Query( inpulsia_medios_editar_args( $params ) + [ 'posts_per_page' => 20, 'paged' => $paged ] );
 	$has_ai = inpulsia_medios_api_key() !== '';
 	$opt    = inpulsia_medios_opt_settings();
+	$labels = inpulsia_medios_field_labels();
 	$others = array_values( array_filter( [
 		defined( 'SHORTPIXEL_IMAGE_OPTIMISER_VERSION' ) ? 'ShortPixel' : '',
 		defined( 'IMAGIFY_VERSION' ) ? 'Imagify' : '',
@@ -222,10 +224,11 @@ function inpulsia_medios_tab_editar() {
 			<?php endif; ?>
 			<span id="inpulsia-medios-dirty"></span>
 		</p>
+		<div class="inpulsia-medios-scroll">
 		<table class="wp-list-table widefat striped inpulsia-medios-grid">
 			<thead>
 				<tr>
-					<td class="check-column"><input type="checkbox" id="inpulsia-medios-check-all" /></td>
+					<td class="check-column"><input type="checkbox" id="inpulsia-medios-check-all" aria-label="Seleccionar todas las imágenes de la página" /></td>
 					<th class="col-thumb"></th>
 					<th>Nombre de archivo</th>
 					<th>Título</th>
@@ -243,7 +246,7 @@ function inpulsia_medios_tab_editar() {
 				$meta = wp_get_attachment_metadata( $post->ID );
 				?>
 				<tr data-id="<?php echo (int) $post->ID; ?>">
-					<th class="check-column"><input type="checkbox" class="inpulsia-medios-row-check" /></th>
+					<th class="check-column"><input type="checkbox" class="inpulsia-medios-row-check" aria-label="<?php echo esc_attr( sprintf( 'Seleccionar imagen %d', $post->ID ) ); ?>" /></th>
 					<td class="col-thumb">
 						<a href="<?php echo esc_url( get_edit_post_link( $post->ID ) ); ?>" target="_blank" rel="noopener"><?php echo wp_get_attachment_image( $post->ID, 'thumbnail' ); ?></a>
 						<small>#<?php echo (int) $post->ID; ?> · <?php echo esc_html( strtoupper( $ext ) ); ?></small>
@@ -252,16 +255,16 @@ function inpulsia_medios_tab_editar() {
 					<?php foreach ( [ 'filename', 'title', 'alt', 'caption', 'description' ] as $field ) : ?>
 						<td>
 							<?php if ( $field === 'description' || $field === 'caption' ) : ?>
-								<textarea rows="2" data-field="<?php echo esc_attr( $field ); ?>" data-orig="<?php echo esc_attr( $cur[ $field ] ); ?>"><?php echo esc_textarea( $cur[ $field ] ); ?></textarea>
+								<textarea rows="2" aria-label="<?php echo esc_attr( $labels[ $field ] . ' #' . $post->ID ); ?>" data-field="<?php echo esc_attr( $field ); ?>" data-orig="<?php echo esc_attr( $cur[ $field ] ); ?>"><?php echo esc_textarea( $cur[ $field ] ); ?></textarea>
 							<?php else : ?>
-								<input type="text" data-field="<?php echo esc_attr( $field ); ?>" data-orig="<?php echo esc_attr( $cur[ $field ] ); ?>" value="<?php echo esc_attr( $cur[ $field ] ); ?>" />
+								<input type="text" aria-label="<?php echo esc_attr( $labels[ $field ] . ' #' . $post->ID ); ?>" data-field="<?php echo esc_attr( $field ); ?>" data-orig="<?php echo esc_attr( $cur[ $field ] ); ?>" value="<?php echo esc_attr( $cur[ $field ] ); ?>" />
 							<?php endif; ?>
 							<?php if ( $field === 'filename' && $ext ) : ?><small class="muted">.<?php echo esc_html( $ext ); ?></small><?php endif; ?>
 							<?php if ( $field === 'alt' ) : ?><small class="inpulsia-medios-chars"></small><?php endif; ?>
 						</td>
 					<?php endforeach; ?>
 					<?php if ( $has_ai ) : ?>
-						<td class="col-ai"><button type="button" class="button inpulsia-medios-suggest" title="Sugerir alt, nombre y título con IA">IA</button></td>
+						<td class="col-ai"><button type="button" class="button inpulsia-medios-suggest" title="Sugerir alt, nombre y título con IA" aria-label="<?php echo esc_attr( sprintf( 'Sugerir textos con IA para la imagen %d', $post->ID ) ); ?>">IA</button></td>
 					<?php endif; ?>
 				</tr>
 			<?php endforeach; ?>
@@ -270,13 +273,14 @@ function inpulsia_medios_tab_editar() {
 			<?php endif; ?>
 			</tbody>
 		</table>
+		</div>
 		<?php
-		echo '<div class="tablenav"><div class="tablenav-pages">' . paginate_links( [
+		echo '<div class="tablenav"><div class="tablenav-pages">' . wp_kses_post( paginate_links( [
 			'base'    => add_query_arg( 'paged', '%#%' ),
 			'format'  => '',
 			'current' => $paged,
 			'total'   => max( 1, $query->max_num_pages ),
-		] ) . '</div></div>';
+		] ) ) . '</div></div>';
 		?>
 	</div>
 	<?php
@@ -413,7 +417,7 @@ function inpulsia_medios_redirects_action() {
 	$table  = inpulsia_medios_redirects_table();
 	$delete = sanitize_text_field( wp_unslash( $_POST['delete'] ?? '' ) );
 	if ( $delete === 'all' ) {
-		$wpdb->query( "DELETE FROM {$table}" );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i', $table ) );
 	} elseif ( absint( $delete ) ) {
 		$wpdb->delete( $table, [ 'id' => absint( $delete ) ] );
 	}
@@ -534,11 +538,12 @@ function inpulsia_medios_stage( $rows, $source ) {
 
 function inpulsia_medios_ajax_preview() {
 	inpulsia_medios_check_ajax();
-	if ( empty( $_FILES['csv_file'] ) || $_FILES['csv_file']['error'] !== UPLOAD_ERR_OK ) {
+	$upload = $_FILES['csv_file'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- validated below, tmp_name is set by PHP.
+	if ( ! is_array( $upload ) || ( $upload['error'] ?? -1 ) !== UPLOAD_ERR_OK || ! is_uploaded_file( $upload['tmp_name'] ?? '' ) ) {
 		wp_send_json_error( 'Error al subir el archivo.' );
 	}
-	$name = sanitize_file_name( $_FILES['csv_file']['name'] );
-	$rows = inpulsia_medios_parse_file( $_FILES['csv_file']['tmp_name'], $name );
+	$name = sanitize_file_name( $upload['name'] ?? 'archivo.csv' );
+	$rows = inpulsia_medios_parse_file( $upload['tmp_name'], $name );
 	if ( is_wp_error( $rows ) ) {
 		wp_send_json_error( $rows->get_error_message() );
 	}
@@ -550,7 +555,7 @@ function inpulsia_medios_ajax_preview() {
 
 function inpulsia_medios_ajax_stage() {
 	inpulsia_medios_check_ajax();
-	$raw  = json_decode( wp_unslash( $_POST['rows'] ?? '' ), true );
+	$raw  = json_decode( wp_unslash( $_POST['rows'] ?? '' ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- every field is cast or sanitized when applied.
 	$rows = [];
 	foreach ( is_array( $raw ) ? $raw : [] as $r ) {
 		$row = [ 'id' => absint( $r['id'] ?? 0 ) ];
@@ -638,7 +643,7 @@ function inpulsia_medios_ajax_opt_stage() {
 	] );
 	update_option( 'inpulsia_medios_opt', $opts, false );
 
-	if ( ( $_POST['mode'] ?? '' ) === 'filter' ) {
+	if ( sanitize_key( wp_unslash( $_POST['mode'] ?? '' ) ) === 'filter' ) {
 		$ids = get_posts( inpulsia_medios_editar_args( inpulsia_medios_editar_params() ) + [ 'posts_per_page' => -1, 'fields' => 'ids', 'orderby' => 'ID', 'order' => 'ASC' ] );
 	} else {
 		$ids = array_filter( array_map( 'absint', (array) ( $_POST['ids'] ?? [] ) ) );

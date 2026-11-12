@@ -66,17 +66,18 @@ function inpulsia_medios_redirects_add( $rel, $map ) {
 
 // Only requests for missing files reach WordPress, so no is_404() check (plain permalinks never set it).
 function inpulsia_medios_redirect() {
-	$path = wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH );
+	// Not sanitized on purpose: sanitize_text_field() would drop %-encoded characters; the value only feeds a prepared query.
+	$path = wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ), PHP_URL_PATH ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	if ( ! $path || strpos( $path, inpulsia_medios_uploads_path() . '/' ) !== 0 ) {
 		return;
 	}
 	global $wpdb;
 	$table = inpulsia_medios_redirects_table();
-	$row   = $wpdb->get_row( $wpdb->prepare( "SELECT id, target FROM {$table} WHERE source = %s", rawurldecode( $path ) ) );
+	$row   = $wpdb->get_row( $wpdb->prepare( 'SELECT id, target FROM %i WHERE source = %s', $table, rawurldecode( $path ) ) );
 	if ( ! $row ) {
 		return;
 	}
-	$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET hits = hits + 1 WHERE id = %d", $row->id ) );
+	$wpdb->query( $wpdb->prepare( 'UPDATE %i SET hits = hits + 1 WHERE id = %d', $table, $row->id ) );
 	wp_safe_redirect( $row->target, 301, 'Inpulsia Medios' );
 	exit;
 }
@@ -84,10 +85,10 @@ function inpulsia_medios_redirect() {
 function inpulsia_medios_redirects_list( $limit = 200 ) {
 	global $wpdb;
 	$table = inpulsia_medios_redirects_table();
-	return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} ORDER BY id DESC LIMIT %d", $limit ) );
+	return $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i ORDER BY id DESC LIMIT %d', $table, $limit ) );
 }
 
 function inpulsia_medios_redirects_count() {
 	global $wpdb;
-	return (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . inpulsia_medios_redirects_table() );
+	return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', inpulsia_medios_redirects_table() ) );
 }

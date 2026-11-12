@@ -11,12 +11,11 @@ function inpulsia_medios_used_ids( $refresh = false ) {
 	}
 	global $wpdb;
 	$used  = [];
-	$valid = "p.post_status NOT IN ('trash','auto-draft') AND p.post_type NOT IN ('revision','attachment')";
 
-	foreach ( $wpdb->get_col( "SELECT pm.meta_value FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE pm.meta_key = '_thumbnail_id' AND {$valid}" ) as $v ) {
+	foreach ( $wpdb->get_col( "SELECT pm.meta_value FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE pm.meta_key = '_thumbnail_id' AND p.post_status NOT IN ('trash','auto-draft') AND p.post_type NOT IN ('revision','attachment')" ) as $v ) {
 		$used[ (int) $v ] = true;
 	}
-	foreach ( $wpdb->get_col( "SELECT pm.meta_value FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE pm.meta_key = '_product_image_gallery' AND pm.meta_value <> '' AND {$valid}" ) as $v ) {
+	foreach ( $wpdb->get_col( "SELECT pm.meta_value FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE pm.meta_key = '_product_image_gallery' AND pm.meta_value <> '' AND p.post_status NOT IN ('trash','auto-draft') AND p.post_type NOT IN ('revision','attachment')" ) as $v ) {
 		foreach ( explode( ',', $v ) as $img ) {
 			$used[ (int) $img ] = true;
 		}
@@ -47,10 +46,10 @@ function inpulsia_medios_used_ids( $refresh = false ) {
 
 	$like = '%' . $wpdb->esc_like( '/uploads/' ) . '%';
 	$like_e = '%' . $wpdb->esc_like( '\/uploads\/' ) . '%';
-	foreach ( $wpdb->get_col( $wpdb->prepare( "SELECT p.post_content FROM {$wpdb->posts} p WHERE {$valid} AND (p.post_content LIKE %s OR p.post_content LIKE %s)", $like, '%wp-image-%' ) ) as $text ) {
+	foreach ( $wpdb->get_col( $wpdb->prepare( "SELECT p.post_content FROM {$wpdb->posts} p WHERE p.post_status NOT IN ('trash','auto-draft') AND p.post_type NOT IN ('revision','attachment') AND (p.post_content LIKE %s OR p.post_content LIKE %s)", $like, '%wp-image-%' ) ) as $text ) {
 		$scan( $text );
 	}
-	foreach ( $wpdb->get_col( $wpdb->prepare( "SELECT pm.meta_value FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE {$valid} AND pm.meta_key NOT IN ('_wp_attached_file','_wp_attachment_metadata') AND (pm.meta_value LIKE %s OR pm.meta_value LIKE %s)", $like, $like_e ) ) as $text ) {
+	foreach ( $wpdb->get_col( $wpdb->prepare( "SELECT pm.meta_value FROM {$wpdb->postmeta} pm JOIN {$wpdb->posts} p ON p.ID = pm.post_id WHERE p.post_status NOT IN ('trash','auto-draft') AND p.post_type NOT IN ('revision','attachment') AND pm.meta_key NOT IN ('_wp_attached_file','_wp_attachment_metadata') AND (pm.meta_value LIKE %s OR pm.meta_value LIKE %s)", $like, $like_e ) ) as $text ) {
 		$scan( $text );
 	}
 	foreach ( $wpdb->get_col( $wpdb->prepare( "SELECT option_value FROM {$wpdb->options} WHERE option_name NOT LIKE %s AND option_name NOT LIKE %s AND (option_value LIKE %s OR option_value LIKE %s)", $wpdb->esc_like( '_transient' ) . '%', $wpdb->esc_like( '_site_transient' ) . '%', $like, $like_e ) ) as $text ) {

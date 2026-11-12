@@ -32,7 +32,7 @@ function inpulsia_medios_export() {
 		return preg_match( '/^\d{4}-\d{2}-\d{2}$/', $v ) ? $v : '';
 	};
 	$opts = [
-		'type'        => ( $_GET['type'] ?? 'image' ) === 'all' ? 'all' : 'image',
+		'type'        => sanitize_key( wp_unslash( $_GET['type'] ?? 'image' ) ) === 'all' ? 'all' : 'image',
 		'missing_alt' => ! empty( $_GET['missing_alt'] ),
 		'usage'       => ! empty( $_GET['usage'] ),
 		'from'        => $date( 'from' ),

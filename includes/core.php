@@ -223,6 +223,7 @@ function inpulsia_medios_apply_rows( $token, $rows ) {
 		$r  = inpulsia_medios_apply_row( $id, $row );
 		if ( ! empty( $r['prev'] ) ) {
 			$log[] = [ 'id' => $id, 'prev' => $r['prev'] ];
+			update_option( 'inpulsia_medios_log_' . $token, $log, false );
 		}
 		unset( $r['prev'] );
 		$results[] = [ 'id' => $id ] + $r;
@@ -241,6 +242,7 @@ function inpulsia_medios_optimize_ids( $token, $ids, $opts ) {
 		$r = inpulsia_medios_optimize( (int) $id, $opts );
 		if ( ! empty( $r['prev'] ) ) {
 			$log[] = [ 'id' => (int) $id, 'prev' => $r['prev'] ];
+			update_option( 'inpulsia_medios_log_' . $token, $log, false );
 		}
 		unset( $r['prev'] );
 		$results[] = [ 'id' => (int) $id ] + $r;
@@ -578,6 +580,9 @@ function inpulsia_medios_history() {
 }
 
 function inpulsia_medios_history_add( $entry ) {
+	if ( inpulsia_medios_history_find( $entry['token'] ) ) {
+		return;
+	}
 	$h = inpulsia_medios_history();
 	array_unshift( $h, $entry );
 	foreach ( array_slice( $h, 20 ) as $old ) {
