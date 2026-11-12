@@ -27,6 +27,11 @@ function inpulsia_medios_stem( $id ) {
 	return $file ? pathinfo( $file, PATHINFO_FILENAME ) : '';
 }
 
+function inpulsia_medios_rel_dir( $id ) {
+	$rel = dirname( (string) get_post_meta( $id, '_wp_attached_file', true ) );
+	return $rel === '.' ? '' : $rel;
+}
+
 function inpulsia_medios_current( $id ) {
 	$post = get_post( $id );
 	return [
@@ -66,6 +71,76 @@ function inpulsia_medios_changes( $id, $row, $undo = false ) {
 	return [ $cur, $changes ];
 }
 
+// Validates rows and returns [ preview items, rows that will change ].
+function inpulsia_medios_build_preview( $rows ) {
+	$items = [];
+	$valid = [];
+	$stems = [];
+	$seen  = [];
+
+	foreach ( $rows as $row ) {
+		$id   = absint( $row['id'] ?? 0 );
+		$post = $id ? get_post( $id ) : null;
+		if ( ! $post || $post->post_type !== 'attachment' ) {
+			$items[] = [ 'id' => $row['id'] ?? '', 'error' => 'No existe un medio con este ID.' ];
+			continue;
+		}
+		if ( ! current_user_can( 'edit_post', $id ) ) {
+			$items[] = [ 'id' => $id, 'error' => 'No tienes permisos para editar este medio.' ];
+			continue;
+		}
+		if ( isset( $seen[ $id ] ) ) {
+			$items[] = [ 'id' => $id, 'error' => 'ID repetido: se usa solo la primera fila.' ];
+			continue;
+		}
+		$seen[ $id ] = true;
+
+		list( $cur, $changes ) = inpulsia_medios_changes( $id, $row );
+		$warn      = [];
+		$final_alt = $changes['alt'] ?? $cur['alt'];
+		$final_fn  = $changes['filename'] ?? $cur['filename'];
+
+		if ( wp_attachment_is_image( $id ) && $final_alt === '' ) {
+			$warn[] = 'Sin texto alternativo.';
+		}
+		if ( mb_strlen( $final_alt ) > 125 ) {
+			$warn[] = 'Alt de ' . mb_strlen( $final_alt ) . ' caracteres (recomendado ≤ 125).';
+		}
+		if ( $final_alt !== '' && sanitize_title( $final_alt ) === sanitize_title( $final_fn ) ) {
+			$warn[] = 'El alt repite el nombre de archivo.';
+		}
+		if ( isset( $changes['filename'] ) ) {
+			$stems[ $final_fn ][] = $id;
+			$file                 = get_attached_file( $id );
+			if ( $file && file_exists( dirname( $file ) . '/' . $final_fn . '.' . pathinfo( $file, PATHINFO_EXTENSION ) ) ) {
+				$warn[] = 'Ya existe un archivo con ese nombre en la carpeta: no se renombrará.';
+			}
+		}
+
+		$items[ 'id' . $id ] = [
+			'id'       => $id,
+			'edit'     => get_edit_post_link( $id, 'raw' ),
+			'thumb'    => (string) wp_get_attachment_image_url( $id, 'thumbnail', true ),
+			'current'  => $cur,
+			'changes'  => $changes,
+			'warnings' => $warn,
+		];
+		if ( $changes ) {
+			$valid[] = $row;
+		}
+	}
+
+	foreach ( $stems as $ids ) {
+		if ( count( $ids ) > 1 ) {
+			foreach ( $ids as $id ) {
+				$items[ 'id' . $id ]['warnings'][] = 'Nombre repetido (IDs ' . implode( ', ', $ids ) . ').';
+			}
+		}
+	}
+
+	return [ array_values( $items ), $valid ];
+}
+
 function inpulsia_medios_apply_row( $id, $row, $undo = false ) {
 	$post = get_post( $id );
 	if ( ! $post || $post->post_type !== 'attachment' ) {
@@ -90,8 +165,10 @@ function inpulsia_medios_apply_row( $id, $row, $undo = false ) {
 	$errors = [];
 
 	if ( isset( $changes['alt'] ) ) {
-		update_post_meta( $id, '_wp_attachment_image_alt', sanitize_text_field( $changes['alt'] ) );
-		$done[] = $labels['alt'];
+		$alt = sanitize_text_field( $changes['alt'] );
+		update_post_meta( $id, '_wp_attachment_image_alt', $alt );
+		$synced = inpulsia_medios_sync_alt( $id, $alt );
+		$done[] = $labels['alt'] . ( $synced ? " ({$synced} en contenido)" : '' );
 	}
 
 	$update = [ 'ID' => $id ];
@@ -121,6 +198,10 @@ function inpulsia_medios_apply_row( $id, $row, $undo = false ) {
 		}
 	}
 
+	if ( $done ) {
+		$GLOBALS['inpulsia_medios_changed'] = true;
+	}
+
 	$msg = $done ? 'Actualizado: ' . implode( ', ', $done ) . '.' : '';
 	if ( $errors ) {
 		$msg .= ( $msg ? ' ' : '' ) . implode( ' ', $errors );
@@ -133,7 +214,41 @@ function inpulsia_medios_apply_row( $id, $row, $undo = false ) {
 	];
 }
 
-// Renames the file, its sub-sizes and original image, and rewrites URLs in content. Returns posts updated.
+// Applies rows under a history token, logging previous values so they can be undone.
+function inpulsia_medios_apply_rows( $token, $rows ) {
+	$log     = get_option( 'inpulsia_medios_log_' . $token, [] );
+	$results = [];
+	foreach ( $rows as $row ) {
+		$id = absint( $row['id'] );
+		$r  = inpulsia_medios_apply_row( $id, $row );
+		if ( ! empty( $r['prev'] ) ) {
+			$log[] = [ 'id' => $id, 'prev' => $r['prev'] ];
+		}
+		unset( $r['prev'] );
+		$results[] = [ 'id' => $id ] + $r;
+	}
+	update_option( 'inpulsia_medios_log_' . $token, $log, false );
+	inpulsia_medios_history_update( $token, [ 'changed' => count( $log ) ] );
+	inpulsia_medios_flush_elementor();
+	return $results;
+}
+
+function inpulsia_medios_undo_entries( $token ) {
+	return array_reverse( (array) get_option( 'inpulsia_medios_log_' . $token, [] ) );
+}
+
+function inpulsia_medios_undo_rows( $entries ) {
+	$results = [];
+	foreach ( $entries as $item ) {
+		$r = inpulsia_medios_apply_row( $item['id'], $item['prev'], true );
+		unset( $r['prev'] );
+		$results[] = [ 'id' => $item['id'] ] + $r;
+	}
+	inpulsia_medios_flush_elementor();
+	return $results;
+}
+
+// Renames the file, its sub-sizes, original image and WebP/AVIF copies, then rewrites URLs and adds redirects.
 function inpulsia_medios_rename( $id, $new_stem ) {
 	global $wpdb;
 
@@ -160,15 +275,29 @@ function inpulsia_medios_rename( $id, $new_stem ) {
 		return $new_stem . $fallback_suffix . '.' . pathinfo( $name, PATHINFO_EXTENSION );
 	};
 
-	$map               = [];
-	$main_old          = basename( $file );
-	$map[ $main_old ]  = $swap( $main_old, '' );
+	$main_old         = basename( $file );
+	$map              = [ $main_old => $swap( $main_old, '' ) ];
 	if ( ! empty( $meta['original_image'] ) ) {
 		$map[ $meta['original_image'] ] = $swap( $meta['original_image'], '' );
 	}
 	foreach ( $meta['sizes'] ?? [] as $s ) {
 		if ( ! isset( $map[ $s['file'] ] ) ) {
 			$map[ $s['file'] ] = $swap( $s['file'], '-' . $s['width'] . 'x' . $s['height'] );
+		}
+	}
+
+	// Copies made by optimizers: "foto.jpg.webp" (ShortPixel, EWWW, Imagify) or "foto.webp".
+	foreach ( $map as $old => $new ) {
+		foreach ( [ 'webp', 'avif' ] as $ext ) {
+			$candidates = [
+				$old . '.' . $ext                                => $new . '.' . $ext,
+				pathinfo( $old, PATHINFO_FILENAME ) . '.' . $ext => pathinfo( $new, PATHINFO_FILENAME ) . '.' . $ext,
+			];
+			foreach ( $candidates as $so => $sn ) {
+				if ( ! isset( $map[ $so ] ) && file_exists( $dir . '/' . $so ) ) {
+					$map[ $so ] = $sn;
+				}
+			}
 		}
 	}
 
@@ -211,58 +340,155 @@ function inpulsia_medios_rename( $id, $new_stem ) {
 	$wpdb->update( $wpdb->posts, [ 'guid' => wp_get_attachment_url( $id ) ], [ 'ID' => $id ] );
 	clean_post_cache( $id );
 
-	$rel = dirname( (string) get_post_meta( $id, '_wp_attached_file', true ) );
-	return inpulsia_medios_replace_urls( $rel === '.' ? '' : $rel, $old_stem, $map );
+	$rel = inpulsia_medios_rel_dir( $id );
+	inpulsia_medios_redirects_add( $rel, $moved );
+	return inpulsia_medios_replace_urls( $rel, $old_stem, $map, $id );
 }
 
-function inpulsia_medios_replace_urls( $rel, $old_stem, $map ) {
+// Replaces strings inside plain, JSON or (nested) serialized values without breaking serialization.
+function inpulsia_medios_replace_in_value( $value, $pairs ) {
+	if ( is_string( $value ) ) {
+		if ( is_serialized( $value ) ) {
+			$data = @unserialize( trim( $value ), [ 'allowed_classes' => false ] );
+			if ( $data !== false || trim( $value ) === 'b:0;' ) {
+				return serialize( inpulsia_medios_replace_in_value( $data, $pairs ) );
+			}
+		}
+		return strtr( $value, $pairs );
+	}
+	if ( is_array( $value ) ) {
+		foreach ( $value as $k => $v ) {
+			$value[ $k ] = inpulsia_medios_replace_in_value( $v, $pairs );
+		}
+	}
+	return $value;
+}
+
+// Rewrites file references in posts, post/term meta and options. Returns how many items changed.
+function inpulsia_medios_replace_urls( $rel, $old_stem, $map, $exclude_id = 0 ) {
 	global $wpdb;
 
 	$prefix = '/' . ( $rel === '' ? '' : $rel . '/' );
-	$plain  = [];
-	$esc    = [];
+	$esc    = function ( $s ) {
+		return str_replace( '/', '\/', $s );
+	};
+	$pairs  = [];
 	foreach ( $map as $o => $n ) {
-		$plain[ $prefix . $o ]                       = $prefix . $n;
-		$esc[ str_replace( '/', '\/', $prefix . $o ) ] = str_replace( '/', '\/', $prefix . $n );
+		$pairs[ $prefix . $o ]          = $prefix . $n;
+		$pairs[ $esc( $prefix . $o ) ] = $esc( $prefix . $n );
 	}
-	$like_plain = '%' . $wpdb->esc_like( $prefix . $old_stem ) . '%';
-	$like_esc   = '%' . $wpdb->esc_like( str_replace( '/', '\/', $prefix . $old_stem ) ) . '%';
-	$touched    = [];
+	$like_a  = '%' . $wpdb->esc_like( $prefix . $old_stem ) . '%';
+	$like_b  = '%' . $wpdb->esc_like( $esc( $prefix . $old_stem ) ) . '%';
+	$touched = 0;
 
 	$posts = $wpdb->get_results( $wpdb->prepare(
 		"SELECT ID, post_content, post_excerpt FROM {$wpdb->posts}
-		 WHERE post_type NOT IN ('revision','attachment') AND (post_content LIKE %s OR post_excerpt LIKE %s)",
-		$like_plain,
-		$like_plain
+		 WHERE post_type NOT IN ('revision','attachment')
+		 AND (post_content LIKE %s OR post_content LIKE %s OR post_excerpt LIKE %s)",
+		$like_a,
+		$like_b,
+		$like_a
 	) );
 	foreach ( $posts as $p ) {
-		$content = strtr( $p->post_content, $plain );
-		$excerpt = strtr( $p->post_excerpt, $plain );
+		$content = strtr( $p->post_content, $pairs );
+		$excerpt = strtr( $p->post_excerpt, $pairs );
 		if ( $content !== $p->post_content || $excerpt !== $p->post_excerpt ) {
 			$wpdb->update( $wpdb->posts, [ 'post_content' => $content, 'post_excerpt' => $excerpt ], [ 'ID' => $p->ID ] );
 			clean_post_cache( $p->ID );
-			$touched[ $p->ID ] = true;
+			$touched++;
 		}
 	}
 
 	$metas = $wpdb->get_results( $wpdb->prepare(
-		"SELECT meta_id, post_id, meta_value FROM {$wpdb->postmeta}
-		 WHERE meta_key = '_elementor_data' AND (meta_value LIKE %s OR meta_value LIKE %s)",
-		$like_plain,
-		$like_esc
+		"SELECT meta_id, post_id, meta_key, meta_value FROM {$wpdb->postmeta}
+		 WHERE post_id <> %d AND meta_key NOT IN ('_wp_attached_file','_wp_attachment_metadata')
+		 AND (meta_value LIKE %s OR meta_value LIKE %s)",
+		$exclude_id,
+		$like_a,
+		$like_b
 	) );
 	foreach ( $metas as $m ) {
-		$value = strtr( strtr( $m->meta_value, $esc ), $plain );
+		$value = inpulsia_medios_replace_in_value( $m->meta_value, $pairs );
 		if ( $value !== $m->meta_value ) {
 			$wpdb->update( $wpdb->postmeta, [ 'meta_value' => $value ], [ 'meta_id' => $m->meta_id ] );
-			delete_post_meta( $m->post_id, '_elementor_css' );
 			wp_cache_delete( $m->post_id, 'post_meta' );
-			$touched[ $m->post_id ]                 = true;
-			$GLOBALS['inpulsia_medios_elementor_dirty'] = true;
+			if ( $m->meta_key === '_elementor_data' ) {
+				delete_post_meta( $m->post_id, '_elementor_css' );
+				$GLOBALS['inpulsia_medios_elementor_dirty'] = true;
+			}
+			$touched++;
 		}
 	}
 
-	return count( $touched );
+	$terms = $wpdb->get_results( $wpdb->prepare(
+		"SELECT meta_id, term_id, meta_value FROM {$wpdb->termmeta} WHERE meta_value LIKE %s OR meta_value LIKE %s",
+		$like_a,
+		$like_b
+	) );
+	foreach ( $terms as $t ) {
+		$value = inpulsia_medios_replace_in_value( $t->meta_value, $pairs );
+		if ( $value !== $t->meta_value ) {
+			$wpdb->update( $wpdb->termmeta, [ 'meta_value' => $value ], [ 'meta_id' => $t->meta_id ] );
+			wp_cache_delete( $t->term_id, 'term_meta' );
+			$touched++;
+		}
+	}
+
+	$options = $wpdb->get_results( $wpdb->prepare(
+		"SELECT option_id, option_name, option_value FROM {$wpdb->options}
+		 WHERE option_name NOT LIKE %s AND option_name NOT LIKE %s AND option_name NOT LIKE %s
+		 AND (option_value LIKE %s OR option_value LIKE %s)",
+		$wpdb->esc_like( '_transient' ) . '%',
+		$wpdb->esc_like( '_site_transient' ) . '%',
+		$wpdb->esc_like( 'inpulsia_medios_' ) . '%',
+		$like_a,
+		$like_b
+	) );
+	foreach ( $options as $o ) {
+		$value = inpulsia_medios_replace_in_value( $o->option_value, $pairs );
+		if ( $value !== $o->option_value ) {
+			$wpdb->update( $wpdb->options, [ 'option_value' => $value ], [ 'option_id' => $o->option_id ] );
+			wp_cache_delete( $o->option_name, 'options' );
+			wp_cache_delete( 'alloptions', 'options' );
+			$touched++;
+		}
+	}
+
+	return $touched;
+}
+
+// Gutenberg and the classic editor hard-code alt in each <img class="wp-image-ID">.
+function inpulsia_medios_sync_alt( $id, $alt ) {
+	global $wpdb;
+	if ( ! class_exists( 'WP_HTML_Tag_Processor' ) ) {
+		return 0;
+	}
+
+	$posts   = $wpdb->get_results( $wpdb->prepare(
+		"SELECT ID, post_content FROM {$wpdb->posts}
+		 WHERE post_type NOT IN ('revision','attachment') AND post_content LIKE %s",
+		'%' . $wpdb->esc_like( 'wp-image-' . $id ) . '%'
+	) );
+	$pattern = '/(^|\s)wp-image-' . (int) $id . '(\s|$)/';
+	$count   = 0;
+
+	foreach ( $posts as $p ) {
+		$html    = new WP_HTML_Tag_Processor( $p->post_content );
+		$changed = false;
+		while ( $html->next_tag( 'img' ) ) {
+			$class = (string) $html->get_attribute( 'class' );
+			if ( preg_match( $pattern, $class ) && $html->get_attribute( 'alt' ) !== $alt ) {
+				$html->set_attribute( 'alt', $alt );
+				$changed = true;
+			}
+		}
+		if ( $changed ) {
+			$wpdb->update( $wpdb->posts, [ 'post_content' => $html->get_updated_html() ], [ 'ID' => $p->ID ] );
+			clean_post_cache( $p->ID );
+			$count++;
+		}
+	}
+	return $count;
 }
 
 function inpulsia_medios_flush_elementor() {
@@ -272,6 +498,46 @@ function inpulsia_medios_flush_elementor() {
 	if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->files_manager ) ) {
 		\Elementor\Plugin::$instance->files_manager->clear_cache();
 	}
+	$GLOBALS['inpulsia_medios_elementor_dirty'] = false;
+}
+
+// Purges page caches of common plugins and hosts. Returns the names purged.
+function inpulsia_medios_purge_caches() {
+	$purged = [];
+	if ( function_exists( 'rocket_clean_domain' ) ) {
+		rocket_clean_domain();
+		$purged[] = 'WP Rocket';
+	}
+	if ( defined( 'LSCWP_V' ) ) {
+		do_action( 'litespeed_purge_all' );
+		$purged[] = 'LiteSpeed Cache';
+	}
+	if ( function_exists( 'w3tc_flush_all' ) ) {
+		w3tc_flush_all();
+		$purged[] = 'W3 Total Cache';
+	}
+	if ( function_exists( 'wp_cache_clear_cache' ) ) {
+		wp_cache_clear_cache();
+		$purged[] = 'WP Super Cache';
+	}
+	if ( function_exists( 'sg_cachepress_purge_cache' ) ) {
+		sg_cachepress_purge_cache();
+		$purged[] = 'SiteGround Optimizer';
+	}
+	if ( class_exists( 'WpFastestCache' ) ) {
+		do_action( 'wpfc_clear_all_cache' );
+		$purged[] = 'WP Fastest Cache';
+	}
+	if ( class_exists( '\Breeze_PurgeCache' ) ) {
+		do_action( 'breeze_clear_all_cache' );
+		$purged[] = 'Breeze';
+	}
+	if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->files_manager ) ) {
+		\Elementor\Plugin::$instance->files_manager->clear_cache();
+		$purged[] = 'Elementor';
+	}
+	wp_cache_flush();
+	return $purged;
 }
 
 function inpulsia_medios_history() {
@@ -305,4 +571,8 @@ function inpulsia_medios_history_find( $token ) {
 		}
 	}
 	return null;
+}
+
+function inpulsia_medios_new_token() {
+	return strtolower( wp_generate_password( 12, false ) );
 }

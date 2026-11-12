@@ -9,7 +9,55 @@ permissions:
   contents: write
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.4']
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: gd, zip, mysqli, mbstring
+          coverage: none
+
+      - name: Instalar dependencias
+        run: composer install --no-interaction --no-progress
+
+      - name: Descargar WordPress
+        run: |
+          mkdir -p /tmp/wordpress
+          curl -sSL https://wordpress.org/latest.tar.gz | tar xz -C /tmp/wordpress --strip-components=1
+
+      - name: Ejecutar tests
+        env:
+          WP_CORE_DIR: /tmp/wordpress
+          WP_DB_NAME: wordpress_test
+          WP_DB_USER: root
+          WP_DB_PASS: root
+          WP_DB_HOST: 127.0.0.1:3306
+        run: |
+          set -o pipefail
+          vendor/bin/phpunit --testdox 2>&1 | tee phpunit.log || {
+            grep -E "^[0-9]+\) |Failed asserting|Error:" phpunit.log | head -20 | sed 's/^/::error::/'
+            exit 1
+          }
+
   release:
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

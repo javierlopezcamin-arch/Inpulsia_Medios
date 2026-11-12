@@ -1,0 +1,93 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+const INPULSIA_MEDIOS_DB_VERSION = '1';
+
+add_action( 'plugins_loaded', 'inpulsia_medios_maybe_install' );
+add_action( 'init', 'inpulsia_medios_redirect', 0 );
+
+function inpulsia_medios_redirects_table() {
+	global $wpdb;
+	return $wpdb->prefix . 'inpulsia_medios_redirects';
+}
+
+function inpulsia_medios_maybe_install() {
+	if ( get_option( 'inpulsia_medios_db' ) !== INPULSIA_MEDIOS_DB_VERSION ) {
+		inpulsia_medios_install();
+	}
+}
+
+function inpulsia_medios_install() {
+	global $wpdb;
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+	$table = inpulsia_medios_redirects_table();
+	dbDelta( "CREATE TABLE {$table} (
+		id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+		source varchar(191) NOT NULL,
+		target varchar(191) NOT NULL,
+		hits bigint(20) unsigned NOT NULL DEFAULT 0,
+		created datetime NOT NULL,
+		PRIMARY KEY  (id),
+		UNIQUE KEY source (source)
+	) {$wpdb->get_charset_collate()};" );
+	update_option( 'inpulsia_medios_db', INPULSIA_MEDIOS_DB_VERSION );
+}
+
+function inpulsia_medios_uploads_path() {
+	$path = wp_parse_url( wp_get_upload_dir()['baseurl'], PHP_URL_PATH );
+	return untrailingslashit( (string) $path );
+}
+
+// $map: old file name => new file name, both inside the uploads sub-folder $rel.
+function inpulsia_medios_redirects_add( $rel, $map ) {
+	global $wpdb;
+	$table = inpulsia_medios_redirects_table();
+	$dir   = inpulsia_medios_uploads_path() . '/' . ( $rel === '' ? '' : $rel . '/' );
+
+	foreach ( $map as $old => $new ) {
+		$source = $dir . $old;
+		$target = $dir . $new;
+		if ( strlen( $source ) > 191 || strlen( $target ) > 191 ) {
+			continue;
+		}
+		// The target exists again as a real file, so any redirect away from it is obsolete.
+		$wpdb->delete( $table, [ 'source' => $target ] );
+		$wpdb->update( $table, [ 'target' => $target ], [ 'target' => $source ] );
+		$wpdb->replace( $table, [
+			'source'  => $source,
+			'target'  => $target,
+			'hits'    => 0,
+			'created' => current_time( 'mysql' ),
+		] );
+	}
+}
+
+// Only requests for missing files reach WordPress, so no is_404() check (plain permalinks never set it).
+function inpulsia_medios_redirect() {
+	$path = wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH );
+	if ( ! $path || strpos( $path, inpulsia_medios_uploads_path() . '/' ) !== 0 ) {
+		return;
+	}
+	global $wpdb;
+	$table = inpulsia_medios_redirects_table();
+	$row   = $wpdb->get_row( $wpdb->prepare( "SELECT id, target FROM {$table} WHERE source = %s", rawurldecode( $path ) ) );
+	if ( ! $row ) {
+		return;
+	}
+	$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET hits = hits + 1 WHERE id = %d", $row->id ) );
+	wp_safe_redirect( $row->target, 301, 'Inpulsia Medios' );
+	exit;
+}
+
+function inpulsia_medios_redirects_list( $limit = 200 ) {
+	global $wpdb;
+	$table = inpulsia_medios_redirects_table();
+	return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} ORDER BY id DESC LIMIT %d", $limit ) );
+}
+
+function inpulsia_medios_redirects_count() {
+	global $wpdb;
+	return (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . inpulsia_medios_redirects_table() );
+}

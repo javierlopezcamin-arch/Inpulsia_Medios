@@ -16,8 +16,8 @@ function inpulsia_medios_template() {
 	header( 'Content-Disposition: attachment; filename="plantilla-inpulsia-medios.csv"' );
 	$out = fopen( 'php://output', 'w' );
 	fwrite( $out, "\xEF\xBB\xBF" );
-	fputcsv( $out, [ 'ID', 'filename', 'title', 'alt', 'caption', 'description' ], ';' );
-	fputcsv( $out, [ '123', 'reforma-cocina-santander', 'Reforma de cocina en Santander', 'Cocina reformada con encimera de madera y muebles blancos', '', INPULSIA_MEDIOS_CLEAR ], ';' );
+	fputcsv( $out, [ 'ID', 'filename', 'title', 'alt', 'caption', 'description' ], ';', '"', '' );
+	fputcsv( $out, [ '123', 'reforma-cocina-santander', 'Reforma de cocina en Santander', 'Cocina reformada con encimera de madera y muebles blancos', '', INPULSIA_MEDIOS_CLEAR ], ';', '"', '' );
 	fclose( $out );
 	exit;
 }
@@ -27,17 +27,31 @@ function inpulsia_medios_export() {
 	if ( ! current_user_can( 'upload_files' ) ) {
 		wp_die( 'No tienes permisos para exportar medios.' );
 	}
-	global $wpdb;
-
-	$type    = ( $_GET['type'] ?? 'image' ) === 'all' ? 'all' : 'image';
-	$missing = ! empty( $_GET['missing_alt'] );
-	$usage   = ! empty( $_GET['usage'] );
-	$date    = function ( $key ) {
-		$v = sanitize_text_field( $_GET[ $key ] ?? '' );
+	$date = function ( $key ) {
+		$v = sanitize_text_field( wp_unslash( $_GET[ $key ] ?? '' ) );
 		return preg_match( '/^\d{4}-\d{2}-\d{2}$/', $v ) ? $v : '';
 	};
-	$from = $date( 'from' );
-	$to   = $date( 'to' );
+	$opts = [
+		'type'        => ( $_GET['type'] ?? 'image' ) === 'all' ? 'all' : 'image',
+		'missing_alt' => ! empty( $_GET['missing_alt'] ),
+		'usage'       => ! empty( $_GET['usage'] ),
+		'from'        => $date( 'from' ),
+		'to'          => $date( 'to' ),
+	];
+
+	nocache_headers();
+	header( 'Content-Type: text/csv; charset=utf-8' );
+	header( 'Content-Disposition: attachment; filename="medios-' . gmdate( 'Y-m-d' ) . '.csv"' );
+	$out = fopen( 'php://output', 'w' );
+	inpulsia_medios_export_write( $out, $opts );
+	fclose( $out );
+	exit;
+}
+
+// Writes the CSV to an open handle and returns the number of media exported.
+function inpulsia_medios_export_write( $out, $opts ) {
+	global $wpdb;
+	$opts = wp_parse_args( $opts, [ 'type' => 'image', 'missing_alt' => false, 'usage' => false, 'from' => '', 'to' => '' ] );
 
 	$args = [
 		'post_type'      => 'attachment',
@@ -47,24 +61,24 @@ function inpulsia_medios_export() {
 		'orderby'        => 'ID',
 		'order'          => 'ASC',
 	];
-	if ( $type === 'image' || $missing ) {
+	if ( $opts['type'] === 'image' || $opts['missing_alt'] ) {
 		$args['post_mime_type'] = 'image';
 	}
-	if ( $missing ) {
+	if ( $opts['missing_alt'] ) {
 		$args['meta_query'] = [
 			'relation' => 'OR',
 			[ 'key' => '_wp_attachment_image_alt', 'compare' => 'NOT EXISTS' ],
 			[ 'key' => '_wp_attachment_image_alt', 'value' => '' ],
 		];
 	}
-	if ( $from || $to ) {
-		$args['date_query'] = [ array_filter( [ 'after' => $from, 'before' => $to, 'inclusive' => true ] ) ];
+	if ( $opts['from'] || $opts['to'] ) {
+		$args['date_query'] = [ array_filter( [ 'after' => $opts['from'], 'before' => $opts['to'], 'inclusive' => true ] ) ];
 	}
 	$ids = get_posts( $args );
 
 	$featured = [];
 	$gallery  = [];
-	if ( $usage ) {
+	if ( $opts['usage'] ) {
 		foreach ( $wpdb->get_results( "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_thumbnail_id'" ) as $r ) {
 			$featured[ (int) $r->meta_value ][] = (int) $r->post_id;
 		}
@@ -75,28 +89,22 @@ function inpulsia_medios_export() {
 		}
 	}
 
-	nocache_headers();
-	header( 'Content-Type: text/csv; charset=utf-8' );
-	header( 'Content-Disposition: attachment; filename="medios-' . gmdate( 'Y-m-d' ) . '.csv"' );
-	$out = fopen( 'php://output', 'w' );
 	fwrite( $out, "\xEF\xBB\xBF" );
-
 	$header = [ 'ID', 'filename', 'title', 'alt', 'caption', 'description', 'url' ];
-	if ( $usage ) {
+	if ( $opts['usage'] ) {
 		$header[] = 'usado_en';
 	}
-	fputcsv( $out, $header, ';' );
+	fputcsv( $out, $header, ';', '"', '' );
 
 	foreach ( $ids as $id ) {
 		$cur  = inpulsia_medios_current( $id );
 		$line = [ $id, $cur['filename'], $cur['title'], $cur['alt'], $cur['caption'], $cur['description'], wp_get_attachment_url( $id ) ];
-		if ( $usage ) {
+		if ( $opts['usage'] ) {
 			$line[] = implode( ' | ', inpulsia_medios_usage( $id, $cur['filename'], $featured[ $id ] ?? [], $gallery[ $id ] ?? [] ) );
 		}
-		fputcsv( $out, $line, ';' );
+		fputcsv( $out, $line, ';', '"', '' );
 	}
-	fclose( $out );
-	exit;
+	return count( $ids );
 }
 
 function inpulsia_medios_usage( $id, $stem, $featured, $gallery ) {
