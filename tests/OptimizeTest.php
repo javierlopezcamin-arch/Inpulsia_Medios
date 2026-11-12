@@ -487,4 +487,26 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertTrue( inpulsia_medios_broken_repair( $post, $item['path'], $item['fix'] ) );
 		$this->assertStringContainsString( wp_get_attachment_image_url( $id, 'medium' ), get_post_field( 'post_content', $post ) );
 	}
+
+	public function test_merge_rewrites_elementor_string_ids_and_orphans_are_repaired() {
+		$a    = $this->upload( 'fondo-original.jpg', 400, 300 );
+		$b    = $this->upload( 'fondo-copia.jpg', 400, 300 );
+		$data = wp_json_encode( [ [ 'elType' => 'section', 'settings' => [ 'background_image' => [ 'url' => wp_get_attachment_url( $b ), 'id' => (string) $b, 'size' => '' ] ] ] ] );
+		$page = self::factory()->post->create( [ 'post_type' => 'page' ] );
+		update_post_meta( $page, '_elementor_data', wp_slash( $data ) );
+		$r = inpulsia_medios_dedupe( $b, $a );
+		$this->assertSame( 'ok', $r['status'], $r['msg'] );
+		$saved = json_decode( get_post_meta( $page, '_elementor_data', true ), true );
+		$this->assertSame( (string) $a, $saved[0]['settings']['background_image']['id'] );
+		$this->assertSame( wp_get_attachment_url( $a ), $saved[0]['settings']['background_image']['url'] );
+
+		// A page left broken by 1.6.0: URL already moved, ID still of the deleted copy.
+		$broken = wp_json_encode( [ [ 'settings' => [ 'background_image' => [ 'url' => wp_get_attachment_url( $a ), 'id' => '999999' ] ] ] ] );
+		update_post_meta( $page, '_elementor_data', wp_slash( $broken ) );
+		$this->assertSame( $a, inpulsia_medios_elementor_orphans( false, $page )[ $page ][0]['new'] );
+		inpulsia_medios_elementor_orphans( true, $page );
+		$saved = json_decode( get_post_meta( $page, '_elementor_data', true ), true );
+		$this->assertSame( (string) $a, $saved[0]['settings']['background_image']['id'] );
+		$this->assertSame( [], inpulsia_medios_elementor_orphans( false, $page ) );
+	}
 }

@@ -180,7 +180,7 @@ function inpulsia_medios_merge_into( $dupe, $keep ) {
 
 	// IDs in blocks, image classes and Elementor settings, only where the kept image now appears.
 	$like  = '%' . $wpdb->esc_like( inpulsia_medios_stem( $keep ) ) . '%';
-	$ids   = [ 'wp-image-' . $dupe . '"' => 'wp-image-' . $keep . '"', 'wp-image-' . $dupe . ' ' => 'wp-image-' . $keep . ' ', '"id":' . $dupe . ',' => '"id":' . $keep . ',', '"id":' . $dupe . '}' => '"id":' . $keep . '}' ];
+	$ids   = [ 'wp-image-' . $dupe . '"' => 'wp-image-' . $keep . '"', 'wp-image-' . $dupe . ' ' => 'wp-image-' . $keep . ' ', '"id":' . $dupe . ',' => '"id":' . $keep . ',', '"id":' . $dupe . '}' => '"id":' . $keep . '}', '"id":"' . $dupe . '"' => '"id":"' . $keep . '"' ]; // Elementor 4 stores IDs as strings.
 	foreach ( $wpdb->get_results( $wpdb->prepare( "SELECT ID, post_content FROM {$wpdb->posts} WHERE post_type NOT IN ('revision','attachment') AND post_content LIKE %s", $like ) ) as $p ) {
 		$c = strtr( $p->post_content, $ids );
 		if ( $c !== $p->post_content ) {
@@ -270,6 +270,16 @@ function inpulsia_medios_broken_scan() {
 			$out[ $key ] = [ 'post' => (int) $s->pid, 'path' => $rel, 'fix' => inpulsia_medios_broken_fix( $rel, $by_path ) ];
 		}
 	}
+	foreach ( inpulsia_medios_elementor_orphans() as $pid => $refs ) {
+		foreach ( $refs as $ref ) {
+			$out[ $pid . '|id' . $ref['id'] ] = [
+				'post' => $pid,
+				'path' => sprintf( 'ID %d · %s', $ref['id'], basename( (string) wp_parse_url( $ref['url'], PHP_URL_PATH ) ) ),
+				'fix'  => $ref['new'] ? sprintf( 'ID %d', $ref['new'] ) : '',
+				'type' => 'id',
+			];
+		}
+	}
 	$out = array_values( $out );
 	set_transient( 'inpulsia_medios_broken', [ 'time' => time(), 'items' => $out ], DAY_IN_SECONDS );
 	return $out;
@@ -308,6 +318,9 @@ function inpulsia_medios_broken_repair( $post_id, $path, $fix ) {
 	if ( $fix === '' || ! current_user_can( 'edit_post', $post_id ) ) {
 		return false;
 	}
+	if ( strpos( $path, 'ID ' ) === 0 ) {
+		return (bool) inpulsia_medios_elementor_orphans( true, $post_id );
+	}
 	$upath = wp_parse_url( wp_get_upload_dir()['baseurl'], PHP_URL_PATH );
 	$pairs = [ $upath . '/' . $path => $upath . '/' . $fix ];
 	$pairs[ str_replace( '/', '\/', $upath . '/' . $path ) ] = str_replace( '/', '\/', $upath . '/' . $fix );
@@ -331,4 +344,84 @@ function inpulsia_medios_broken_repair( $post_id, $path, $fix ) {
 		}
 	}
 	return $done;
+}
+
+/* ---------- Elementor references to deleted images ---------- */
+
+// Elementor builds background CSS from the image ID; an ID of a deleted image leaves the section without background.
+function inpulsia_medios_elementor_orphans_walk( &$node, &$found, $fix ) {
+	if ( ! is_array( $node ) ) {
+		return;
+	}
+	if ( isset( $node['url'], $node['id'] ) && is_string( $node['url'] ) && is_numeric( $node['id'] ) && (int) $node['id'] > 0 && get_post_type( (int) $node['id'] ) !== 'attachment' ) {
+		$new = inpulsia_medios_url_to_attachment( $node['url'] );
+		$found[] = [ 'id' => (int) $node['id'], 'url' => $node['url'], 'new' => $new ];
+		if ( $fix && $new ) {
+			$node['id'] = is_string( $node['id'] ) ? (string) $new : $new;
+		}
+	}
+	foreach ( $node as &$child ) {
+		inpulsia_medios_elementor_orphans_walk( $child, $found, $fix );
+	}
+}
+
+// Attachment ID for an uploads URL (any size, -scaled, WebP copies…).
+function inpulsia_medios_url_to_attachment( $url ) {
+	$upath = wp_parse_url( wp_get_upload_dir()['baseurl'], PHP_URL_PATH );
+	$path  = (string) wp_parse_url( $url, PHP_URL_PATH );
+	$pos   = strpos( $path, $upath . '/' );
+	if ( $pos === false ) {
+		return 0;
+	}
+	$ids = inpulsia_medios_usage_paths()[ inpulsia_medios_path_key( substr( $path, $pos + strlen( $upath ) + 1 ) ) ] ?? [];
+	foreach ( $ids as $id ) {
+		if ( get_post_type( $id ) === 'attachment' ) {
+			return (int) $id;
+		}
+	}
+	return 0;
+}
+
+// Lists (or fixes, with $fix) Elementor image settings that point to deleted attachments. Returns [ post_id => [ refs ] ].
+function inpulsia_medios_elementor_orphans( $fix = false, $post_id = 0 ) {
+	global $wpdb;
+	$GLOBALS['inpulsia_medios_usage_paths_reset'] = true;
+	$rows = $post_id
+		? $wpdb->get_results( $wpdb->prepare( "SELECT meta_id, post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_elementor_data' AND post_id = %d", $post_id ) )
+		: $wpdb->get_results( "SELECT m.meta_id, m.post_id, m.meta_value FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id WHERE m.meta_key = '_elementor_data' AND p.post_type <> 'revision' AND p.post_status NOT IN ('trash','auto-draft')" );
+	$out = [];
+	foreach ( $rows as $r ) {
+		$data = json_decode( (string) $r->meta_value, true );
+		if ( ! is_array( $data ) ) {
+			continue;
+		}
+		$found = [];
+		inpulsia_medios_elementor_orphans_walk( $data, $found, $fix );
+		if ( ! $found ) {
+			continue;
+		}
+		$out[ (int) $r->post_id ] = $found;
+		if ( $fix && array_filter( wp_list_pluck( $found, 'new' ) ) ) {
+			$wpdb->update( $wpdb->postmeta, [ 'meta_value' => wp_json_encode( $data ) ], [ 'meta_id' => $r->meta_id ] );
+			wp_cache_delete( (int) $r->post_id, 'post_meta' );
+			delete_post_meta( (int) $r->post_id, '_elementor_css' );
+			delete_post_meta( (int) $r->post_id, '_elementor_element_cache' );
+			$GLOBALS['inpulsia_medios_elementor_dirty'] = true;
+		}
+	}
+	return $out;
+}
+
+// 1.6.1: sites where 1.6.0 merged duplicates may have Elementor sections pointing to the deleted copy. Fix them once.
+add_action( 'admin_init', 'inpulsia_medios_repair_elementor_ids_once' );
+function inpulsia_medios_repair_elementor_ids_once() {
+	if ( get_option( 'inpulsia_medios_elementor_ids_repaired' ) || ! current_user_can( 'edit_pages' ) ) {
+		return;
+	}
+	update_option( 'inpulsia_medios_elementor_ids_repaired', 1, false );
+	$fixed = inpulsia_medios_elementor_orphans( true );
+	if ( $fixed ) {
+		inpulsia_medios_flush_elementor();
+		inpulsia_medios_purge_caches();
+	}
 }
