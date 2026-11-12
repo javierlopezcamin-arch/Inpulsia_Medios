@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // IDs of attachments referenced anywhere on the site. Cached for an hour.
 function inpulsia_medios_used_ids( $refresh = false ) {
-	$cached = get_transient( 'inpulsia_medios_used' );
+	$cached = get_transient( 'inpulsia_medios_used_v2' );
 	if ( $cached !== false && ! $refresh ) {
 		return $cached;
 	}
@@ -23,9 +23,10 @@ function inpulsia_medios_used_ids( $refresh = false ) {
 	$used[ (int) get_theme_mod( 'custom_logo' ) ] = true;
 	$used[ (int) get_option( 'site_icon' ) ]      = true;
 
+	// Translation plugins (WPML, Polylang) create one attachment per language for the same file: all of them count.
 	$by_path = [];
 	foreach ( $wpdb->get_results( "SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file'" ) as $r ) {
-		$by_path[ inpulsia_medios_path_key( $r->meta_value ) ] = (int) $r->post_id;
+		$by_path[ inpulsia_medios_path_key( $r->meta_value ) ][] = (int) $r->post_id;
 	}
 	$scan = function ( $text ) use ( &$used, $by_path ) {
 		$text = str_replace( '\/', '/', $text );
@@ -37,8 +38,8 @@ function inpulsia_medios_used_ids( $refresh = false ) {
 		if ( preg_match_all( '#/uploads/([^"\'\s<>()]+?\.(?:jpe?g|png|gif|webp|avif))#i', $text, $m ) ) {
 			foreach ( $m[1] as $path ) {
 				$key = inpulsia_medios_path_key( $path );
-				if ( isset( $by_path[ $key ] ) ) {
-					$used[ $by_path[ $key ] ] = true;
+				foreach ( $by_path[ $key ] ?? [] as $id ) {
+					$used[ $id ] = true;
 				}
 			}
 		}
@@ -56,10 +57,11 @@ function inpulsia_medios_used_ids( $refresh = false ) {
 		$scan( $text );
 	}
 
-	unset( $used[0] );
-	$ids = array_map( 'intval', array_keys( $used ) );
+	// Drop references to images that were deleted or are not images (e.g. a featured PDF).
+	$existing = array_flip( array_map( 'intval', $wpdb->get_col( "SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_status <> 'trash' AND post_mime_type LIKE 'image/%'" ) ) );
+	$ids      = array_map( 'intval', array_keys( array_intersect_key( $used, $existing ) ) );
 	sort( $ids );
-	set_transient( 'inpulsia_medios_used', $ids, HOUR_IN_SECONDS );
+	set_transient( 'inpulsia_medios_used_v2', $ids, HOUR_IN_SECONDS );
 	return $ids;
 }
 

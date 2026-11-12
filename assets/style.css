@@ -105,3 +105,4 @@
 .im-guide details { border-top: 1px solid #f0f0f1; padding: 8px 0; }
 .im-guide details summary { cursor: pointer; font-weight: 500; }
 .im-guide details p { margin: 6px 0 0; color: #50575e; }
+.im-hidden-notice { margin: 0 0 12px; }

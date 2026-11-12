@@ -190,6 +190,13 @@ function inpulsia_medios_tab_editar() {
 		<?php endif; ?>
 	</form>
 
+	<?php
+	if ( ! $params['s'] && ! $params['missing_alt'] && ! $params['usage'] && $paged === 1 ) {
+		global $wpdb;
+		$stored = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_status <> 'trash' AND post_mime_type LIKE 'image/%'" );
+		inpulsia_medios_hidden_notice( $stored - (int) $query->found_posts );
+	}
+	?>
 	<div id="inpulsia-medios-grid-wrap">
 		<details class="inpulsia-medios-card inpulsia-medios-opt" <?php echo $params['usage'] ? 'open' : ''; ?>>
 			<summary><strong>Optimizar imágenes</strong> — convertir, reducir peso, nombres amigables y alt</summary>

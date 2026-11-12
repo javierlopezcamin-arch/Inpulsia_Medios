@@ -10,40 +10,62 @@ function inpulsia_medios_url( $tab = 'inicio', $args = [] ) {
 	return add_query_arg( array_merge( [ 'page' => 'inpulsia-medios', 'tab' => $tab ], $args ), admin_url( 'upload.php' ) );
 }
 
-function inpulsia_medios_stats() {
-	$counts  = wp_count_attachments( 'image' );
-	$total   = 0;
-	foreach ( (array) $counts as $mime => $n ) {
-		if ( strpos( (string) $mime, 'image/' ) === 0 ) {
-			$total += (int) $n;
-		}
-	}
-	$missing = new WP_Query( [
-		'post_type'      => 'attachment',
-		'post_status'    => 'inherit',
-		'post_mime_type' => 'image',
+// Same query as the Editar tab, so every number matches what the user sees after clicking it.
+function inpulsia_medios_count( $params ) {
+	$q = new WP_Query( inpulsia_medios_editar_args( wp_parse_args( $params, [ 's' => '', 'missing_alt' => false, 'usage' => '' ] ) ) + [
 		'posts_per_page' => 1,
 		'fields'         => 'ids',
-		'meta_query'     => [
-			'relation' => 'OR',
-			[ 'key' => '_wp_attachment_image_alt', 'compare' => 'NOT EXISTS' ],
-			[ 'key' => '_wp_attachment_image_alt', 'value' => '' ],
-		],
 	] );
-	$heavy = new WP_Query( [
-		'post_type'      => 'attachment',
-		'post_status'    => 'inherit',
+	return (int) $q->found_posts;
+}
+
+function inpulsia_medios_stats() {
+	global $wpdb;
+	$visible = inpulsia_medios_count( [] );
+	$stored  = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_status <> 'trash' AND post_mime_type LIKE 'image/%'" );
+	$heavy   = new WP_Query( array_merge( inpulsia_medios_editar_args( [ 's' => '', 'missing_alt' => false, 'usage' => '' ] ), [
 		'post_mime_type' => [ 'image/png', 'image/gif', 'image/bmp', 'image/tiff' ],
 		'posts_per_page' => 1,
 		'fields'         => 'ids',
-	] );
+	] ) );
 	return [
-		'total'     => $total,
-		'missing'   => (int) $missing->found_posts,
-		'used'      => count( inpulsia_medios_used_ids() ),
+		'total'     => $visible,
+		'hidden'    => max( 0, $stored - $visible ),
+		'missing'   => inpulsia_medios_count( [ 'missing_alt' => true ] ),
+		'used'      => inpulsia_medios_count( [ 'usage' => 'used' ] ),
 		'png'       => (int) $heavy->found_posts,
 		'redirects' => inpulsia_medios_redirects_count(),
 	];
+}
+
+// Plugins known to filter the media library by language or folder.
+function inpulsia_medios_library_filters() {
+	return array_values( array_filter( [
+		defined( 'ICL_SITEPRESS_VERSION' ) ? 'WPML (muestra solo las imágenes del idioma activo)' : '',
+		function_exists( 'pll_languages_list' ) ? 'Polylang (muestra solo las imágenes del idioma activo)' : '',
+		defined( 'NJFB_VERSION' ) ? 'FileBird (muestra solo la carpeta seleccionada)' : '',
+		defined( 'RML_VERSION' ) ? 'Real Media Library (muestra solo la carpeta seleccionada)' : '',
+		defined( 'HAPPYFILES_VERSION' ) ? 'HappyFiles (muestra solo la carpeta seleccionada)' : '',
+		class_exists( 'MaxGalleriaMediaLib' ) ? 'Media Library Folders (muestra solo la carpeta seleccionada)' : '',
+	] ) );
+}
+
+function inpulsia_medios_hidden_notice( $hidden ) {
+	if ( $hidden < 1 ) {
+		return;
+	}
+	$causes = inpulsia_medios_library_filters();
+	?>
+	<div class="notice notice-info inline im-hidden-notice">
+		<p><strong><?php echo esc_html( 1 === (int) $hidden ? 'Hay 1 imagen más en la base de datos que no aparece aquí.' : 'Hay ' . number_format_i18n( $hidden ) . ' imágenes más en la base de datos que no aparecen aquí.' ); ?></strong>
+		<?php if ( $causes ) : ?>
+			Las filtra <?php echo esc_html( implode( '; ', $causes ) ); ?>. Cambia el idioma o la carpeta en la barra superior de WordPress para verlas y trabajar con ellas.
+		<?php else : ?>
+			Otro plugin está filtrando la biblioteca de medios (por idioma, carpetas o permisos). Las cifras de esta página son las de las imágenes visibles.
+		<?php endif; ?>
+		</p>
+	</div>
+	<?php
 }
 
 function inpulsia_medios_tab_inicio() {
@@ -60,9 +82,10 @@ function inpulsia_medios_tab_inicio() {
 		</section>
 
 		<h2 class="im-section-title">Estado de esta web</h2>
+		<?php inpulsia_medios_hidden_notice( $s['hidden'] ); ?>
 		<div class="im-stats">
 			<?php
-			inpulsia_medios_stat_card( $s['total'], 'imágenes en la biblioteca', 'Ver todas', inpulsia_medios_url( 'editar' ) );
+			inpulsia_medios_stat_card( $s['total'], $s['hidden'] ? 'imágenes visibles en la biblioteca' : 'imágenes en la biblioteca', 'Ver todas', inpulsia_medios_url( 'editar' ) );
 			inpulsia_medios_stat_card( $s['used'], 'se usan en la web', 'Ver las que se usan', inpulsia_medios_url( 'editar', [ 'usage' => 'used' ] ) );
 			inpulsia_medios_stat_card( $s['missing'], 'sin texto alternativo', $s['missing'] ? 'Completarlas' : '', inpulsia_medios_url( 'editar', [ 'missing_alt' => 1 ] ), $s['missing'] ? 'warn' : 'ok' );
 			inpulsia_medios_stat_card( $s['png'], 'en PNG u otros formatos pesados', $s['png'] ? 'Optimizarlas' : '', inpulsia_medios_url( 'editar', [ 'usage' => 'used' ] ), $s['png'] ? 'warn' : 'ok' );

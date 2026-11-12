@@ -126,6 +126,21 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertNotContains( $unused, $used );
 	}
 
+	public function test_used_ids_ignore_deleted_images_and_count_translations() {
+		$img  = $this->upload( 'traducida.jpg', 200, 200 );
+		$copy = self::factory()->attachment->create_object( [ 'file' => get_post_meta( $img, '_wp_attached_file', true ), 'post_mime_type' => 'image/jpeg' ] );
+		$post = self::factory()->post->create( [ 'post_content' => '<img src="' . wp_get_attachment_url( $img ) . '"> <img class="wp-image-999999" src="x.jpg">' ] );
+		set_post_thumbnail( $post, $img );
+		update_post_meta( $post, '_thumbnail_id', 888888 );
+
+		$used = inpulsia_medios_used_ids( true );
+
+		$this->assertContains( $img, $used );
+		$this->assertContains( $copy, $used );
+		$this->assertNotContains( 999999, $used );
+		$this->assertNotContains( 888888, $used );
+	}
+
 	public function test_camera_names() {
 		foreach ( [ 'IMG_2041', 'DSC0099', 'PXL_20260101_123', 'WhatsApp Image 2026', '20260101_101010', 'foto-final-v2', 'Captura de pantalla' ] as $n ) {
 			$this->assertTrue( inpulsia_medios_is_camera_name( $n ), $n );
