@@ -295,6 +295,7 @@
 		var $log = $('#inpulsia-medios-log').empty();
 		var counts = { ok: 0, partial: 0, error: 0, skip: 0 };
 		var purged = [];
+		var notes = [];
 		var before = 0, after = 0;
 		$('#inpulsia-medios-run-title').text(title);
 
@@ -314,7 +315,7 @@
 					var pct = d.total ? Math.round(d.next / d.total * 100) : 100;
 					$bar.css('width', pct + '%').parent().attr('aria-valuenow', pct);
 					$status.text(d.next + ' de ' + d.total + ' procesados');
-					if (d.done) { purged = d.purged || []; finish(null); }
+					if (d.done) { purged = d.purged || []; notes = d.notes || []; finish(null); }
 					else step(d.next);
 				})
 				.fail(function (xhr, textStatus) {
@@ -347,6 +348,7 @@
 				$status.append($('<br>'), txt('strong', 'Ahorro: ' + mb(before - after) + ' (' + mb(before) + ' → ' + mb(after) + ', −' + Math.round((1 - after / before) * 100) + ' %)'));
 			}
 			if (purged.length) $status.append($('<br>'), txt('span', 'Cachés vaciadas: ' + purged.join(', ') + '.', 'muted'));
+			$.each(notes, function (_, n) { $status.append($('<br>'), txt('span', n, 'muted')); });
 			if (action === 'inpulsia_medios_undo') {
 				setTimeout(function () { location.reload(); }, 1500);
 				return;

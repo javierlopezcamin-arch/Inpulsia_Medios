@@ -493,14 +493,27 @@ function inpulsia_medios_tab_ajustes() {
 function inpulsia_medios_backups_card() {
 	list( $count, $bytes ) = inpulsia_medios_backups_stats();
 	list( $old_count )     = inpulsia_medios_backups_stats( 30 );
+	list( $orphans, $orphan_bytes ) = inpulsia_medios_orphans_stats();
 	$url                   = admin_url( 'admin-post.php' );
 	?>
 	<div class="inpulsia-medios-card">
 		<h2>Copias de seguridad de imágenes optimizadas</h2>
+		<?php if ( isset( $_GET['orphans_deleted'] ) ) : ?>
+			<div class="notice notice-success inline"><p><?php echo (int) $_GET['orphans_deleted']; ?> archivos antiguos eliminados.</p></div>
+		<?php endif; ?>
 		<?php if ( isset( $_GET['backups_deleted'] ) ) : ?>
 			<div class="notice notice-success inline"><p><?php echo (int) $_GET['backups_deleted']; ?> copias eliminadas.</p></div>
 		<?php endif; ?>
 		<p><?php echo (int) $count; ?> copias, <?php echo esc_html( $bytes ? size_format( $bytes, 1 ) : '0 MB' ); ?> en <code>uploads/inpulsia-medios-backups</code>. Sin copia, una optimización ya no se puede deshacer.</p>
+		<?php if ( $orphans ) : ?>
+			<p><?php echo (int) $orphans; ?> archivos antiguos (<?php echo esc_html( size_format( $orphan_bytes, 1 ) ); ?>) se conservan durante <?php echo (int) INPULSIA_MEDIOS_GRACE_DAYS; ?> días tras renombrar u optimizar, para que las cachés y los enlaces externos no muestren imágenes rotas. Se borran solos.</p>
+			<form method="post" action="<?php echo esc_url( $url ); ?>" onsubmit="return confirm('Borra los archivos antiguos ya. Hazlo solo si has vaciado todas las cachés (también la del hosting y Cloudflare). ¿Seguir?');">
+				<input type="hidden" name="action" value="inpulsia_medios_backups" />
+				<input type="hidden" name="orphans" value="1" />
+				<?php wp_nonce_field( 'inpulsia_medios_backups' ); ?>
+				<p><button class="button">Borrar ya los archivos antiguos</button></p>
+			</form>
+		<?php endif; ?>
 		<form method="post" action="<?php echo esc_url( $url ); ?>" style="display:inline">
 			<input type="hidden" name="action" value="inpulsia_medios_backups" />
 			<input type="hidden" name="days" value="30" />
@@ -521,6 +534,11 @@ function inpulsia_medios_backups_action() {
 	check_admin_referer( 'inpulsia_medios_backups' );
 	if ( ! current_user_can( 'manage_options' ) ) {
 		wp_die( 'Solo los administradores pueden borrar copias.' );
+	}
+	if ( ! empty( $_POST['orphans'] ) ) {
+		$n = inpulsia_medios_orphans_cleanup( true );
+		wp_safe_redirect( admin_url( 'upload.php?page=inpulsia-medios&tab=ajustes&orphans_deleted=' . $n ) );
+		exit;
 	}
 	$n = inpulsia_medios_backups_delete( absint( $_POST['days'] ?? 30 ) );
 	wp_safe_redirect( admin_url( 'upload.php?page=inpulsia-medios&tab=ajustes&backups_deleted=' . $n ) );
@@ -614,8 +632,9 @@ function inpulsia_medios_ajax_apply() {
 		$entry  = inpulsia_medios_history_find( $token );
 		$purged = $entry && $entry['changed'] > 0 ? inpulsia_medios_purge_caches() : [];
 	}
+	$notes = $done && $purged ? inpulsia_medios_done_notes() : [];
 
-	wp_send_json_success( compact( 'results', 'next', 'done', 'purged' ) + [ 'total' => count( $rows ) ] );
+	wp_send_json_success( compact( 'results', 'next', 'done', 'purged', 'notes' ) + [ 'total' => count( $rows ) ] );
 }
 
 function inpulsia_medios_ajax_undo() {
@@ -736,5 +755,6 @@ function inpulsia_medios_ajax_opt_apply() {
 		delete_transient( 'inpulsia_medios_opt_' . $token );
 		$purged = inpulsia_medios_purge_caches();
 	}
-	wp_send_json_success( compact( 'results', 'next', 'done', 'purged' ) + [ 'total' => count( $ids ) ] );
+	$notes = $done ? inpulsia_medios_done_notes() : [];
+	wp_send_json_success( compact( 'results', 'next', 'done', 'purged', 'notes' ) + [ 'total' => count( $ids ) ] );
 }

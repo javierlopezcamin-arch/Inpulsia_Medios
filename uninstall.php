@@ -7,3 +7,4 @@ global $wpdb;
 $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'inpulsia\_medios\_%' OR option_name LIKE '\_transient\_inpulsia\_medios\_%' OR option_name LIKE '\_transient\_timeout\_inpulsia\_medios\_%'" );
 $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}inpulsia_medios_redirects" );
 delete_metadata( 'user', 0, 'inpulsia_medios_welcomed', '', true );
+wp_clear_scheduled_hook( 'inpulsia_medios_cleanup' );

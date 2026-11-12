@@ -39,7 +39,8 @@ class MediosTest extends WP_UnitTestCase {
 		$r = inpulsia_medios_rename( $id, 'reforma-cocina' );
 
 		$this->assertNotWPError( $r );
-		$this->assertFileDoesNotExist( $old );
+		$this->assertFileExists( $old, 'El archivo antiguo se conserva durante el periodo de gracia.' );
+		$this->assertContains( basename( $old ), inpulsia_medios_orphans()[0]['files'] );
 		$this->assertSame( 'reforma-cocina', inpulsia_medios_stem( $id ) );
 		$this->assertFileExists( get_attached_file( $id ) );
 		$dir = dirname( get_attached_file( $id ) );
@@ -74,7 +75,7 @@ class MediosTest extends WP_UnitTestCase {
 
 		$this->assertFileExists( $dir . '/con-webp.jpg.webp' );
 		$this->assertFileExists( $dir . '/con-webp.avif' );
-		$this->assertFileDoesNotExist( $dir . '/' . $old . '.webp' );
+		$this->assertFileExists( $dir . '/' . $old . '.webp', 'Se conserva durante el periodo de gracia.' );
 	}
 
 	public function test_rename_refuses_to_overwrite_existing_file() {

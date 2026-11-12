@@ -266,6 +266,7 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	}
 
 	// 3. Check the destination name before touching anything.
+	inpulsia_medios_orphans_release( $id, $dir, [ $new_stem . '.' . $ext ] );
 	list( , $own ) = inpulsia_medios_attachment_files( $id );
 	$new_name      = $new_stem . '.' . $ext;
 	if ( file_exists( $dir . '/' . $new_name ) && ! in_array( $new_name, $own, true ) ) {
@@ -294,12 +295,15 @@ function inpulsia_medios_optimize( $id, $opts ) {
 		@unlink( $staged );
 		return [ 'status' => 'error', 'msg' => 'No se pudo escribir la imagen nueva en uploads (permisos o espacio); el original no se ha tocado.', 'prev' => $prev ];
 	}
-	foreach ( $old_files as $f ) {
+	// Optimizer copies (.webp/.avif next to the file) would serve the old picture: remove them now.
+	list( , $old_meta_files ) = inpulsia_medios_meta_files( $id );
+	foreach ( array_diff( $old_files, $old_meta_files ) as $f ) {
 		@unlink( $dir . '/' . $f );
 	}
 	if ( ! @rename( $staged, $dir . '/' . $new_name ) ) {
 		$new_name = basename( $staged );
 	}
+	inpulsia_medios_fix_perms( $dir . '/' . $new_name );
 
 	update_attached_file( $id, $dir . '/' . $new_name );
 	$wpdb->update( $wpdb->posts, [ 'post_mime_type' => $target ], [ 'ID' => $id ] );
@@ -310,6 +314,12 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	$new_meta = wp_generate_attachment_metadata( $id, $dir . '/' . $new_name );
 	wp_update_attachment_metadata( $id, $new_meta );
 	$new_main = basename( get_attached_file( $id ) );
+	list( , $new_meta_files ) = inpulsia_medios_meta_files( $id );
+	foreach ( $new_meta_files as $f ) {
+		inpulsia_medios_fix_perms( $dir . '/' . $f );
+	}
+	// Old files stay reachable during the grace period; the daily cleanup removes them.
+	inpulsia_medios_orphans_add( $id, $dir, array_diff( $old_meta_files, $new_meta_files ) );
 	$wpdb->update( $wpdb->posts, [ 'guid' => wp_get_attachment_url( $id ) ], [ 'ID' => $id ] );
 	clean_post_cache( $id );
 
@@ -336,6 +346,10 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	$GLOBALS['inpulsia_medios_changed'] = true;
 
 	$after = filesize( get_attached_file( $id ) );
+	$public = inpulsia_medios_check_public( $id );
+	if ( $public !== '' ) {
+		$notes[] = $public;
+	}
 	if ( $backup ) {
 		$prev['restore'] = $backup;
 	}
@@ -432,10 +446,12 @@ function inpulsia_medios_backup_restore( $key ) {
 	foreach ( $cur_files as $f ) {
 		@unlink( $cur_dir . '/' . $f );
 	}
+	inpulsia_medios_orphans_release( $id, $dir, $data['files'] );
 	foreach ( $data['files'] as $f ) {
 		if ( ! @copy( $path . '/' . $f, $dir . '/' . $f ) ) {
 			return new WP_Error( 'restore', 'No se pudo restaurar ' . $f . '.' );
 		}
+		inpulsia_medios_fix_perms( $dir . '/' . $f );
 	}
 
 	update_post_meta( $id, '_wp_attached_file', $data['file'] );

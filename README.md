@@ -47,7 +47,9 @@ Al cambiar el alt también se actualiza en las imágenes ya insertadas en Gutenb
 - Los PNG, WebP y GIF estáticos se convierten al formato elegido (JPG por defecto, o WebP). Los que tienen píxeles transparentes, como los logos, se mantienen en su formato y los GIF animados no se tocan.
 - La imagen se limita al ancho máximo (2560 px por defecto) y se recomprime (calidad 82). Se corrige la orientación EXIF y se regeneran las miniaturas.
 - Si el resultado no pesa al menos un 5 % menos que el original, la imagen se deja como está. En gráficos planos, un PNG suele pesar menos que un JPG.
-- Las URLs antiguas se reemplazan en todo el sitio y redirigen con 301 a las nuevas, igual que al renombrar.
+- Las URLs antiguas se reemplazan en todo el sitio (incluidos los fondos de Elementor, cuyo CSS se regenera) y redirigen con 301 a las nuevas, igual que al renombrar.
+- Los archivos antiguos se conservan 15 días tras renombrar u optimizar, para que ninguna caché de servidor, CDN o enlace externo muestre una imagen rota; una tarea diaria los borra después. En Ajustes se pueden borrar antes.
+- Al terminar se comprueba que la imagen nueva se puede abrir desde la web (y se corrigen sus permisos si hace falta). Si la web pasa por Cloudflare sin su plugin, se avisa para vaciar su caché.
 - Con la copia de seguridad activada, los archivos originales se guardan en `uploads/inpulsia-medios-backups/` y la optimización se puede deshacer desde Historial. En Ajustes se pueden borrar las copias de más de 30 días.
 - Si la web ya usa ShortPixel, Imagify, EWWW, Smush u Optimole, se muestra un aviso para no comprimir dos veces.
 

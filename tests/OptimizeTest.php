@@ -95,7 +95,7 @@ class OptimizeTest extends WP_UnitTestCase {
 		inpulsia_medios_history_add( [ 'token' => $token, 'date' => current_time( 'mysql' ), 'user' => 't', 'file' => 'opt', 'rows' => 1, 'changed' => 0, 'status' => 'incompleto' ] );
 		inpulsia_medios_optimize_ids( $token, [ $id ], $this->opts );
 		$this->assertSame( 'image/jpeg', get_post_mime_type( $id ) );
-		$this->assertFileDoesNotExist( $old_file );
+		$this->assertFileExists( $old_file, 'El original se conserva durante el periodo de gracia.' );
 
 		$results = inpulsia_medios_undo_rows( inpulsia_medios_undo_entries( $token ) );
 
@@ -139,6 +139,62 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertContains( $copy, $used );
 		$this->assertNotContains( 999999, $used );
 		$this->assertNotContains( 888888, $used );
+	}
+
+	public function test_old_files_are_removed_after_the_grace_period() {
+		$id  = $this->upload( 'antigua.png', 900, 600 );
+		$old = get_attached_file( $id );
+		inpulsia_medios_optimize( $id, $this->opts );
+		$new = get_attached_file( $id );
+		$this->assertFileExists( $old );
+
+		$list = inpulsia_medios_orphans();
+		foreach ( $list as &$e ) {
+			$e['until'] = time() - 1;
+		}
+		update_option( 'inpulsia_medios_orphans', $list, false );
+		inpulsia_medios_orphans_cleanup();
+
+		$this->assertFileDoesNotExist( $old );
+		$this->assertFileExists( $new );
+		$this->assertSame( [], inpulsia_medios_orphans() );
+	}
+
+	public function test_stale_optimizer_copies_are_removed() {
+		$id      = $this->upload( 'con-copia.jpg', 900, 600 );
+		$sidecar = get_attached_file( $id ) . '.webp';
+		file_put_contents( $sidecar, 'webp viejo' );
+
+		$r = inpulsia_medios_optimize( $id, [ 'quality' => 60 ] + $this->opts );
+
+		$this->assertSame( 'ok', $r['status'], $r['msg'] );
+		$this->assertFileDoesNotExist( $sidecar );
+	}
+
+	public function test_permissions_are_made_readable() {
+		$file = trailingslashit( wp_get_upload_dir()['basedir'] ) . 'privada.jpg';
+		file_put_contents( $file, 'x' );
+		chmod( $file, 0600 );
+
+		inpulsia_medios_fix_perms( $file );
+		clearstatcache();
+
+		$this->assertNotSame( 0, fileperms( $file ) & 0044, 'El servidor web debe poder leer el archivo.' );
+		unlink( $file );
+	}
+
+	public function test_elementor_caches_are_cleared_when_an_image_changes() {
+		$id   = $this->upload( 'fondo.jpg', 900, 600 );
+		$post = self::factory()->post->create();
+		update_post_meta( $post, '_elementor_data', wp_slash( wp_json_encode( [ [ 'settings' => [ 'background_image' => [ 'url' => wp_get_attachment_url( $id ), 'id' => $id ] ] ] ] ) ) );
+		update_post_meta( $post, '_elementor_css', [ 'status' => 'file' ] );
+		update_post_meta( $post, '_elementor_element_cache', [ 'html' => 'viejo' ] );
+
+		inpulsia_medios_rename( $id, 'fondo-nuevo' );
+
+		$this->assertSame( '', get_post_meta( $post, '_elementor_css', true ) );
+		$this->assertSame( '', get_post_meta( $post, '_elementor_element_cache', true ) );
+		$this->assertStringContainsString( 'fondo-nuevo', get_post_meta( $post, '_elementor_data', true ) );
 	}
 
 	public function test_camera_names() {

@@ -335,6 +335,7 @@ function inpulsia_medios_rename( $id, $new_stem ) {
 		}
 	}
 
+	inpulsia_medios_orphans_release( $id, $dir, array_values( $map ) );
 	foreach ( $map as $new ) {
 		if ( file_exists( $dir . '/' . $new ) && ! isset( $map[ $new ] ) ) {
 			return new WP_Error( 'exists', "ya existe «{$new}» en la carpeta." );
@@ -354,6 +355,19 @@ function inpulsia_medios_rename( $id, $new_stem ) {
 		}
 		$moved[ $old ] = $new;
 	}
+
+	// Keep the old names working during the grace period (hard link: no extra disk space).
+	$kept = [];
+	foreach ( $moved as $old => $new ) {
+		if ( isset( $map[ $old ] ) && in_array( $old, $map, true ) ) {
+			continue;
+		}
+		if ( @link( $dir . '/' . $new, $dir . '/' . $old ) || @copy( $dir . '/' . $new, $dir . '/' . $old ) ) {
+			inpulsia_medios_fix_perms( $dir . '/' . $old );
+			$kept[] = $old;
+		}
+	}
+	inpulsia_medios_orphans_add( $id, $dir, $kept );
 
 	update_attached_file( $id, $dir . '/' . $map[ $main_old ] );
 
@@ -446,8 +460,10 @@ function inpulsia_medios_replace_urls( $rel, $old_stem, $map, $exclude_id = 0 ) 
 		if ( $value !== $m->meta_value ) {
 			$wpdb->update( $wpdb->postmeta, [ 'meta_value' => $value ], [ 'meta_id' => $m->meta_id ] );
 			wp_cache_delete( $m->post_id, 'post_meta' );
-			if ( $m->meta_key === '_elementor_data' ) {
+			if ( strpos( $m->meta_key, '_elementor' ) === 0 ) {
+				// Backgrounds live in Elementor's generated CSS and element cache: both must be rebuilt.
 				delete_post_meta( $m->post_id, '_elementor_css' );
+				delete_post_meta( $m->post_id, '_elementor_element_cache' );
 				$GLOBALS['inpulsia_medios_elementor_dirty'] = true;
 			}
 			$touched++;
@@ -568,7 +584,40 @@ function inpulsia_medios_purge_caches() {
 	}
 	if ( class_exists( '\Elementor\Plugin' ) && isset( \Elementor\Plugin::$instance->files_manager ) ) {
 		\Elementor\Plugin::$instance->files_manager->clear_cache();
-		$purged[] = 'Elementor';
+		$purged[] = 'Elementor (CSS regenerado)';
+	}
+	if ( has_action( 'rt_nginx_helper_purge_all' ) ) {
+		do_action( 'rt_nginx_helper_purge_all' );
+		$purged[] = 'Nginx Helper';
+	}
+	if ( class_exists( 'autoptimizeCache' ) && method_exists( 'autoptimizeCache', 'clearall' ) ) {
+		autoptimizeCache::clearall();
+		$purged[] = 'Autoptimize';
+	}
+	if ( has_action( 'wphb_clear_page_cache' ) ) {
+		do_action( 'wphb_clear_page_cache' );
+		$purged[] = 'Hummingbird';
+	}
+	if ( class_exists( 'Cache_Enabler' ) && method_exists( 'Cache_Enabler', 'clear_complete_cache' ) ) {
+		Cache_Enabler::clear_complete_cache();
+		$purged[] = 'Cache Enabler';
+	}
+	if ( class_exists( 'WpeCommon' ) ) {
+		foreach ( [ 'purge_memcached', 'clear_maxcdn_cache', 'purge_varnish_cache' ] as $m ) {
+			if ( method_exists( 'WpeCommon', $m ) ) {
+				call_user_func( [ 'WpeCommon', $m ] );
+			}
+		}
+		$purged[] = 'WP Engine';
+	}
+	if ( isset( $GLOBALS['kinsta_cache'] ) && isset( $GLOBALS['kinsta_cache']->kinsta_cache_purge ) && method_exists( $GLOBALS['kinsta_cache']->kinsta_cache_purge, 'purge_complete_caches' ) ) {
+		$GLOBALS['kinsta_cache']->kinsta_cache_purge->purge_complete_caches();
+		$purged[] = 'Kinsta';
+	}
+	if ( class_exists( '\CF\WordPress\Hooks' ) && method_exists( '\CF\WordPress\Hooks', 'purgeCacheEverything' ) ) {
+		( new \CF\WordPress\Hooks() )->purgeCacheEverything();
+		$purged[] = 'Cloudflare';
+		$GLOBALS['inpulsia_medios_cloudflare_purged'] = true;
 	}
 	wp_cache_flush();
 	return $purged;
