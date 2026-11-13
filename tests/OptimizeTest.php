@@ -673,7 +673,7 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertSame( 'context', $s['source'] );
 		$this->assertSame( 'Cocina reformada en blanco en Santander', $s['alt'] );
 		$this->assertSame( 'cocina-reformada-en-blanco-santander', $s['filename'] );
-		$this->assertSame( 'Cocina reformada en blanco', inpulsia_medios_template_value( $id, '{encabezado} - {ciudad}', 'title', 1 ) );
+		$this->assertSame( 'Cocina reformada en blanco - Santander', inpulsia_medios_template_value( $id, '{encabezado} - {ciudad}', 'title', 1 ) );
 		unset( $page );
 	}
 
