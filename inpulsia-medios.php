@@ -3,7 +3,7 @@
  * Plugin Name: Inpulsia Medios
  * Plugin URI: https://github.com/javierlopezcamin-arch/Inpulsia_Medios
  * Description: Optimiza las imágenes y completa nombres, títulos y textos alternativos en bloque: tabla editable, CSV/Excel, plantillas e IA, con redirecciones y deshacer.
- * Version: 1.7.2
+ * Version: 1.8.0
  * Domain Path: /languages
  * Requires at least: 6.2
  * Requires PHP: 7.4
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'INPULSIA_MEDIOS_VERSION', '1.7.2' );
+define( 'INPULSIA_MEDIOS_VERSION', '1.8.0' );
 define( 'INPULSIA_MEDIOS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'INPULSIA_MEDIOS_URL', plugin_dir_url( __FILE__ ) );
 define( 'INPULSIA_MEDIOS_CLEAR', '[vaciar]' );
@@ -58,6 +58,7 @@ if ( is_admin() || wp_doing_cron() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 	require_once INPULSIA_MEDIOS_PATH . 'includes/optimize.php';
 	require_once INPULSIA_MEDIOS_PATH . 'includes/ai.php';
 	require_once INPULSIA_MEDIOS_PATH . 'includes/cleanup.php';
+	require_once INPULSIA_MEDIOS_PATH . 'includes/ux.php';
 }
 if ( is_admin() ) {
 	require_once INPULSIA_MEDIOS_PATH . 'includes/admin.php';

@@ -24,10 +24,10 @@ function inpulsia_medios_tabs() {
 	$tabs = [
 		'inicio'        => __( 'Inicio', 'inpulsia-medios' ),
 		'editar'        => __( 'Editar', 'inpulsia-medios' ),
-		'importar'      => __( 'Importar', 'inpulsia-medios' ),
-		'exportar'      => __( 'Exportar', 'inpulsia-medios' ),
 		'limpieza'      => __( 'Limpieza', 'inpulsia-medios' ),
 		'historial'     => __( 'Historial', 'inpulsia-medios' ),
+		'importar'      => __( 'Importar', 'inpulsia-medios' ),
+		'exportar'      => __( 'Exportar', 'inpulsia-medios' ),
 		'redirecciones' => __( 'Redirecciones', 'inpulsia-medios' ),
 	];
 	if ( current_user_can( 'manage_options' ) ) {
@@ -51,23 +51,46 @@ function inpulsia_medios_assets( $hook ) {
 		'history'  => admin_url( 'upload.php?page=inpulsia-medios&tab=historial' ),
 		'site'     => get_bloginfo( 'name' ),
 		'i18n'     => determine_locale() === 'es_ES' ? [] : inpulsia_medios_js_i18n(),
+		'urls'     => [
+			'i' => inpulsia_medios_url( 'inicio' ),
+			'e' => inpulsia_medios_url( 'editar' ),
+			'l' => inpulsia_medios_url( 'limpieza' ),
+			'h' => inpulsia_medios_url( 'historial' ),
+		],
+		'prefs'    => inpulsia_medios_prefs(),
 	] );
 }
 
 function inpulsia_medios_page() {
 	$tabs = inpulsia_medios_tabs();
 	$tab  = sanitize_key( wp_unslash( $_GET['tab'] ?? '' ) );
-	$tab  = isset( $tabs[ $tab ] ) ? $tab : 'inicio';
+	$tab    = isset( $tabs[ $tab ] ) ? $tab : 'inicio';
+	$badges = inpulsia_medios_tab_badges();
+	$prefs  = inpulsia_medios_prefs();
 	?>
-	<div class="wrap inpulsia-medios-wrap">
-		<h1>Inpulsia Medios <span class="inpulsia-medios-version">v<?php echo esc_html( INPULSIA_MEDIOS_VERSION ); ?></span></h1>
-		<nav class="nav-tab-wrapper">
+	<div class="wrap inpulsia-medios-wrap im-theme-<?php echo esc_attr( $prefs['theme'] ); ?>">
+		<div class="im-head">
+			<h1>Inpulsia Medios <span class="inpulsia-medios-version">v<?php echo esc_html( INPULSIA_MEDIOS_VERSION ); ?></span></h1>
+			<div class="im-head-tools">
+				<label class="screen-reader-text" for="im-theme"><?php esc_html_e( 'Tema', 'inpulsia-medios' ); ?></label>
+				<select id="im-theme" class="im-pref" data-key="theme">
+					<option value="auto" <?php selected( $prefs['theme'], 'auto' ); ?>><?php esc_html_e( 'Tema del sistema', 'inpulsia-medios' ); ?></option>
+					<option value="light" <?php selected( $prefs['theme'], 'light' ); ?>><?php esc_html_e( 'Claro', 'inpulsia-medios' ); ?></option>
+					<option value="dark" <?php selected( $prefs['theme'], 'dark' ); ?>><?php esc_html_e( 'Oscuro', 'inpulsia-medios' ); ?></option>
+				</select>
+				<button type="button" class="button im-keys-open" aria-keyshortcuts="?"><span class="dashicons dashicons-editor-help" aria-hidden="true"></span> <?php esc_html_e( 'Atajos', 'inpulsia-medios' ); ?></button>
+			</div>
+		</div>
+		<nav class="nav-tab-wrapper im-tabs" aria-label="<?php esc_attr_e( 'Secciones de Inpulsia Medios', 'inpulsia-medios' ); ?>">
 			<?php foreach ( $tabs as $slug => $label ) : ?>
 				<a href="<?php echo esc_url( add_query_arg( 'tab', $slug, admin_url( 'upload.php?page=inpulsia-medios' ) ) ); ?>"
-					class="nav-tab <?php echo $tab === $slug ? 'nav-tab-active' : ''; ?>"><?php echo esc_html( $label ); ?></a>
+					class="nav-tab <?php echo $tab === $slug ? 'nav-tab-active' : ''; ?> <?php echo in_array( $slug, [ 'importar', 'exportar', 'redirecciones', 'ajustes' ], true ) ? 'im-tab-secondary' : ''; ?>"
+					<?php echo $tab === $slug ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $label ); ?><?php if ( ! empty( $badges[ $slug ] ) ) : ?> <span class="im-badge is-<?php echo $slug === 'limpieza' ? 'bad' : 'warn'; ?>" title="<?php echo esc_attr( $slug === 'limpieza' ? __( 'Problemas pendientes', 'inpulsia-medios' ) : __( 'Imágenes sin alt', 'inpulsia-medios' ) ); ?>"><?php echo esc_html( number_format_i18n( $badges[ $slug ] ) ); ?></span><?php endif; ?></a>
 			<?php endforeach; ?>
 		</nav>
+		<?php inpulsia_medios_bg_markup(); ?>
 		<?php call_user_func( 'inpulsia_medios_tab_' . $tab ); ?>
+		<?php inpulsia_medios_shortcuts_markup(); ?>
 	</div>
 	<?php
 }
@@ -260,6 +283,7 @@ function inpulsia_medios_tab_editar() {
 			<a href="<?php echo esc_url( add_query_arg( 'refresh_usage', 1 ) ); ?>" class="inpulsia-medios-refresh"><?php esc_html_e( 'Recalcular uso', 'inpulsia-medios' ); ?></a>
 		<?php endif; ?>
 	</form>
+	<?php inpulsia_medios_saved_filters_markup( $params ); ?>
 
 	<?php
 	if ( ! array_filter( $params ) && $paged === 1 ) {
@@ -336,7 +360,26 @@ function inpulsia_medios_tab_editar() {
 		</div>
 
 		<div class="inpulsia-medios-scroll">
-		<table class="wp-list-table widefat striped inpulsia-medios-grid">
+		<?php $prefs = inpulsia_medios_prefs(); ?>
+		<div class="im-view-tools">
+			<label><?php esc_html_e( 'Densidad', 'inpulsia-medios' ); ?>
+				<select class="im-pref" data-key="density">
+					<option value="comfortable" <?php selected( $prefs['density'], 'comfortable' ); ?>><?php esc_html_e( 'Cómoda', 'inpulsia-medios' ); ?></option>
+					<option value="compact" <?php selected( $prefs['density'], 'compact' ); ?>><?php esc_html_e( 'Compacta', 'inpulsia-medios' ); ?></option>
+				</select>
+			</label>
+			<details class="im-cols">
+				<summary><?php esc_html_e( 'Columnas', 'inpulsia-medios' ); ?></summary>
+				<div>
+					<?php foreach ( inpulsia_medios_field_labels() as $f => $label ) : ?>
+						<?php if ( in_array( $f, [ 'filename', 'title', 'alt', 'caption', 'description' ], true ) ) : ?>
+							<label><input type="checkbox" class="im-col-toggle" value="<?php echo esc_attr( $f ); ?>" <?php checked( ! in_array( $f, $prefs['hidden'], true ) ); ?> /> <?php echo esc_html( $label ); ?></label>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</div>
+			</details>
+		</div>
+		<table class="wp-list-table widefat striped inpulsia-medios-grid is-<?php echo esc_attr( $prefs['density'] ); ?> <?php echo esc_attr( implode( ' ', array_map( function ( $c ) { return 'hide-' . $c; }, $prefs['hidden'] ) ) ); ?>">
 			<thead>
 				<tr>
 					<td class="check-column"><input type="checkbox" id="inpulsia-medios-check-all" aria-label="<?php esc_attr_e( 'Seleccionar todas las imágenes de la página', 'inpulsia-medios' ); ?>" /></td>
@@ -465,7 +508,24 @@ function inpulsia_medios_tab_historial() {
 	?>
 	<div class="inpulsia-medios-card">
 		<h2><?php esc_html_e( 'Últimas importaciones', 'inpulsia-medios' ); ?></h2>
-		<p class="description"><?php esc_html_e( 'Se guardan las 20 últimas. Deshacer restaura los valores anteriores, incluidos los nombres de archivo y sus URLs.', 'inpulsia-medios' ); ?></p>
+		<p class="description"><?php esc_html_e( 'Se guardan las 20 últimas. Deshacer restaura los valores anteriores, incluidos los nombres de archivo y sus URLs. Abre una fila para deshacer solo una imagen.', 'inpulsia-medios' ); ?></p>
+		<?php if ( $history ) : ?>
+			<div class="im-history-tools">
+				<input type="search" id="im-history-search" placeholder="<?php esc_attr_e( 'Buscar por origen o usuario', 'inpulsia-medios' ); ?>" aria-label="<?php esc_attr_e( 'Buscar en el historial', 'inpulsia-medios' ); ?>" />
+				<select id="im-history-type" aria-label="<?php esc_attr_e( 'Tipo', 'inpulsia-medios' ); ?>">
+					<option value=""><?php esc_html_e( 'Todos los tipos', 'inpulsia-medios' ); ?></option>
+					<option value="opt"><?php esc_html_e( 'Optimización', 'inpulsia-medios' ); ?></option>
+					<option value="clean"><?php esc_html_e( 'Limpieza', 'inpulsia-medios' ); ?></option>
+					<option value="edit"><?php esc_html_e( 'Ediciones e importaciones', 'inpulsia-medios' ); ?></option>
+				</select>
+				<select id="im-history-user" aria-label="<?php esc_attr_e( 'Usuario', 'inpulsia-medios' ); ?>">
+					<option value=""><?php esc_html_e( 'Todos los usuarios', 'inpulsia-medios' ); ?></option>
+					<?php foreach ( array_unique( wp_list_pluck( $history, 'user' ) ) as $u ) : ?>
+						<option value="<?php echo esc_attr( $u ); ?>"><?php echo esc_html( $u ); ?></option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		<?php endif; ?>
 		<?php if ( ! $history ) : ?>
 			<p><?php esc_html_e( 'Todavía no hay importaciones.', 'inpulsia-medios' ); ?></p>
 		<?php else : ?>
@@ -473,8 +533,14 @@ function inpulsia_medios_tab_historial() {
 				<thead><tr><th><?php esc_html_e( 'Fecha', 'inpulsia-medios' ); ?></th><th><?php esc_html_e( 'Origen', 'inpulsia-medios' ); ?></th><th><?php esc_html_e( 'Usuario', 'inpulsia-medios' ); ?></th><th><?php esc_html_e( 'Filas', 'inpulsia-medios' ); ?></th><th><?php esc_html_e( 'Medios cambiados', 'inpulsia-medios' ); ?></th><th><?php esc_html_e( 'Estado', 'inpulsia-medios' ); ?></th><th></th></tr></thead>
 				<tbody>
 				<?php foreach ( $history as $e ) : ?>
-					<tr>
-						<td><?php echo esc_html( mysql2date( 'd/m/Y H:i', $e['date'] ) ); ?></td>
+					<?php
+					$type = strpos( $e['file'], 'Optimizaci' ) === 0 ? 'opt' : ( strpos( $e['file'], 'Limpieza' ) === 0 ? 'clean' : 'edit' );
+					$log  = $e['status'] !== 'deshecho' ? (array) get_option( 'inpulsia_medios_log_' . $e['token'], [] ) : [];
+					$ids  = array_unique( array_map( 'intval', wp_list_pluck( $log, 'id' ) ) );
+					?>
+					<tr class="im-history-row" data-type="<?php echo esc_attr( $type ); ?>" data-user="<?php echo esc_attr( $e['user'] ); ?>" data-text="<?php echo esc_attr( strtolower( inpulsia_medios_history_label( $e['file'] ) . ' ' . $e['user'] ) ); ?>">
+						<td><?php if ( $ids ) : ?><button type="button" class="button-link im-history-toggle" aria-expanded="false" aria-controls="im-h-<?php echo esc_attr( $e['token'] ); ?>"><span class="dashicons dashicons-arrow-right-alt2" aria-hidden="true"></span><span class="screen-reader-text"><?php esc_html_e( 'Ver imágenes', 'inpulsia-medios' ); ?></span></button><?php endif; ?>
+						<?php echo esc_html( mysql2date( 'd/m/Y H:i', $e['date'] ) ); ?></td>
 						<td><?php echo esc_html( inpulsia_medios_history_label( $e['file'] ) ); ?></td>
 						<td><?php echo esc_html( $e['user'] ); ?></td>
 						<td><?php echo (int) $e['rows']; ?></td>
@@ -486,6 +552,22 @@ function inpulsia_medios_tab_historial() {
 							<?php endif; ?>
 						</td>
 					</tr>
+					<?php if ( $ids ) : ?>
+						<tr class="im-history-detail" id="im-h-<?php echo esc_attr( $e['token'] ); ?>" hidden>
+							<td colspan="7">
+								<ul class="im-history-images">
+									<?php foreach ( array_slice( $ids, 0, 100 ) as $id ) : ?>
+										<li>
+											<?php echo wp_get_attachment_image( $id, [ 40, 40 ] ); ?>
+											<a href="<?php echo esc_url( (string) get_edit_post_link( $id ) ); ?>" target="_blank" rel="noopener"><?php echo esc_html( get_the_title( $id ) ?: '#' . $id ); ?></a>
+											<button type="button" class="button button-small im-undo-one" data-token="<?php echo esc_attr( $e['token'] ); ?>" data-id="<?php echo (int) $id; ?>"><?php esc_html_e( 'Deshacer esta', 'inpulsia-medios' ); ?></button>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+								<?php if ( count( $ids ) > 100 ) : ?><p class="muted"><?php echo esc_html( sprintf( __( 'Y %d más.', 'inpulsia-medios' ), count( $ids ) - 100 ) ); ?></p><?php endif; ?>
+							</td>
+						</tr>
+					<?php endif; ?>
 				<?php endforeach; ?>
 				</tbody>
 			</table>
@@ -566,11 +648,18 @@ function inpulsia_medios_tab_ajustes() {
 	$s         = inpulsia_medios_settings();
 	$from_conf = defined( 'INPULSIA_MEDIOS_CLAUDE_KEY' ) && INPULSIA_MEDIOS_CLAUDE_KEY;
 	?>
-	<div class="inpulsia-medios-card">
-		<h2><?php esc_html_e( 'Sugerencias con IA', 'inpulsia-medios' ); ?></h2>
-		<?php if ( isset( $_GET['saved'] ) ) : ?>
-			<div class="notice notice-success inline"><p><?php esc_html_e( 'Ajustes guardados.', 'inpulsia-medios' ); ?></p></div>
-		<?php endif; ?>
+	<nav class="im-subnav" aria-label="<?php esc_attr_e( 'Secciones de ajustes', 'inpulsia-medios' ); ?>">
+		<a href="#im-opt-settings"><?php esc_html_e( 'Optimización', 'inpulsia-medios' ); ?></a>
+		<a href="#im-ai"><?php esc_html_e( 'IA', 'inpulsia-medios' ); ?></a>
+		<a href="#im-backups"><?php esc_html_e( 'Seguridad y copias', 'inpulsia-medios' ); ?></a>
+		<a href="#im-diag"><?php esc_html_e( 'Diagnóstico del servidor', 'inpulsia-medios' ); ?></a>
+	</nav>
+	<?php if ( isset( $_GET['saved'] ) ) : ?>
+		<div class="notice notice-success inline"><p><?php esc_html_e( 'Ajustes guardados.', 'inpulsia-medios' ); ?></p></div>
+	<?php endif; ?>
+	<?php inpulsia_medios_opt_settings_card(); ?>
+	<div class="inpulsia-medios-card" id="im-ai">
+		<h2><span class="dashicons dashicons-lightbulb" aria-hidden="true"></span> <?php esc_html_e( 'Sugerencias con IA', 'inpulsia-medios' ); ?></h2>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="inpulsia_medios_settings" />
 			<?php wp_nonce_field( 'inpulsia_medios_settings' ); ?>
@@ -607,20 +696,19 @@ function inpulsia_medios_tab_ajustes() {
 						<p class="description"><?php esc_html_e( 'Negocio, ubicación y palabras clave. Se envía en cada sugerencia junto con la imagen y las páginas donde aparece.', 'inpulsia-medios' ); ?></p>
 					</td>
 				</tr>
-				<tr>
-					<th scope="row"><?php esc_html_e( 'Imágenes nuevas', 'inpulsia-medios' ); ?></th>
-					<td>
-						<?php $o = inpulsia_medios_opt_settings(); ?>
-						<label><input type="checkbox" name="auto_optimize" value="1" <?php checked( $o['auto'] ); ?> /> <?php esc_html_e( 'Optimizar automáticamente cada imagen que se suba', 'inpulsia-medios' ); ?></label>
-						<p class="description"><?php esc_html_e( 'Se hace en segundo plano a los pocos segundos de subirla, con las opciones de', 'inpulsia-medios' ); ?> <em><?php esc_html_e( 'Optimizar imágenes', 'inpulsia-medios' ); ?></em> <?php esc_html_e( '(ahora:', 'inpulsia-medios' ); ?> <?php echo esc_html( strtoupper( $o['format'] ) . ', ' . $o['max_width'] . ' px, calidad ' . $o['quality'] . ( $o['ai'] ? ', nombre y alt con IA' : '' ) ); ?><?php esc_html_e( '). Queda en el Historial y se puede deshacer.', 'inpulsia-medios' ); ?></p>
-					</td>
-				</tr>
 			</table>
 			<?php submit_button( __( 'Guardar ajustes', 'inpulsia-medios' ) ); ?>
 		</form>
 	</div>
 	<?php
 	inpulsia_medios_backups_card();
+	?>
+	<div class="inpulsia-medios-card" id="im-diag">
+		<h2><span class="dashicons dashicons-admin-tools" aria-hidden="true"></span> <?php esc_html_e( 'Diagnóstico del servidor', 'inpulsia-medios' ); ?></h2>
+		<p class="description"><?php esc_html_e( 'Lo que el servidor necesita para optimizar sin errores.', 'inpulsia-medios' ); ?></p>
+		<?php inpulsia_medios_diagnostics_table(); ?>
+	</div>
+	<?php
 }
 
 function inpulsia_medios_backups_card() {
@@ -629,8 +717,8 @@ function inpulsia_medios_backups_card() {
 	list( $orphans, $orphan_bytes ) = inpulsia_medios_orphans_stats();
 	$url                   = admin_url( 'admin-post.php' );
 	?>
-	<div class="inpulsia-medios-card">
-		<h2><?php esc_html_e( 'Copias de seguridad de imágenes optimizadas', 'inpulsia-medios' ); ?></h2>
+	<div class="inpulsia-medios-card" id="im-backups">
+		<h2><span class="dashicons dashicons-shield" aria-hidden="true"></span> <?php esc_html_e( 'Seguridad y copias', 'inpulsia-medios' ); ?></h2>
 		<?php if ( isset( $_GET['orphans_deleted'] ) ) : ?>
 			<div class="notice notice-success inline"><p><?php echo (int) $_GET['orphans_deleted']; ?> <?php esc_html_e( 'archivos antiguos eliminados.', 'inpulsia-medios' ); ?></p></div>
 		<?php endif; ?>
@@ -851,6 +939,10 @@ function inpulsia_medios_ajax_opt_stage() {
 		'listed' => count( $ids ),
 		'bytes'  => size_format( $bytes, 1 ),
 		'mode'   => 'optimize',
+		'impact' => [
+			'backup' => $opts['backup'] ? __( 'Copia de seguridad en uploads/inpulsia-medios-backups: se puede deshacer desde el Historial.', 'inpulsia-medios' ) : __( 'Sin copia de seguridad: esta optimización no se podrá deshacer.', 'inpulsia-medios' ),
+			'saving' => $bytes ? sprintf( __( 'Ahorro estimado: unos %s.', 'inpulsia-medios' ), size_format( (int) ( $bytes * ( $opts['format'] === 'webp' ? 0.55 : 0.4 ) ), 1 ) ) : '',
+		],
 	] );
 }
 

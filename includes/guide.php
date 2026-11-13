@@ -78,6 +78,7 @@ function inpulsia_medios_tab_inicio() {
 	update_user_meta( get_current_user_id(), 'inpulsia_medios_welcomed', 1 );
 	?>
 	<div class="im-guide">
+		<?php inpulsia_medios_alerts_markup(); ?>
 		<section class="im-hero">
 			<h2><?php esc_html_e( 'Imágenes más ligeras, mejor posicionadas y sin romper nada', 'inpulsia-medios' ); ?></h2>
 			<p><?php esc_html_e( 'Inpulsia Medios revisa las imágenes de la biblioteca de medios y las deja listas para Google: pesan menos, tienen nombres que se entienden y un texto alternativo que describe lo que se ve. Todo se revisa antes de aplicarse y se puede deshacer.', 'inpulsia-medios' ); ?></p>

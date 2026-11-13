@@ -128,7 +128,7 @@ function inpulsia_medios_tab_limpieza() {
 		</div>
 
 		<?php if ( $errors ) : ?>
-			<div class="inpulsia-medios-card im-clean-card">
+			<div class="inpulsia-medios-card im-clean-card" id="im-errors">
 				<h2><span class="dashicons dashicons-list-view" aria-hidden="true"></span> <?php esc_html_e( 'Optimizaciones que fallaron', 'inpulsia-medios' ); ?></h2>
 				<p><?php esc_html_e( 'En todas ellas se mantuvo la imagen original.', 'inpulsia-medios' ); ?></p>
 				<div class="inpulsia-medios-scroll">

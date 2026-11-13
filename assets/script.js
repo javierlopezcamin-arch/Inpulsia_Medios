@@ -4,6 +4,7 @@
 	var cfg = window.inpulsiaMedios;
 	var token = null;
 	var applyAction = 'inpulsia_medios_apply';
+	var lastTotal = 0;
 	var runTitle = '';
 
 	// Translations come from PHP (wp_localize_script); %s placeholders are filled in order.
@@ -422,6 +423,7 @@
 		var warnCount = 0, errCount = 0;
 		var isOpt = data.mode === 'optimize';
 		applyAction = data.action || (isOpt ? 'inpulsia_medios_opt_apply' : 'inpulsia_medios_apply');
+		lastTotal = data.total;
 		runTitle = data.title || '';
 
 		$.each(data.items, function (i, item) {
@@ -485,6 +487,12 @@
 			warnCount ? txt('span', t('%s con avisos', warnCount), 'pill pill-warn') : '',
 			errCount ? txt('span', t('%s con errores', errCount), 'pill pill-error') : ''
 		);
+		if (data.impact) {
+			var $imp = $('<ul class="im-impact">');
+			$.each([data.impact.saving, data.impact.backup], function (_, l) { if (l) $imp.append(txt('li', l)); });
+			if (!data.impact.backup || data.impact.backup.indexOf('uploads/') < 0) $imp.addClass('is-risky');
+			$('#inpulsia-medios-summary').append($imp);
+		}
 		$('#inpulsia-medios-apply').prop('disabled', !data.total).text(data.label || (isOpt ? t('Optimizar %s imágenes', data.total) : t('Aplicar %s cambios', data.total)));
 		$('#inpulsia-medios-only-warn').prop('checked', false);
 		$('#inpulsia-medios-preview').prop('hidden', false);
@@ -501,7 +509,13 @@
 	});
 
 	$('#inpulsia-medios-apply').on('click', function () {
-		if (!token || !confirm(t('¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial.'))) return;
+		if (!token) return;
+		// Large optimizations need the number typed in, so nobody converts a whole library by accident.
+		if (applyAction === 'inpulsia_medios_opt_apply' && lastTotal > 100) {
+			var typed = prompt(t('Vas a optimizar %s imágenes. Escribe %s para confirmar.', lastTotal, lastTotal));
+			if (typed === null) return;
+			if (String(typed).trim() !== String(lastTotal)) { alert(t('El número no coincide: no se ha aplicado nada.')); return; }
+		} else if (!confirm(t('¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial.'))) return;
 		$('#inpulsia-medios-preview').prop('hidden', true);
 		window.inpulsiaMediosSaving = true;
 		run(applyAction, token, runTitle || (applyAction === 'inpulsia_medios_opt_apply' ? t('Optimizando imágenes') : t('Aplicando cambios')));
@@ -528,6 +542,17 @@
 		var notes = [];
 		var before = 0, after = 0;
 		$('#inpulsia-medios-run-title').text(title);
+		var handoff = false;
+		$box.find('.im-handoff').remove();
+		if (action === 'inpulsia_medios_opt_apply') {
+			$box.find('.inpulsia-medios-progress').after($('<p class="im-handoff">').append(
+				$('<button type="button" class="button">').text(t('Seguir en segundo plano')).on('click', function () {
+					handoff = true;
+					$(this).prop('disabled', true).text(t('Pasando al servidor al terminar este lote…'));
+				}),
+				' ', txt('span', t('Podrás cerrar la pestaña; el servidor sigue solo.'), 'muted')
+			));
+		}
 
 		window.onbeforeunload = function () { return true; };
 
@@ -546,6 +571,13 @@
 					$bar.css('width', pct + '%').parent().attr('aria-valuenow', pct);
 					$status.text(t('%s de %s procesados', d.next, d.total));
 					if (d.done) { purged = d.purged || []; notes = d.notes || []; finish(null); }
+					else if (handoff) {
+						$.post(cfg.ajax_url, { action: 'inpulsia_medios_bg_start', nonce: cfg.nonce, token: tok, offset: d.next }).done(function (r) {
+							window.onbeforeunload = null;
+							if (!r.success) return finish(r.data || t('Error.'), function () { step(d.next); });
+							location.href = cfg.urls.i;
+						});
+					}
 					else step(d.next);
 				})
 				.fail(function (xhr, textStatus) {
@@ -590,4 +622,103 @@
 			}
 		}
 	}
+	/* ---------- 1.8: preferences, saved filters, background jobs, history, shortcuts ---------- */
+
+	function setPref(key, value, extra) {
+		return $.post(cfg.ajax_url, $.extend({ action: 'inpulsia_medios_pref', nonce: cfg.nonce, key: key, value: value }, extra || {}));
+	}
+	$('.im-pref').on('change', function () {
+		var key = $(this).data('key'), v = $(this).val();
+		if (key === 'theme') $('.inpulsia-medios-wrap').removeClass('im-theme-auto im-theme-light im-theme-dark').addClass('im-theme-' + v);
+		if (key === 'density') $('.inpulsia-medios-grid').removeClass('is-comfortable is-compact').addClass('is-' + v);
+		setPref(key, v);
+	});
+	$('.im-col-toggle').on('change', function () {
+		var hidden = $('.im-col-toggle').not(':checked').map(function () { return this.value; }).get();
+		if (hidden.length === $('.im-col-toggle').length) { this.checked = true; return; }
+		$('.inpulsia-medios-grid').toggleClass('hide-' + this.value, !this.checked);
+		setPref('hidden', '', { cols: hidden });
+	});
+
+	$('.im-filter-save').on('click', function () {
+		var name = prompt(t('Nombre del filtro:'));
+		if (!name) return;
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_filter_save', nonce: cfg.nonce, name: name, query: location.search.replace(/^\?/, '') })
+			.done(function (r) { if (r.success) location.reload(); else alert(r.data); });
+	});
+	$('.im-filter-delete').on('click', function () {
+		if (!confirm(t('¿Borrar este filtro guardado?'))) return;
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_filter_delete', nonce: cfg.nonce, name: $(this).data('name') }).done(function () { location.reload(); });
+	});
+
+	var $bg = $('#im-bg');
+	if ($bg.length && !$bg.data('done')) {
+		(function poll() {
+			$.post(cfg.ajax_url, { action: 'inpulsia_medios_bg_status', nonce: cfg.nonce }).done(function (r) {
+				var j = r.success && r.data;
+				if (!j) return $bg.remove();
+				$bg.find('.inpulsia-medios-progress > div').css('width', (j.total ? Math.round(j.offset / j.total * 100) : 100) + '%');
+				$bg.find('.im-bg-text').text(t('%s de %s · %s errores', j.offset, j.total, j.errors));
+				if (j.done) { $bg.addClass('is-done').find('.im-bg-title').text(t('Optimización en segundo plano terminada')); return; }
+				setTimeout(poll, 5000);
+			}).fail(function () { setTimeout(poll, 15000); });
+		})();
+	}
+	$(document).on('click', '.im-bg-cancel', function () {
+		if (!$bg.hasClass('is-done') && !confirm(t('¿Detener la optimización? Lo ya hecho queda en el Historial.'))) return;
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_bg_cancel', nonce: cfg.nonce }).done(function () { $bg.remove(); });
+	});
+
+	function filterHistory() {
+		var q = ($('#im-history-search').val() || '').toLowerCase(), type = $('#im-history-type').val(), user = $('#im-history-user').val();
+		$('.im-history-row').each(function () {
+			var $r = $(this);
+			var ok = (!q || String($r.data('text')).indexOf(q) >= 0) && (!type || $r.data('type') === type) && (!user || String($r.data('user')) === user);
+			$r.toggle(ok);
+			if (!ok) $r.next('.im-history-detail').prop('hidden', true);
+		});
+	}
+	$('#im-history-search').on('input', filterHistory);
+	$('#im-history-type, #im-history-user').on('change', filterHistory);
+	$(document).on('click', '.im-history-toggle', function () {
+		var open = $(this).attr('aria-expanded') !== 'true';
+		$(this).attr('aria-expanded', open).find('.dashicons').toggleClass('dashicons-arrow-right-alt2 dashicons-arrow-down-alt2');
+		$('#' + $(this).attr('aria-controls')).prop('hidden', !open);
+	});
+	$(document).on('click', '.im-undo-one', function () {
+		var $b = $(this);
+		if (!confirm(t('¿Deshacer los cambios de esta imagen?'))) return;
+		$b.prop('disabled', true);
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_undo_one', nonce: cfg.nonce, token: $b.data('token'), id: $b.data('id') })
+			.done(function (r) {
+				if (!r.success) { alert(r.data); $b.prop('disabled', false); return; }
+				$b.replaceWith(txt('span', r.data.status === 'error' ? r.data.msg : t('Deshecho'), r.data.status === 'error' ? 'log-error' : 'muted'));
+			})
+			.fail(function () { alert(t('Error de conexión con el servidor.')); $b.prop('disabled', false); });
+	});
+
+	// Keyboard shortcuts (never while typing in a field).
+	var $keys = $('#im-keys'), lastKey = '', keysOpener = null;
+	function toggleKeys(open) {
+		$keys.prop('hidden', !open);
+		if (open) { keysOpener = document.activeElement; $keys.find('.im-keys-close').trigger('focus'); }
+		else if (keysOpener) keysOpener.focus();
+	}
+	$('.im-keys-open').on('click', function () { toggleKeys(true); });
+	$keys.on('click', function (e) { if (e.target === this || $(e.target).is('.im-keys-close')) toggleKeys(false); });
+	$(document).on('keydown', function (e) {
+		var typing = $(e.target).is('input, textarea, select, [contenteditable]');
+		if (e.key === 'Escape') {
+			if (!$keys.prop('hidden')) return toggleKeys(false);
+			if (!$('#inpulsia-medios-preview').prop('hidden')) return $('#inpulsia-medios-cancel').trigger('click');
+		}
+		if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && $('#inpulsia-medios-review').length) { e.preventDefault(); return $('#inpulsia-medios-review').trigger('click'); }
+		if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
+		if (e.key === '?') { e.preventDefault(); return toggleKeys($keys.prop('hidden')); }
+		if (e.key === '/' && $('.inpulsia-medios-filters [name="s"]').length) { e.preventDefault(); return $('.inpulsia-medios-filters [name="s"]').trigger('focus'); }
+		if (lastKey === 'g' && cfg.urls[e.key]) { location.href = cfg.urls[e.key]; }
+		lastKey = e.key;
+		setTimeout(function () { lastKey = ''; }, 1000);
+	});
+
 })(jQuery);

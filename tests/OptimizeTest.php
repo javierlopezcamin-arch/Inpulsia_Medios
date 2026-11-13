@@ -559,4 +559,44 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertFileExists( get_attached_file( $id ) );
 		$this->assertSame( 'image/png', get_post_mime_type( $id ) );
 	}
+
+	public function test_diagnostics_and_alerts_report_lost_images() {
+		$labels = wp_list_pluck( inpulsia_medios_diagnostics(), 'label' );
+		$this->assertContains( 'Conversión a WebP', $labels );
+		$id = $this->upload( 'aviso.png', 600, 300 );
+		unlink( get_attached_file( $id ) );
+		delete_transient( 'inpulsia_medios_lost_count' );
+		$alerts = inpulsia_medios_alerts();
+		$this->assertSame( 'bad', $alerts[0][0] );
+		$this->assertArrayHasKey( 'limpieza', inpulsia_medios_tab_badges() );
+	}
+
+	public function test_background_job_optimizes_every_image() {
+		$ids   = [ $this->upload( 'fondo-1.png', 1200, 600 ), $this->upload( 'fondo-2.png', 1200, 600 ), $this->upload( 'fondo-3.png', 1200, 600 ) ];
+		$token = 'fondo';
+		inpulsia_medios_history_add( [ 'token' => $token, 'date' => current_time( 'mysql' ), 'user' => 't', 'file' => 'Optimización (JPG, 2560 px)', 'rows' => 3, 'changed' => 0, 'status' => 'incompleto' ] );
+		update_option( 'inpulsia_medios_bg', [ 'token' => $token, 'user' => get_current_user_id(), 'ids' => $ids, 'opts' => inpulsia_medios_opt_sanitize( $this->opts ), 'offset' => 1, 'ok' => 0, 'errors' => 0, 'started' => time(), 'done' => false ] );
+		inpulsia_medios_bg_run();
+		$job = inpulsia_medios_bg_job();
+		$this->assertTrue( $job['done'] );
+		$this->assertSame( 2, $job['ok'] );
+		$this->assertSame( 'image/png', get_post_mime_type( $ids[0] ), 'Images before the hand-off offset are left to the browser run.' );
+		$this->assertSame( 'image/jpeg', get_post_mime_type( $ids[2] ) );
+		$this->assertSame( 'aplicado', inpulsia_medios_history_find( $token )['status'] );
+	}
+
+	public function test_one_image_can_be_undone_from_a_batch() {
+		$a     = self::factory()->attachment->create_object( [ 'file' => 'a.jpg', 'post_mime_type' => 'image/jpeg', 'post_title' => 'A' ] );
+		$b     = self::factory()->attachment->create_object( [ 'file' => 'b.jpg', 'post_mime_type' => 'image/jpeg', 'post_title' => 'B' ] );
+		$token = 'lote';
+		inpulsia_medios_history_add( [ 'token' => $token, 'date' => current_time( 'mysql' ), 'user' => 't', 'file' => 'x', 'rows' => 2, 'changed' => 0, 'status' => 'incompleto' ] );
+		inpulsia_medios_apply_rows( $token, [ [ 'id' => $a, 'alt' => 'alt a' ], [ 'id' => $b, 'alt' => 'alt b' ] ] );
+		$log  = get_option( 'inpulsia_medios_log_' . $token );
+		$mine = array_values( array_filter( $log, function ( $e ) use ( $a ) {
+			return (int) $e['id'] === $a;
+		} ) );
+		inpulsia_medios_undo_rows( $mine );
+		$this->assertSame( '', get_post_meta( $a, '_wp_attachment_image_alt', true ) );
+		$this->assertSame( 'alt b', get_post_meta( $b, '_wp_attachment_image_alt', true ) );
+	}
 }

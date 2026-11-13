@@ -51,10 +51,7 @@ function inpulsia_medios_save_settings() {
 
 	update_option( 'inpulsia_medios_settings', $s, false );
 
-	$opt         = inpulsia_medios_opt_settings();
-	$opt['auto'] = ! empty( $_POST['auto_optimize'] );
-	update_option( 'inpulsia_medios_opt', $opt, false );
-	wp_safe_redirect( admin_url( 'upload.php?page=inpulsia-medios&tab=ajustes&saved=1' ) );
+	wp_safe_redirect( admin_url( 'upload.php?page=inpulsia-medios&tab=ajustes&saved=1' ) . '#im-ai' );
 	exit;
 }
 
