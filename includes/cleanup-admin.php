@@ -11,6 +11,7 @@ function inpulsia_medios_clean_labels() {
 		'unused' => 'Limpieza: imágenes sin uso',
 		'dupes'  => 'Limpieza: duplicados',
 		'broken' => 'Limpieza: imágenes rotas',
+		'lost'   => 'Limpieza: recuperar archivos perdidos',
 	];
 }
 
@@ -39,8 +40,33 @@ function inpulsia_medios_tab_limpieza() {
 	$fixable = $broken ? count( array_filter( $broken['items'], function ( $b ) {
 		return $b['fix'] !== '';
 	} ) ) : 0;
+	$lost       = inpulsia_medios_lost_files();
+	$recoverable = count( array_filter( wp_list_pluck( $lost, 'backup' ) ) );
+	$errors     = array_reverse( (array) get_option( 'inpulsia_medios_errors', [] ) );
 	?>
 	<div id="im-clean">
+		<?php if ( $lost ) : ?>
+			<div class="inpulsia-medios-card im-clean-card im-clean-alert">
+				<h2><span class="dashicons dashicons-dismiss" aria-hidden="true"></span> <?php esc_html_e( 'Imágenes sin archivo en el servidor', 'inpulsia-medios' ); ?></h2>
+				<p class="im-clean-figure"><strong><?php echo esc_html( number_format_i18n( count( $lost ) ) ); ?></strong> <?php esc_html_e( 'imágenes', 'inpulsia-medios' ); ?> · <?php echo esc_html( sprintf( __( '%d se pueden recuperar de una copia', 'inpulsia-medios' ), $recoverable ) ); ?></p>
+				<p><?php esc_html_e( 'La biblioteca las tiene, pero el archivo ya no está en uploads, así que la web las muestra rotas.', 'inpulsia-medios' ); ?></p>
+				<div class="inpulsia-medios-scroll">
+				<table class="wp-list-table widefat striped">
+					<thead><tr><th>ID</th><th><?php esc_html_e( 'Archivo que falta', 'inpulsia-medios' ); ?></th><th><?php esc_html_e( 'Copia de seguridad', 'inpulsia-medios' ); ?></th></tr></thead>
+					<tbody>
+					<?php foreach ( array_slice( $lost, 0, 50 ) as $l ) : ?>
+						<tr>
+							<td><a href="<?php echo esc_url( (string) get_edit_post_link( $l['id'] ) ); ?>" target="_blank" rel="noopener"><?php echo (int) $l['id']; ?></a></td>
+							<td><code><?php echo esc_html( $l['file'] ); ?></code></td>
+							<td><?php echo $l['backup'] ? esc_html__( 'Sí', 'inpulsia-medios' ) : '<span class="muted">' . esc_html__( 'No: vuelve a subirla o cámbiala en las páginas', 'inpulsia-medios' ) . '</span>'; ?></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+				</div>
+				<p><button type="button" class="button button-primary im-clean-stage" data-kind="lost" <?php disabled( ! $recoverable ); ?>><?php echo esc_html( sprintf( __( 'Recuperar las %d con copia', 'inpulsia-medios' ), $recoverable ) ); ?></button></p>
+			</div>
+		<?php endif; ?>
 		<p class="description im-clean-intro"><?php esc_html_e( 'Antes de borrar o cambiar nada verás la lista completa. Las imágenes borradas se guardan en una copia y se pueden recuperar desde el Historial.', 'inpulsia-medios' ); ?></p>
 
 		<div class="inpulsia-medios-card im-clean-card">
@@ -100,6 +126,26 @@ function inpulsia_medios_tab_limpieza() {
 				<?php endif; ?>
 			<?php endif; ?>
 		</div>
+
+		<?php if ( $errors ) : ?>
+			<div class="inpulsia-medios-card im-clean-card">
+				<h2><span class="dashicons dashicons-list-view" aria-hidden="true"></span> <?php esc_html_e( 'Optimizaciones que fallaron', 'inpulsia-medios' ); ?></h2>
+				<p><?php esc_html_e( 'En todas ellas se mantuvo la imagen original.', 'inpulsia-medios' ); ?></p>
+				<div class="inpulsia-medios-scroll">
+				<table class="wp-list-table widefat striped">
+					<tbody>
+					<?php foreach ( array_slice( $errors, 0, 30 ) as $e ) : ?>
+						<tr>
+							<td><?php echo esc_html( wp_date( 'd/m/Y H:i', $e['time'] ) ); ?></td>
+							<td><a href="<?php echo esc_url( (string) get_edit_post_link( $e['id'] ) ); ?>" target="_blank" rel="noopener"><?php echo esc_html( get_the_title( $e['id'] ) ?: '#' . $e['id'] ); ?></a></td>
+							<td><?php echo esc_html( $e['msg'] ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+				</div>
+			</div>
+		<?php endif; ?>
 	</div>
 	<?php
 	inpulsia_medios_preview_markup();
@@ -142,6 +188,14 @@ function inpulsia_medios_ajax_clean_stage() {
 			$jobs[]  = $b + [ 'id' => $b['post'] ];
 			$items[] = [ 'id' => $b['post'], 'edit' => get_edit_post_link( $b['post'], 'raw' ), 'thumb' => '', 'name' => get_the_title( $b['post'] ), 'lines' => [ $b['path'] . ' → ' . $b['fix'] ], 'warnings' => [] ];
 		}
+	} elseif ( $kind === 'lost' ) {
+		foreach ( inpulsia_medios_lost_files() as $l ) {
+			if ( $l['backup'] === '' ) {
+				continue;
+			}
+			$jobs[]  = [ 'id' => $l['id'], 'backup' => $l['backup'] ];
+			$items[] = [ 'id' => $l['id'], 'edit' => get_edit_post_link( $l['id'], 'raw' ), 'thumb' => '', 'name' => $l['file'], 'lines' => [ __( 'Se recupera el archivo desde la copia de seguridad', 'inpulsia-medios' ) ], 'warnings' => [] ];
+		}
 	} else {
 		wp_send_json_error( __( 'Acción no válida.', 'inpulsia-medios' ) );
 	}
@@ -154,6 +208,7 @@ function inpulsia_medios_ajax_clean_stage() {
 		'unused' => __( 'Mandar %d imágenes a la papelera', 'inpulsia-medios' ),
 		'dupes'  => __( 'Unificar %d duplicados', 'inpulsia-medios' ),
 		'broken' => __( 'Reparar %d enlaces', 'inpulsia-medios' ),
+		'lost'   => __( 'Recuperar %d imágenes', 'inpulsia-medios' ),
 	];
 	wp_send_json_success( [
 		'token'  => $token,
@@ -191,7 +246,10 @@ function inpulsia_medios_ajax_clean_apply() {
 	$log     = get_option( 'inpulsia_medios_log_' . $token, [] );
 	$results = [];
 	foreach ( array_slice( $jobs, $offset, 5 ) as $job ) {
-		if ( $data['kind'] === 'broken' ) {
+		if ( $data['kind'] === 'lost' ) {
+			$ok = inpulsia_medios_backup_restore( $job['backup'] );
+			$r  = is_wp_error( $ok ) ? [ 'status' => 'error', 'msg' => $ok->get_error_message() ] : [ 'status' => 'ok', 'msg' => __( 'Imagen recuperada.', 'inpulsia-medios' ) ];
+		} elseif ( $data['kind'] === 'broken' ) {
 			$ok = inpulsia_medios_broken_repair( $job['post'], $job['path'], $job['fix'] );
 			$r  = $ok ? [ 'status' => 'ok', 'msg' => $job['path'] . ' → ' . $job['fix'] ] : [ 'status' => 'skip', 'msg' => __( 'Sin cambios.', 'inpulsia-medios' ) ];
 		} else {

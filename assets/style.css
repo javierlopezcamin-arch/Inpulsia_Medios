@@ -170,3 +170,5 @@
 .im-dupe-group { display: flex; align-items: center; gap: 6px; border: 1px solid var(--im-line); border-radius: 6px; padding: 4px 8px 4px 4px; background: #fff; }
 .im-dupe-group img { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; display: block; }
 .im-broken code { word-break: break-all; }
+
+.im-clean-alert { border-left: 4px solid #d63638; }

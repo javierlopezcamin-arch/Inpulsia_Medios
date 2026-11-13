@@ -425,3 +425,27 @@ function inpulsia_medios_repair_elementor_ids_once() {
 		inpulsia_medios_purge_caches();
 	}
 }
+
+// Attachments whose main file is gone from the server, with the newest Inpulsia backup that can bring it back.
+function inpulsia_medios_lost_files() {
+	global $wpdb;
+	$base = wp_get_upload_dir()['basedir'];
+	$out  = [];
+	foreach ( $wpdb->get_results( "SELECT m.post_id AS id, m.meta_value AS file FROM {$wpdb->postmeta} m JOIN {$wpdb->posts} p ON p.ID = m.post_id WHERE m.meta_key = '_wp_attached_file' AND p.post_type = 'attachment' AND p.post_mime_type LIKE 'image/%'" ) as $r ) {
+		if ( $r->file === '' || file_exists( $base . '/' . $r->file ) ) {
+			continue;
+		}
+		$out[] = [ 'id' => (int) $r->id, 'file' => $r->file, 'backup' => inpulsia_medios_latest_backup( (int) $r->id ) ];
+	}
+	return $out;
+}
+
+function inpulsia_medios_latest_backup( $id ) {
+	$dirs = glob( inpulsia_medios_backup_dir() . '/' . (int) $id . '-*', GLOB_ONLYDIR ) ?: [];
+	$dirs = array_filter( $dirs, function ( $d ) {
+		return is_file( $d . '/backup.json' );
+	} );
+	sort( $dirs );
+	return $dirs ? basename( end( $dirs ) ) : '';
+}
+

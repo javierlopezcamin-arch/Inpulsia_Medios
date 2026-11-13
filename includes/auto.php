@@ -16,7 +16,7 @@ function inpulsia_medios_auto_schedule( $id ) {
 	if ( ! inpulsia_medios_auto_enabled() || strpos( (string) get_post_mime_type( $id ), 'image/' ) !== 0 ) {
 		return;
 	}
-	wp_schedule_single_event( time() + 30, 'inpulsia_medios_auto_optimize', [ (int) $id, 0 ] );
+	wp_schedule_single_event( time() + 2 * MINUTE_IN_SECONDS, 'inpulsia_medios_auto_optimize', [ (int) $id, 0 ] );
 }
 
 function inpulsia_medios_auto_run( $id, $attempt = 0 ) {
@@ -25,7 +25,9 @@ function inpulsia_medios_auto_run( $id, $attempt = 0 ) {
 		return;
 	}
 	// Sub-sizes may still be generating: try again a little later.
-	if ( ! wp_get_attachment_metadata( $id ) && $attempt < 3 ) {
+	// WordPress saves the metadata after each size, so wait until the upload is a couple of minutes old too.
+	$young = time() - (int) get_post_time( 'U', true, $post ) < 90;
+	if ( ( $young || ! wp_get_attachment_metadata( $id ) ) && $attempt < 3 ) {
 		wp_schedule_single_event( time() + 60, 'inpulsia_medios_auto_optimize', [ (int) $id, $attempt + 1 ] );
 		return;
 	}

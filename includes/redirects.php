@@ -78,6 +78,11 @@ function inpulsia_medios_redirect() {
 	if ( ! $row ) {
 		return;
 	}
+	// Never send visitors to a file that is not there: a plain 404 is better than a redirect to one.
+	$upath = inpulsia_medios_uploads_path();
+	if ( strpos( $row->target, $upath . '/' ) === 0 && ! file_exists( wp_get_upload_dir()['basedir'] . '/' . rawurldecode( substr( $row->target, strlen( $upath ) + 1 ) ) ) ) {
+		return;
+	}
 	$wpdb->query( $wpdb->prepare( 'UPDATE %i SET hits = hits + 1 WHERE id = %d', $table, $row->id ) );
 	wp_safe_redirect( $row->target, 301, 'Inpulsia Medios' );
 	exit;

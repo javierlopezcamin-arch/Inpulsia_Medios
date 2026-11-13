@@ -523,4 +523,34 @@ class OptimizeTest extends WP_UnitTestCase {
 		unset( $_GET['per_page'] );
 		$this->assertSame( 100, inpulsia_medios_per_page() );
 	}
+
+	public function test_concurrent_optimization_of_the_same_image_is_refused() {
+		$id = $this->upload( 'bloqueo.png', 1200, 600 );
+		$this->assertTrue( inpulsia_medios_lock( $id ) );
+		$r = inpulsia_medios_optimize( $id, $this->opts );
+		$this->assertSame( 'skip', $r['status'] );
+		$this->assertFileExists( get_attached_file( $id ) );
+		inpulsia_medios_unlock( $id );
+		$r = inpulsia_medios_optimize( $id, $this->opts );
+		$this->assertSame( 'ok', $r['status'], $r['msg'] );
+		$this->assertFileExists( get_attached_file( $id ) );
+		$this->assertTrue( inpulsia_medios_lock( $id ), 'The lock is released after a run.' );
+		inpulsia_medios_unlock( $id );
+	}
+
+	public function test_lost_file_is_listed_and_recovered_from_backup() {
+		$id   = $this->upload( 'perdida.png', 1200, 600 );
+		$r    = inpulsia_medios_optimize( $id, [ 'format' => 'webp' ] + $this->opts );
+		$this->assertSame( 'ok', $r['status'], $r['msg'] );
+		list( $dir, $names ) = inpulsia_medios_meta_files( $id );
+		foreach ( $names as $n ) {
+			unlink( $dir . '/' . $n );
+		}
+		$lost = wp_list_pluck( inpulsia_medios_lost_files(), 'backup', 'id' );
+		$this->assertArrayHasKey( $id, $lost );
+		$this->assertNotSame( '', $lost[ $id ] );
+		$this->assertTrue( inpulsia_medios_backup_restore( $lost[ $id ] ) );
+		$this->assertFileExists( get_attached_file( $id ) );
+		$this->assertSame( 'image/png', get_post_mime_type( $id ) );
+	}
 }

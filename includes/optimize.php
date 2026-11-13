@@ -164,7 +164,52 @@ function inpulsia_medios_opt_plan( $id, $opts ) {
  * Converts, resizes and recompresses one attachment. Optional AI name and alt.
  * Returns [ status, msg, before, after, prev ] where prev feeds the undo log.
  */
+/**
+ * One optimization per image at a time. A retried request or the upload cron working on the same image
+ * would otherwise delete the files the other one just wrote (menamarprojects.com, 1.7.0).
+ */
+function inpulsia_medios_lock( $id ) {
+	global $wpdb;
+	$name = 'inpulsia_medios_lock_' . (int) $id;
+	$now  = time();
+	$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name = %s AND option_value < %d", $name, $now - 10 * MINUTE_IN_SECONDS ) );
+	$ok = (bool) $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO {$wpdb->options} (option_name, option_value, autoload) VALUES (%s, %s, 'no')", $name, (string) $now ) );
+	wp_cache_delete( $name, 'options' );
+	wp_cache_delete( 'notoptions', 'options' );
+	return $ok;
+}
+
+function inpulsia_medios_unlock( $id ) {
+	global $wpdb;
+	$wpdb->delete( $wpdb->options, [ 'option_name' => 'inpulsia_medios_lock_' . (int) $id ] );
+	wp_cache_delete( 'inpulsia_medios_lock_' . (int) $id, 'options' );
+}
+
+// Failed optimizations, shown in Limpieza so nobody has to find them in the server logs.
+function inpulsia_medios_errors_add( $id, $msg ) {
+	$list   = (array) get_option( 'inpulsia_medios_errors', [] );
+	$list[] = [ 'id' => (int) $id, 'time' => time(), 'msg' => (string) $msg ];
+	update_option( 'inpulsia_medios_errors', array_slice( $list, -100 ), false );
+}
+
 function inpulsia_medios_optimize( $id, $opts ) {
+	if ( ! inpulsia_medios_lock( $id ) ) {
+		return [ 'status' => 'skip', 'msg' => __( 'Esta imagen ya se está procesando en otra pestaña o en segundo plano; no se toca.', 'inpulsia-medios' ) ];
+	}
+	try {
+		clean_post_cache( $id );
+		wp_cache_delete( $id, 'post_meta' );
+		$r = inpulsia_medios_optimize_locked( $id, $opts );
+	} finally {
+		inpulsia_medios_unlock( $id );
+	}
+	if ( $r['status'] === 'error' ) {
+		inpulsia_medios_errors_add( $id, $r['msg'] );
+	}
+	return $r;
+}
+
+function inpulsia_medios_optimize_locked( $id, $opts ) {
 	global $wpdb;
 	$opts = inpulsia_medios_opt_sanitize( $opts );
 	$post = get_post( $id );
@@ -302,10 +347,13 @@ function inpulsia_medios_optimize( $id, $opts ) {
 		@unlink( $staged );
 		return [ 'status' => 'error', 'msg' => __( 'No se pudo escribir la imagen nueva en uploads (permisos o espacio); el original no se ha tocado.', 'inpulsia-medios' ), 'prev' => $prev ];
 	}
-	// Optimizer copies (.webp/.avif next to the file) would serve the old picture: remove them now.
+	// Optimizer copies (photo.jpg.webp, photo.jpg.avif) would serve the old picture: remove them now.
+	// Only exact copies of a file of this image, never anything else that happens to share the name.
 	list( , $old_meta_files ) = inpulsia_medios_meta_files( $id );
 	foreach ( array_diff( $old_files, $old_meta_files ) as $f ) {
-		@unlink( $dir . '/' . $f );
+		if ( preg_match( '/^(.+)\.(webp|avif)$/i', $f, $m ) && in_array( $m[1], $old_meta_files, true ) ) {
+			@unlink( $dir . '/' . $f );
+		}
 	}
 	if ( ! @rename( $staged, $dir . '/' . $new_name ) ) {
 		$new_name = basename( $staged );
@@ -323,6 +371,30 @@ function inpulsia_medios_optimize( $id, $opts ) {
 	wp_update_attachment_metadata( $id, $new_meta );
 	$new_main = basename( get_attached_file( $id ) );
 	list( , $new_meta_files ) = inpulsia_medios_meta_files( $id );
+
+	// Check every new file is really on disk before the old ones are let go; otherwise go back to the original.
+	clearstatcache();
+	$missing = [];
+	foreach ( $new_meta_files as $f ) {
+		if ( ! file_exists( $dir . '/' . $f ) || ! filesize( $dir . '/' . $f ) ) {
+			$missing[] = $f;
+		}
+	}
+	if ( $missing ) {
+		foreach ( array_diff( $new_meta_files, $old_meta_files ) as $f ) {
+			@unlink( $dir . '/' . $f );
+		}
+		if ( $backup && ! file_exists( $file ) ) {
+			inpulsia_medios_backup_restore( $backup );
+		} else {
+			update_attached_file( $id, $file );
+			wp_update_attachment_metadata( $id, $old_meta );
+			$wpdb->update( $wpdb->posts, [ 'post_mime_type' => $mime, 'guid' => wp_get_attachment_url( $id ) ], [ 'ID' => $id ] );
+			clean_post_cache( $id );
+			inpulsia_medios_siblings_sync( $id, $siblings );
+		}
+		return [ 'status' => 'error', 'msg' => sprintf( __( 'La imagen nueva no se ha generado bien (falta %s); se mantiene la original sin cambios.', 'inpulsia-medios' ), implode( ', ', array_slice( $missing, 0, 3 ) ) ), 'prev' => $prev ];
+	}
 	foreach ( $new_meta_files as $f ) {
 		inpulsia_medios_fix_perms( $dir . '/' . $f );
 	}
