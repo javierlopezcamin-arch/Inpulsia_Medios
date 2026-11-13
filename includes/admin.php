@@ -788,6 +788,7 @@ function inpulsia_medios_backups_action() {
 }
 
 function inpulsia_medios_check_ajax() {
+	inpulsia_medios_ajax_guard();
 	check_ajax_referer( 'inpulsia_medios_nonce', 'nonce' );
 	if ( ! current_user_can( 'upload_files' ) ) {
 		wp_send_json_error( __( 'No tienes permisos para editar medios.', 'inpulsia-medios' ) );
@@ -1049,3 +1050,39 @@ function inpulsia_medios_today_changes() {
 function inpulsia_medios_autosave_token() {
 	return inpulsia_medios_daily_token( 'autosave', 'Guardado automático en tabla' );
 }
+
+/*
+ * Keeps AJAX answers valid JSON on real sites: PHP notices printed by other plugins (or by hooks that run while
+ * renaming) are dropped, and a fatal error comes back as a readable message instead of "Error de conexión".
+ */
+function inpulsia_medios_ajax_guard() {
+	static $on = false;
+	if ( $on ) {
+		return;
+	}
+	$on = true;
+	if ( function_exists( 'set_time_limit' ) ) {
+		@set_time_limit( 120 );
+	}
+	ob_start( function ( $buffer ) {
+		$pos = strpos( $buffer, '{"success":' );
+		return $pos > 0 ? substr( $buffer, $pos ) : $buffer;
+	} );
+	register_shutdown_function( function () {
+		$e = error_get_last();
+		if ( ! $e || ! in_array( $e['type'], [ E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR ], true ) ) {
+			return;
+		}
+		while ( ob_get_level() ) {
+			ob_end_clean();
+		}
+		if ( ! headers_sent() ) {
+			header( 'Content-Type: application/json; charset=utf-8' );
+		}
+		echo wp_json_encode( [
+			'success' => false,
+			'data'    => sprintf( __( 'Error del servidor: %1$s (%2$s, línea %3$d)', 'inpulsia-medios' ), wp_strip_all_tags( strtok( $e['message'], "\n" ) ), basename( $e['file'] ), $e['line'] ),
+		] );
+	} );
+}
+

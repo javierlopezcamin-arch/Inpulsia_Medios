@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inpulsia Medios\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 22:57+0100\n"
+"POT-Creation-Date: 2026-11-13 23:20+0100\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -816,59 +816,64 @@ msgstr "Esborra-les totes"
 msgid "Solo los administradores pueden borrar copias."
 msgstr "Només els administradors poden esborrar còpies."
 
-#: includes/admin.php:793
+#: includes/admin.php:794
 msgid "No tienes permisos para editar medios."
 msgstr "No tens permisos per editar mitjans."
 
-#: includes/admin.php:812
+#: includes/admin.php:813
 msgid "Error al subir el archivo."
 msgstr "Error en pujar el fitxer."
 
-#: includes/admin.php:820 includes/cli.php:52
+#: includes/admin.php:821 includes/cli.php:52
 msgid "El archivo está vacío o no tiene columna ID."
 msgstr "El fitxer és buit o no té columna ID."
 
-#: includes/admin.php:839
+#: includes/admin.php:840
 msgid "No hay cambios que revisar."
 msgstr "No hi ha canvis per revisar."
 
-#: includes/admin.php:851 includes/bulk-filter.php:135
+#: includes/admin.php:852 includes/bulk-filter.php:135
 #: includes/cleanup-admin.php:232
 msgid "La sesión ha caducado. Vuelve a cargar los cambios."
 msgstr "La sessió ha caducat. Torna a carregar els canvis."
 
-#: includes/admin.php:889
+#: includes/admin.php:890
 msgid "Esta importación no se puede deshacer."
 msgstr "Aquesta importació no es pot desfer."
 
-#: includes/admin.php:924
+#: includes/admin.php:925
 msgid "No hay imágenes seleccionadas."
 msgstr "No hi ha imatges seleccionades."
 
-#: includes/admin.php:964
+#: includes/admin.php:965
 msgid "Copia de seguridad en uploads/inpulsia-medios-backups: se puede deshacer desde el Historial."
 msgstr "Còpia de seguretat a uploads/inpulsia-medios-backups: es pot desfer des de l'Historial."
 
-#: includes/admin.php:964
+#: includes/admin.php:965
 msgid "Sin copia de seguridad: esta optimización no se podrá deshacer."
 msgstr "Sense còpia de seguretat: aquesta optimització no es podrà desfer."
 
-#: includes/admin.php:965
+#: includes/admin.php:966
 #, php-format
 msgid "Ahorro estimado: unos %s."
 msgstr "Estalvi estimat: uns %s."
 
-#: includes/admin.php:976 includes/ux.php:311
+#: includes/admin.php:977 includes/ux.php:311
 msgid "La sesión ha caducado. Vuelve a lanzar la optimización."
 msgstr "La sessió ha caducat. Torna a llançar l'optimització."
 
-#: includes/admin.php:1017
+#: includes/admin.php:1018
 msgid "Este campo no se guarda automáticamente."
 msgstr "Aquest camp no es desa automàticament."
 
-#: includes/admin.php:1020
+#: includes/admin.php:1021
 msgid "El nombre de archivo no puede quedar vacío."
 msgstr "El nom del fitxer no pot quedar buit."
+
+#: includes/admin.php:1084
+#, php-format
+msgid "Error del servidor: %1$s (%2$s, línea %3$d)"
+msgstr "Error del servidor: %1$s (%2$s, línia %3$d)"
 
 #: includes/ai.php:13
 msgid "Claude Opus 5.5 (mejor calidad)"
@@ -2514,6 +2519,33 @@ msgstr "En aquesta pàgina no falta res. Fes servir les dreceres «Sense alt» o
 #: includes/i18n-js.php:102
 msgid "Sin IA: sacado de la página"
 msgstr "Sense IA: tret de la pàgina"
+
+#: includes/i18n-js.php:103
+msgid "el servidor ha tardado demasiado"
+msgstr "el servidor ha trigat massa"
+
+#: includes/i18n-js.php:104
+#, php-format
+msgid "error %s del servidor"
+msgstr "error %s del servidor"
+
+#: includes/i18n-js.php:105
+msgid "respuesta no válida del servidor"
+msgstr "resposta no vàlida del servidor"
+
+#: includes/i18n-js.php:106
+#, php-format
+msgid "error %s"
+msgstr "error %s"
+
+#: includes/i18n-js.php:107
+#, php-format
+msgid "No se ha guardado: %s."
+msgstr "No s'ha desat: %s."
+
+#: includes/i18n-js.php:108
+msgid "Reintentar"
+msgstr "Torna-ho a provar"
 
 #: includes/media.php:15
 msgid "SEO de imagen"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inpulsia Medios\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 22:57+0100\n"
+"POT-Creation-Date: 2026-11-13 23:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -825,58 +825,63 @@ msgstr ""
 msgid "Solo los administradores pueden borrar copias."
 msgstr ""
 
-#: includes/admin.php:793
+#: includes/admin.php:794
 msgid "No tienes permisos para editar medios."
 msgstr ""
 
-#: includes/admin.php:812
+#: includes/admin.php:813
 msgid "Error al subir el archivo."
 msgstr ""
 
-#: includes/admin.php:820 includes/cli.php:52
+#: includes/admin.php:821 includes/cli.php:52
 msgid "El archivo está vacío o no tiene columna ID."
 msgstr ""
 
-#: includes/admin.php:839
+#: includes/admin.php:840
 msgid "No hay cambios que revisar."
 msgstr ""
 
-#: includes/admin.php:851 includes/bulk-filter.php:135
+#: includes/admin.php:852 includes/bulk-filter.php:135
 #: includes/cleanup-admin.php:232
 msgid "La sesión ha caducado. Vuelve a cargar los cambios."
 msgstr ""
 
-#: includes/admin.php:889
+#: includes/admin.php:890
 msgid "Esta importación no se puede deshacer."
 msgstr ""
 
-#: includes/admin.php:924
+#: includes/admin.php:925
 msgid "No hay imágenes seleccionadas."
 msgstr ""
 
-#: includes/admin.php:964
+#: includes/admin.php:965
 msgid "Copia de seguridad en uploads/inpulsia-medios-backups: se puede deshacer desde el Historial."
 msgstr ""
 
-#: includes/admin.php:964
+#: includes/admin.php:965
 msgid "Sin copia de seguridad: esta optimización no se podrá deshacer."
 msgstr ""
 
-#: includes/admin.php:965
+#: includes/admin.php:966
 #, php-format
 msgid "Ahorro estimado: unos %s."
 msgstr ""
 
-#: includes/admin.php:976 includes/ux.php:311
+#: includes/admin.php:977 includes/ux.php:311
 msgid "La sesión ha caducado. Vuelve a lanzar la optimización."
 msgstr ""
 
-#: includes/admin.php:1017
+#: includes/admin.php:1018
 msgid "Este campo no se guarda automáticamente."
 msgstr ""
 
-#: includes/admin.php:1020
+#: includes/admin.php:1021
 msgid "El nombre de archivo no puede quedar vacío."
+msgstr ""
+
+#: includes/admin.php:1084
+#, php-format
+msgid "Error del servidor: %1$s (%2$s, línea %3$d)"
 msgstr ""
 
 #: includes/ai.php:13
@@ -2522,6 +2527,33 @@ msgstr ""
 
 #: includes/i18n-js.php:102
 msgid "Sin IA: sacado de la página"
+msgstr ""
+
+#: includes/i18n-js.php:103
+msgid "el servidor ha tardado demasiado"
+msgstr ""
+
+#: includes/i18n-js.php:104
+#, php-format
+msgid "error %s del servidor"
+msgstr ""
+
+#: includes/i18n-js.php:105
+msgid "respuesta no válida del servidor"
+msgstr ""
+
+#: includes/i18n-js.php:106
+#, php-format
+msgid "error %s"
+msgstr ""
+
+#: includes/i18n-js.php:107
+#, php-format
+msgid "No se ha guardado: %s."
+msgstr ""
+
+#: includes/i18n-js.php:108
+msgid "Reintentar"
 msgstr ""
 
 #: includes/media.php:15

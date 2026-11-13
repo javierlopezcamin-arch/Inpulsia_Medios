@@ -100,5 +100,11 @@ function inpulsia_medios_js_i18n() {
 		'Tab acepta la sugerencia en gris.' => __( 'Tab acepta la sugerencia en gris.', 'inpulsia-medios' ),
 		'En esta página no falta nada. Usa los atajos «Sin alt» o «Nombres de cámara» para ver más.' => __( 'En esta página no falta nada. Usa los atajos «Sin alt» o «Nombres de cámara» para ver más.', 'inpulsia-medios' ),
 		'Sin IA: sacado de la página' => __( 'Sin IA: sacado de la página', 'inpulsia-medios' ),
+		'el servidor ha tardado demasiado' => __( 'el servidor ha tardado demasiado', 'inpulsia-medios' ),
+		'error %s del servidor' => __( 'error %s del servidor', 'inpulsia-medios' ),
+		'respuesta no válida del servidor' => __( 'respuesta no válida del servidor', 'inpulsia-medios' ),
+		'error %s' => __( 'error %s', 'inpulsia-medios' ),
+		'No se ha guardado: %s.' => __( 'No se ha guardado: %s.', 'inpulsia-medios' ),
+		'Reintentar' => __( 'Reintentar', 'inpulsia-medios' ),
 	];
 }

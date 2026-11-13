@@ -162,10 +162,15 @@
 		$td.find('.im-cell-undo').remove();
 		var sent = $f.val();
 		pending++;
-		return $.post(cfg.ajax_url, { action: 'inpulsia_medios_autosave', nonce: cfg.nonce, id: $f.closest('tr').data('id'), field: field, value: sent }, null, 'json')
+		return $.ajax({ url: cfg.ajax_url, type: 'POST', dataType: 'json', timeout: field === 'filename' ? 120000 : 30000, data: { action: 'inpulsia_medios_autosave', nonce: cfg.nonce, id: $f.closest('tr').data('id'), field: field, value: sent } })
 			.done(function (res) {
-				if (!res.success) { $td.addClass('is-save-error').attr('title', res.data || t('Error')); return; }
-				$td.removeAttr('title');
+				if (!res.success) {
+					$td.addClass('is-save-error').attr('title', res.data || t('Error'));
+					$td.find('.im-save-msg').remove();
+					$td.append(txt('small', res.data || t('Error'), 'im-save-msg log-error'));
+					return;
+				}
+				$td.removeAttr('title').find('.im-save-msg').remove();
 				$f.attr('data-orig', res.data.value);
 				if ($f.val() === sent) $f.val(res.data.value);
 				$f.removeClass('is-ai');
@@ -182,7 +187,14 @@
 				updateRowState($f.closest('tr'));
 				sheetSync();
 			})
-			.fail(function () { $td.addClass('is-save-error').attr('title', t('Error de conexión: no se ha guardado')); })
+			.fail(function (xhr, status) {
+				var why = status === 'timeout' ? t('el servidor ha tardado demasiado') : xhr.status >= 500 ? t('error %s del servidor', xhr.status) : status === 'parsererror' ? t('respuesta no válida del servidor') : xhr.status === 0 ? t('sin conexión') : t('error %s', xhr.status);
+				var msg = t('No se ha guardado: %s.', why);
+				$td.addClass('is-save-error').attr('title', msg);
+				$td.find('.im-save-msg').remove();
+				$td.append($('<button type="button" class="button-link im-save-msg">').text(msg + ' ' + t('Reintentar')).on('click', function () { $(this).remove(); save($f); }));
+				if (window.console) console.warn('Inpulsia Medios', field, status, xhr.status, (xhr.responseText || '').slice(0, 500));
+			})
 			.always(function () { pending--; $td.removeClass('is-saving'); updateRowState($f.closest('tr')); });
 	}
 
