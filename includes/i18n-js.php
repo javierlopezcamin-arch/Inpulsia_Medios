@@ -59,5 +59,17 @@ function inpulsia_medios_js_i18n() {
 		'tiempo agotado' => __( 'tiempo agotado', 'inpulsia-medios' ),
 		'¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial.' => __( '¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial.', 'inpulsia-medios' ),
 		'¿Deshacer esta importación y restaurar los valores anteriores?' => __( '¿Deshacer esta importación y restaurar los valores anteriores?', 'inpulsia-medios' ),
+		'Vas a optimizar %s imágenes. Escribe %s para confirmar.' => __( 'Vas a optimizar %s imágenes. Escribe %s para confirmar.', 'inpulsia-medios' ),
+		'El número no coincide: no se ha aplicado nada.' => __( 'El número no coincide: no se ha aplicado nada.', 'inpulsia-medios' ),
+		'Seguir en segundo plano' => __( 'Seguir en segundo plano', 'inpulsia-medios' ),
+		'Pasando al servidor al terminar este lote…' => __( 'Pasando al servidor al terminar este lote…', 'inpulsia-medios' ),
+		'Podrás cerrar la pestaña; el servidor sigue solo.' => __( 'Podrás cerrar la pestaña; el servidor sigue solo.', 'inpulsia-medios' ),
+		'Nombre del filtro:' => __( 'Nombre del filtro:', 'inpulsia-medios' ),
+		'¿Borrar este filtro guardado?' => __( '¿Borrar este filtro guardado?', 'inpulsia-medios' ),
+		'%s de %s · %s errores' => __( '%s de %s · %s errores', 'inpulsia-medios' ),
+		'Optimización en segundo plano terminada' => __( 'Optimización en segundo plano terminada', 'inpulsia-medios' ),
+		'¿Detener la optimización? Lo ya hecho queda en el Historial.' => __( '¿Detener la optimización? Lo ya hecho queda en el Historial.', 'inpulsia-medios' ),
+		'¿Deshacer los cambios de esta imagen?' => __( '¿Deshacer los cambios de esta imagen?', 'inpulsia-medios' ),
+		'Deshecho' => __( 'Deshecho', 'inpulsia-medios' ),
 	];
 }
