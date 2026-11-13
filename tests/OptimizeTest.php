@@ -599,4 +599,48 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertSame( '', get_post_meta( $a, '_wp_attachment_image_alt', true ) );
 		$this->assertSame( 'alt b', get_post_meta( $b, '_wp_attachment_image_alt', true ) );
 	}
+
+	public function test_daily_check_reports_changed_images_that_do_not_load() {
+		$id    = $this->upload( 'comprobar.png', 600, 300 );
+		$token = 'comprobar';
+		inpulsia_medios_history_add( [ 'token' => $token, 'date' => current_time( 'mysql', true ), 'user' => 't', 'file' => 'x', 'rows' => 1, 'changed' => 1, 'status' => 'aplicado' ] );
+		update_option( 'inpulsia_medios_log_' . $token, [ [ 'id' => $id, 'prev' => [ 'alt' => '' ] ] ] );
+		$this->assertContains( $id, inpulsia_medios_recent_ids() );
+		unlink( get_attached_file( $id ) );
+		add_filter( 'pre_http_request', function () {
+			return [ 'response' => [ 'code' => 404, 'message' => '' ], 'headers' => [], 'body' => '' ];
+		} );
+		$r = inpulsia_medios_health_run();
+		$this->assertNotEmpty( $r['failed'] );
+		$this->assertSame( $id, $r['failed'][0]['id'] );
+		$this->assertSame( 'bad', inpulsia_medios_alerts()[0][0] );
+	}
+
+	public function test_lcp_fix_marks_only_the_main_image_of_that_page() {
+		$page  = self::factory()->post->create( [ 'post_type' => 'page' ] );
+		$main  = $this->upload( 'principal.png', 800, 400 );
+		$other = $this->upload( 'otra.png', 800, 400 );
+		update_option( 'inpulsia_medios_lcp_fix', [ $page => $main ] );
+		$this->go_to( get_permalink( $page ) );
+		$a = inpulsia_medios_lcp_attributes( [ 'loading' => 'lazy' ], get_post( $main ) );
+		$this->assertSame( 'eager', $a['loading'] );
+		$this->assertSame( 'high', $a['fetchpriority'] );
+		$b = inpulsia_medios_lcp_attributes( [ 'loading' => 'lazy', 'fetchpriority' => 'high' ], get_post( $other ) );
+		$this->assertSame( 'lazy', $b['loading'] );
+		$this->assertArrayNotHasKey( 'fetchpriority', $b );
+		$tag = inpulsia_medios_lcp_content_tag( '<img loading="lazy" src="x.jpg">', 'the_content', $main );
+		$this->assertStringContainsString( 'fetchpriority="high"', $tag );
+		$this->assertStringNotContainsString( 'lazy', $tag );
+	}
+
+	public function test_oversized_and_lcp_issues_are_built_from_measurements() {
+		$page = self::factory()->post->create( [ 'post_type' => 'page' ] );
+		$big  = [ 'id' => 5, 'src' => 'https://x/a.jpg', 'natural' => 2400, 'shown' => 400, 'bytes' => 900000, 'lazy' => false, 'fp' => '', 'bg' => false ];
+		update_option( 'inpulsia_medios_perf', [ $page => [ 'desktop' => [ 'time' => time(), 'over' => [ $big ], 'lcp' => [ 'lazy' => true, 'ms' => 3200 ] + $big ] ] ] );
+		$i = inpulsia_medios_perf_issues();
+		$this->assertCount( 1, $i['oversized'] );
+		$this->assertGreaterThan( 800000, $i['oversized'][0]['waste'] );
+		$this->assertCount( 3, $i['lcp'][0]['problem'] );
+		$this->assertSame( 2, inpulsia_medios_perf_problem_count() );
+	}
 }

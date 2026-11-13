@@ -71,5 +71,10 @@ function inpulsia_medios_js_i18n() {
 		'¿Detener la optimización? Lo ya hecho queda en el Historial.' => __( '¿Detener la optimización? Lo ya hecho queda en el Historial.', 'inpulsia-medios' ),
 		'¿Deshacer los cambios de esta imagen?' => __( '¿Deshacer los cambios de esta imagen?', 'inpulsia-medios' ),
 		'Deshecho' => __( 'Deshecho', 'inpulsia-medios' ),
+		'Comprobando…' => __( 'Comprobando…', 'inpulsia-medios' ),
+		'Análisis terminado.' => __( 'Análisis terminado.', 'inpulsia-medios' ),
+		'Analizando %s de %s: %s' => __( 'Analizando %s de %s: %s', 'inpulsia-medios' ),
+		'móvil' => __( 'móvil', 'inpulsia-medios' ),
+		'escritorio' => __( 'escritorio', 'inpulsia-medios' ),
 	];
 }

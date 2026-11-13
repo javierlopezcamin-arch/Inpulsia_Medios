@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inpulsia Medios\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 18:37+0100\n"
+"POT-Creation-Date: 2026-11-13 22:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,799 +26,803 @@ msgstr ""
 msgid "Editar"
 msgstr ""
 
-#: includes/admin.php:27 includes/admin.php:518
+#: includes/admin.php:27 includes/admin.php:519
 msgid "Limpieza"
 msgstr ""
 
-#: includes/admin.php:28 includes/guide.php:197
+#: includes/admin.php:28
+msgid "Rendimiento"
+msgstr ""
+
+#: includes/admin.php:29 includes/guide.php:197
 msgid "Historial"
 msgstr ""
 
-#: includes/admin.php:29
+#: includes/admin.php:30
 msgid "Importar"
 msgstr ""
 
-#: includes/admin.php:30 includes/guide.php:283
+#: includes/admin.php:31 includes/guide.php:283
 msgid "Exportar"
 msgstr ""
 
-#: includes/admin.php:31 includes/guide.php:285
+#: includes/admin.php:32 includes/guide.php:285
 msgid "Redirecciones"
 msgstr ""
 
-#: includes/admin.php:34 includes/guide.php:286
+#: includes/admin.php:35 includes/guide.php:286
 msgid "Ajustes"
 msgstr ""
 
-#: includes/admin.php:75
+#: includes/admin.php:76
 msgid "Tema"
 msgstr ""
 
-#: includes/admin.php:77
+#: includes/admin.php:78
 msgid "Tema del sistema"
 msgstr ""
 
-#: includes/admin.php:78
+#: includes/admin.php:79
 msgid "Claro"
 msgstr ""
 
-#: includes/admin.php:79
+#: includes/admin.php:80
 msgid "Oscuro"
 msgstr ""
 
-#: includes/admin.php:81
+#: includes/admin.php:82
 msgid "Atajos"
 msgstr ""
 
-#: includes/admin.php:84
+#: includes/admin.php:85
 msgid "Secciones de Inpulsia Medios"
 msgstr ""
 
-#: includes/admin.php:88
-msgid "Problemas pendientes"
-msgstr ""
-
-#: includes/admin.php:88
+#: includes/admin.php:89
 msgid "Imágenes sin alt"
 msgstr ""
 
-#: includes/admin.php:101
+#: includes/admin.php:89
+msgid "Problemas pendientes"
+msgstr ""
+
+#: includes/admin.php:102
 msgid "Vista previa"
 msgstr ""
 
-#: includes/admin.php:103
+#: includes/admin.php:104
 msgid "Mostrar solo filas con avisos"
 msgstr ""
 
-#: includes/admin.php:105
+#: includes/admin.php:106
 msgid "Cambios"
 msgstr ""
 
-#: includes/admin.php:105 includes/ux.php:172
+#: includes/admin.php:106 includes/ux.php:176
 msgid "Avisos"
 msgstr ""
 
-#: includes/admin.php:109
+#: includes/admin.php:110
 msgid "Aplicar cambios"
 msgstr ""
 
-#: includes/admin.php:110
+#: includes/admin.php:111
 msgid "Cancelar"
 msgstr ""
 
-#: includes/admin.php:114
+#: includes/admin.php:115
 msgid "Procesando"
 msgstr ""
 
-#: includes/admin.php:131
+#: includes/admin.php:132
 msgid "Subir CSV o Excel"
 msgstr ""
 
-#: includes/admin.php:132
+#: includes/admin.php:133
 msgid "Columnas:"
 msgstr ""
 
-#: includes/admin.php:132
+#: includes/admin.php:133
 msgid "(obligatoria),"
 msgstr ""
 
-#: includes/admin.php:132
+#: includes/admin.php:133
 msgid ". Las demás se ignoran."
 msgstr ""
 
-#: includes/admin.php:133
+#: includes/admin.php:134
 msgid "Descargar plantilla"
 msgstr ""
 
-#: includes/admin.php:134
+#: includes/admin.php:135
 msgid "Exportar medios actuales"
 msgstr ""
 
-#: includes/admin.php:136
+#: includes/admin.php:137
 msgid "Celda vacía = no cambiar. Escribe"
 msgstr ""
 
-#: includes/admin.php:136
+#: includes/admin.php:137
 msgid "para vaciar un campo."
 msgstr ""
 
-#: includes/admin.php:137
+#: includes/admin.php:138
 msgid "El nombre de archivo se normaliza para SEO (minúsculas, guiones, sin tildes) y conserva la extensión original."
 msgstr ""
 
-#: includes/admin.php:138
+#: includes/admin.php:139
 msgid "Al renombrar se actualizan las URLs en todo el sitio, se renombran las copias WebP/AVIF y se crean redirecciones 301 desde las URLs antiguas."
 msgstr ""
 
-#: includes/admin.php:139
+#: includes/admin.php:140
 msgid "Al cambiar el alt también se actualiza en las imágenes ya insertadas en entradas y páginas."
 msgstr ""
 
-#: includes/admin.php:143
+#: includes/admin.php:144
 msgid "Ver vista previa"
 msgstr ""
 
-#: includes/admin.php:246
+#: includes/admin.php:247
 msgid "Buscar medios"
 msgstr ""
 
-#: includes/admin.php:247
+#: includes/admin.php:248
 msgid "Uso"
 msgstr ""
 
-#: includes/admin.php:248
+#: includes/admin.php:249
 msgid "Cualquier uso"
 msgstr ""
 
-#: includes/admin.php:249 includes/guide.php:185
+#: includes/admin.php:250 includes/guide.php:185
 msgid "En uso en la web"
 msgstr ""
 
-#: includes/admin.php:250 includes/admin.php:418
+#: includes/admin.php:251 includes/admin.php:419
 msgid "Sin uso detectado"
 msgstr ""
 
-#: includes/admin.php:252 includes/admin.php:303 includes/ux.php:513
+#: includes/admin.php:253 includes/admin.php:304 includes/ux.php:521
 msgid "Formato"
 msgstr ""
 
-#: includes/admin.php:253
+#: includes/admin.php:254
 msgid "Todos los formatos"
 msgstr ""
 
-#: includes/admin.php:258 includes/editors.php:24
+#: includes/admin.php:259 includes/editors.php:24
 msgid "Peso"
 msgstr ""
 
-#: includes/admin.php:259
+#: includes/admin.php:260
 msgid "Cualquier peso"
 msgstr ""
 
-#: includes/admin.php:265
+#: includes/admin.php:266
 msgid "Idioma"
 msgstr ""
 
-#: includes/admin.php:266
+#: includes/admin.php:267
 msgid "Idioma activo"
 msgstr ""
 
-#: includes/admin.php:267
+#: includes/admin.php:268
 msgid "Todos los idiomas"
 msgstr ""
 
-#: includes/admin.php:270 includes/ux.php:228
+#: includes/admin.php:271 includes/ux.php:236
 msgid "Sin alt"
 msgstr ""
 
-#: includes/admin.php:271
+#: includes/admin.php:272
 msgid "Nombre poco amigable"
 msgstr ""
 
-#: includes/admin.php:272
+#: includes/admin.php:273
 msgid "Filtrar"
 msgstr ""
 
-#: includes/admin.php:274
+#: includes/admin.php:275
 msgid "Quitar filtros"
 msgstr ""
 
-#: includes/admin.php:276
+#: includes/admin.php:277
 msgid "Imágenes por página"
 msgstr ""
 
-#: includes/admin.php:278
+#: includes/admin.php:279
 #, php-format
 msgid "%d por página"
 msgstr ""
 
-#: includes/admin.php:281 includes/cleanup-admin.php:51
+#: includes/admin.php:282 includes/cleanup-admin.php:51
 #: includes/cleanup-admin.php:74
 msgid "imágenes"
 msgstr ""
 
-#: includes/admin.php:283 includes/cleanup-admin.php:80
+#: includes/admin.php:284 includes/cleanup-admin.php:80
 msgid "Recalcular uso"
 msgstr ""
 
-#: includes/admin.php:298 includes/guide.php:189
+#: includes/admin.php:299 includes/guide.php:189
 msgid "Optimizar imágenes"
 msgstr ""
 
-#: includes/admin.php:298
+#: includes/admin.php:299
 msgid "convertir, reducir peso, nombres amigables y alt"
 msgstr ""
 
-#: includes/admin.php:300
+#: includes/admin.php:301
 msgid "Esta web ya usa"
 msgstr ""
 
-#: includes/admin.php:300
+#: includes/admin.php:301
 msgid ". Optimizar también aquí puede comprimir dos veces: revisa su configuración antes."
 msgstr ""
 
-#: includes/admin.php:305
+#: includes/admin.php:306
 msgid "JPG"
 msgstr ""
 
-#: includes/admin.php:306
+#: includes/admin.php:307
 msgid "WebP (≈30 % menos peso)"
 msgstr ""
 
-#: includes/admin.php:309 includes/ux.php:521
+#: includes/admin.php:310 includes/ux.php:529
 msgid "Ancho máximo"
 msgstr ""
 
-#: includes/admin.php:310 includes/ux.php:526
+#: includes/admin.php:311 includes/ux.php:534
 msgid "Calidad"
 msgstr ""
 
-#: includes/admin.php:311
+#: includes/admin.php:312
 msgid "Copia de seguridad (permite deshacer)"
 msgstr ""
 
-#: includes/admin.php:313
+#: includes/admin.php:314
 msgid "Borrar del servidor la imagen anterior al sustituirla"
 msgstr ""
 
-#: includes/admin.php:315
+#: includes/admin.php:316
 msgid "Configura la clave de Claude en Ajustes"
 msgstr ""
 
-#: includes/admin.php:316 includes/ux.php:541
+#: includes/admin.php:317 includes/ux.php:549
 msgid "Nombre y alt con IA si faltan o son de cámara"
 msgstr ""
 
-#: includes/admin.php:319
+#: includes/admin.php:320
 msgid "Los PNG con transparencia (logos, iconos) se mantienen en PNG. Los GIF animados no se tocan. Las URLs antiguas redirigen a las nuevas."
 msgstr ""
 
-#: includes/admin.php:321
+#: includes/admin.php:322
 msgid "Optimizar las"
 msgstr ""
 
-#: includes/admin.php:321
+#: includes/admin.php:322
 msgid "del filtro"
 msgstr ""
 
-#: includes/admin.php:326
+#: includes/admin.php:327
 msgid "Rellenar con plantilla"
 msgstr ""
 
-#: includes/admin.php:326
+#: includes/admin.php:327
 msgid "el mismo patrón para muchas imágenes, sin IA"
 msgstr ""
 
-#: includes/admin.php:328
+#: includes/admin.php:329
 msgid "Campo"
 msgstr ""
 
-#: includes/admin.php:335
+#: includes/admin.php:336
 msgid "Plantilla"
 msgstr ""
 
-#: includes/admin.php:336
+#: includes/admin.php:337
 msgid "Solo donde esté vacío o tenga nombre de cámara"
 msgstr ""
 
-#: includes/admin.php:337
+#: includes/admin.php:338
 msgid "Aplicar en esta página"
 msgstr ""
 
-#: includes/admin.php:338
+#: includes/admin.php:339
 #, php-format
 msgid "Aplicar a las %d del filtro"
 msgstr ""
 
-#: includes/admin.php:340
+#: includes/admin.php:341
 msgid "Variables:"
 msgstr ""
 
-#: includes/admin.php:341
+#: includes/admin.php:342
 msgid "título de la página donde se usa"
 msgstr ""
 
-#: includes/admin.php:341
+#: includes/admin.php:342
 msgid "palabra clave de Rank Math, Yoast o SEOPress de esa página"
 msgstr ""
 
-#: includes/admin.php:341
+#: includes/admin.php:342
 msgid "título de la imagen"
 msgstr ""
 
-#: includes/admin.php:341
+#: includes/admin.php:342
 msgid "número 1, 2, 3…"
 msgstr ""
 
-#: includes/admin.php:344
+#: includes/admin.php:345
 msgid "· Se aplica a las seleccionadas, o a toda la página si no hay ninguna. Después revisa y aplica."
 msgstr ""
 
-#: includes/admin.php:350
+#: includes/admin.php:351
 msgid "Guardar automáticamente alt, título, leyenda y descripción"
 msgstr ""
 
-#: includes/admin.php:351
+#: includes/admin.php:352
 msgid "Intro: fila siguiente · Pega una columna de Excel para rellenar hacia abajo"
 msgstr ""
 
-#: includes/admin.php:354
+#: includes/admin.php:355
 #, php-format
 msgid "Completar con IA las %d del filtro"
 msgstr ""
 
-#: includes/admin.php:356 includes/guide.php:193
+#: includes/admin.php:357 includes/guide.php:193
 msgid "Revisar cambios"
 msgstr ""
 
-#: includes/admin.php:358
+#: includes/admin.php:359
 msgid "Configura la IA en Ajustes"
 msgstr ""
 
-#: includes/admin.php:365
+#: includes/admin.php:366
 msgid "Densidad"
 msgstr ""
 
-#: includes/admin.php:367
+#: includes/admin.php:368
 msgid "Cómoda"
 msgstr ""
 
-#: includes/admin.php:368
+#: includes/admin.php:369
 msgid "Compacta"
 msgstr ""
 
-#: includes/admin.php:372
+#: includes/admin.php:373
 msgid "Columnas"
 msgstr ""
 
-#: includes/admin.php:385
+#: includes/admin.php:386
 msgid "Seleccionar todas las imágenes de la página"
 msgstr ""
 
-#: includes/admin.php:387 includes/editors.php:25
+#: includes/admin.php:388 includes/editors.php:25
 msgid "Nombre de archivo"
 msgstr ""
 
-#: includes/admin.php:388 includes/core.php:13
+#: includes/admin.php:389 includes/core.php:13
 msgid "Título"
 msgstr ""
 
-#: includes/admin.php:390 includes/core.php:15
+#: includes/admin.php:391 includes/core.php:15
 msgid "Leyenda"
 msgstr ""
 
-#: includes/admin.php:391 includes/core.php:16
+#: includes/admin.php:392 includes/core.php:16
 msgid "Descripción"
 msgstr ""
 
-#: includes/admin.php:406
+#: includes/admin.php:407
 #, php-format
 msgid "Seleccionar imagen %d"
 msgstr ""
 
-#: includes/admin.php:434
+#: includes/admin.php:435
 msgid "Sugerir alt, nombre y título con IA"
 msgstr ""
 
-#: includes/admin.php:434
+#: includes/admin.php:435
 #, php-format
 msgid "Sugerir textos con IA para la imagen %d"
 msgstr ""
 
-#: includes/admin.php:439
+#: includes/admin.php:440
 msgid "No hay imágenes con estos filtros."
 msgstr ""
 
-#: includes/admin.php:453
+#: includes/admin.php:454
 msgid "Acciones con las imágenes seleccionadas"
 msgstr ""
 
-#: includes/admin.php:456
+#: includes/admin.php:457
 msgid "Sugerir con IA"
 msgstr ""
 
-#: includes/admin.php:458 includes/editors.php:30
+#: includes/admin.php:459 includes/editors.php:30 includes/perf.php:390
 msgid "Optimizar"
 msgstr ""
 
-#: includes/admin.php:459
+#: includes/admin.php:460
 msgid "Copia el campo en el que estabas escribiendo a todas las seleccionadas"
 msgstr ""
 
-#: includes/admin.php:459
+#: includes/admin.php:460
 msgid "Copiar campo a seleccionadas"
 msgstr ""
 
-#: includes/admin.php:460
+#: includes/admin.php:461
 msgid "Quitar selección"
 msgstr ""
 
-#: includes/admin.php:470
+#: includes/admin.php:471
 msgid "Exportar biblioteca a CSV"
 msgstr ""
 
-#: includes/admin.php:476 includes/admin.php:515
+#: includes/admin.php:477 includes/admin.php:516
 msgid "Tipo"
 msgstr ""
 
-#: includes/admin.php:479
+#: includes/admin.php:480
 msgid "Solo imágenes"
 msgstr ""
 
-#: includes/admin.php:480
+#: includes/admin.php:481
 msgid "Todos los medios"
 msgstr ""
 
-#: includes/admin.php:485
+#: includes/admin.php:486
 msgid "Filtro"
 msgstr ""
 
-#: includes/admin.php:486
+#: includes/admin.php:487
 msgid "Solo imágenes sin texto alternativo"
 msgstr ""
 
-#: includes/admin.php:489
+#: includes/admin.php:490
 msgid "Subidas entre"
 msgstr ""
 
-#: includes/admin.php:493
+#: includes/admin.php:494
 msgid "Contexto"
 msgstr ""
 
-#: includes/admin.php:495
+#: includes/admin.php:496
 msgid "Incluir columna"
 msgstr ""
 
-#: includes/admin.php:496
+#: includes/admin.php:497
 msgid "Indica en qué páginas, entradas, productos o plantillas de Elementor aparece cada imagen. En bibliotecas muy grandes la exportación tarda más."
 msgstr ""
 
-#: includes/admin.php:500
+#: includes/admin.php:501
 msgid "Descargar CSV"
 msgstr ""
 
-#: includes/admin.php:510
+#: includes/admin.php:511
 msgid "Últimas importaciones"
 msgstr ""
 
-#: includes/admin.php:511
+#: includes/admin.php:512
 msgid "Se guardan las 20 últimas. Deshacer restaura los valores anteriores, incluidos los nombres de archivo y sus URLs. Abre una fila para deshacer solo una imagen."
 msgstr ""
 
-#: includes/admin.php:514
+#: includes/admin.php:515
 msgid "Buscar por origen o usuario"
 msgstr ""
 
-#: includes/admin.php:514
+#: includes/admin.php:515
 msgid "Buscar en el historial"
 msgstr ""
 
-#: includes/admin.php:516
+#: includes/admin.php:517
 msgid "Todos los tipos"
 msgstr ""
 
-#: includes/admin.php:517 includes/admin.php:652 includes/ux.php:506
+#: includes/admin.php:518 includes/admin.php:653 includes/ux.php:514
 msgid "Optimización"
 msgstr ""
 
-#: includes/admin.php:519
+#: includes/admin.php:520
 msgid "Ediciones e importaciones"
 msgstr ""
 
-#: includes/admin.php:521 includes/admin.php:533 includes/cli.php:169
+#: includes/admin.php:522 includes/admin.php:534 includes/cli.php:169
 msgid "Usuario"
 msgstr ""
 
-#: includes/admin.php:522
+#: includes/admin.php:523
 msgid "Todos los usuarios"
 msgstr ""
 
-#: includes/admin.php:530
+#: includes/admin.php:531
 msgid "Todavía no hay importaciones."
 msgstr ""
 
-#: includes/admin.php:533 includes/cli.php:169
+#: includes/admin.php:534 includes/cli.php:169
 msgid "Fecha"
 msgstr ""
 
-#: includes/admin.php:533 includes/admin.php:596 includes/cli.php:169
+#: includes/admin.php:534 includes/admin.php:597 includes/cli.php:169
 msgid "Origen"
 msgstr ""
 
-#: includes/admin.php:533
+#: includes/admin.php:534
 msgid "Filas"
 msgstr ""
 
-#: includes/admin.php:533
+#: includes/admin.php:534
 msgid "Medios cambiados"
 msgstr ""
 
-#: includes/admin.php:533 includes/cli.php:169
+#: includes/admin.php:534 includes/cli.php:169
 msgid "Estado"
 msgstr ""
 
-#: includes/admin.php:542
+#: includes/admin.php:543
 msgid "Ver imágenes"
 msgstr ""
 
-#: includes/admin.php:548
+#: includes/admin.php:549
 msgid "aplicado"
 msgstr ""
 
-#: includes/admin.php:548
+#: includes/admin.php:549
 msgid "deshecho"
 msgstr ""
 
-#: includes/admin.php:548
+#: includes/admin.php:549
 msgid "incompleto"
 msgstr ""
 
-#: includes/admin.php:551 includes/guide.php:197
+#: includes/admin.php:552 includes/guide.php:197
 msgid "Deshacer"
 msgstr ""
 
-#: includes/admin.php:563
+#: includes/admin.php:564
 msgid "Deshacer esta"
 msgstr ""
 
-#: includes/admin.php:567
+#: includes/admin.php:568
 #, php-format
 msgid "Y %d más."
 msgstr ""
 
-#: includes/admin.php:577
+#: includes/admin.php:578
 msgid "Deshaciendo"
 msgstr ""
 
-#: includes/admin.php:586
+#: includes/admin.php:587
 msgid "Redirecciones 301 de archivos renombrados"
 msgstr ""
 
-#: includes/admin.php:587
+#: includes/admin.php:588
 msgid "Cuando alguien (o Google Imágenes) pide la URL antigua de un archivo renombrado, se le redirige a la nueva. Funciona en servidores donde las peticiones a archivos que no existen llegan a WordPress, que es lo habitual en Apache y en la mayoría de configuraciones de Nginx."
 msgstr ""
 
-#: includes/admin.php:589
+#: includes/admin.php:590
 msgid "Redirecciones eliminadas."
 msgstr ""
 
-#: includes/admin.php:592
+#: includes/admin.php:593
 msgid "No hay redirecciones."
 msgstr ""
 
-#: includes/admin.php:594
+#: includes/admin.php:595
 #, php-format
 msgid "%d redirecciones"
 msgstr ""
 
-#: includes/admin.php:594
+#: includes/admin.php:595
 #, php-format
 msgid "(se muestran las %d más recientes)"
 msgstr ""
 
-#: includes/admin.php:596
+#: includes/admin.php:597
 msgid "Destino"
 msgstr ""
 
-#: includes/admin.php:596
+#: includes/admin.php:597
 msgid "Visitas"
 msgstr ""
 
-#: includes/admin.php:596
+#: includes/admin.php:597
 msgid "Creada"
 msgstr ""
 
-#: includes/admin.php:609
+#: includes/admin.php:610
 msgid "Eliminar"
 msgstr ""
 
-#: includes/admin.php:620
+#: includes/admin.php:621
 msgid "Eliminar todas"
 msgstr ""
 
-#: includes/admin.php:630
+#: includes/admin.php:631
 msgid "Solo los administradores pueden eliminar redirecciones."
 msgstr ""
 
-#: includes/admin.php:651
+#: includes/admin.php:652
 msgid "Secciones de ajustes"
 msgstr ""
 
-#: includes/admin.php:653
+#: includes/admin.php:654
 msgid "IA"
 msgstr ""
 
-#: includes/admin.php:654 includes/admin.php:721
+#: includes/admin.php:655 includes/admin.php:722
 msgid "Seguridad y copias"
 msgstr ""
 
-#: includes/admin.php:655 includes/admin.php:707
+#: includes/admin.php:656 includes/admin.php:708
 msgid "Diagnóstico del servidor"
 msgstr ""
 
-#: includes/admin.php:658
+#: includes/admin.php:659
 msgid "Ajustes guardados."
 msgstr ""
 
-#: includes/admin.php:662
+#: includes/admin.php:663
 msgid "Sugerencias con IA"
 msgstr ""
 
-#: includes/admin.php:668
+#: includes/admin.php:669
 msgid "Clave de la API de Claude"
 msgstr ""
 
-#: includes/admin.php:671
+#: includes/admin.php:672
 msgid "Se usa la clave definida en"
 msgstr ""
 
-#: includes/admin.php:671 includes/admin.php:678
+#: includes/admin.php:672 includes/admin.php:679
 msgid "wp-config.php"
 msgstr ""
 
-#: includes/admin.php:671
+#: includes/admin.php:672
 msgid "INPULSIA_MEDIOS_CLAUDE_KEY"
 msgstr ""
 
-#: includes/admin.php:674
+#: includes/admin.php:675
 #, php-format
 msgid "Guardada (…%s)"
 msgstr ""
 
-#: includes/admin.php:676
+#: includes/admin.php:677
 msgid "Borrar la clave guardada"
 msgstr ""
 
-#: includes/admin.php:678
+#: includes/admin.php:679
 msgid "Déjalo en blanco para mantener la actual. Es más seguro definirla en"
 msgstr ""
 
-#: includes/admin.php:678
+#: includes/admin.php:679
 msgid "define( 'INPULSIA_MEDIOS_CLAUDE_KEY', 'sk-ant-…' );"
 msgstr ""
 
-#: includes/admin.php:683
+#: includes/admin.php:684
 msgid "Modelo"
 msgstr ""
 
-#: includes/admin.php:693
+#: includes/admin.php:694
 msgid "Contexto SEO de la web"
 msgstr ""
 
-#: includes/admin.php:695
+#: includes/admin.php:696
 msgid "Ej.: Reformas integrales en Santander. Palabras clave: reformas de cocina, baños, Cantabria."
 msgstr ""
 
-#: includes/admin.php:696
+#: includes/admin.php:697
 msgid "Negocio, ubicación y palabras clave. Se envía en cada sugerencia junto con la imagen y las páginas donde aparece."
 msgstr ""
 
-#: includes/admin.php:700
+#: includes/admin.php:701
 msgid "Guardar ajustes"
 msgstr ""
 
-#: includes/admin.php:708
+#: includes/admin.php:709
 msgid "Lo que el servidor necesita para optimizar sin errores."
 msgstr ""
 
-#: includes/admin.php:723
+#: includes/admin.php:724
 msgid "archivos antiguos eliminados."
 msgstr ""
 
-#: includes/admin.php:726
+#: includes/admin.php:727
 msgid "copias eliminadas."
 msgstr ""
 
-#: includes/admin.php:728
+#: includes/admin.php:729
 msgid "copias,"
 msgstr ""
 
-#: includes/admin.php:728
+#: includes/admin.php:729
 msgid "en"
 msgstr ""
 
-#: includes/admin.php:728
+#: includes/admin.php:729
 msgid "uploads/inpulsia-medios-backups"
 msgstr ""
 
-#: includes/admin.php:728
+#: includes/admin.php:729
 msgid ". Sin copia, una optimización ya no se puede deshacer."
 msgstr ""
 
-#: includes/admin.php:730
+#: includes/admin.php:731
 msgid "archivos antiguos ("
 msgstr ""
 
-#: includes/admin.php:730
+#: includes/admin.php:731
 msgid ") se conservan durante"
 msgstr ""
 
-#: includes/admin.php:730
+#: includes/admin.php:731
 msgid "días tras renombrar u optimizar, para que las cachés y los enlaces externos no muestren imágenes rotas. Se borran solos."
 msgstr ""
 
-#: includes/admin.php:735
+#: includes/admin.php:736
 msgid "Borrar ya los archivos antiguos"
 msgstr ""
 
-#: includes/admin.php:742
+#: includes/admin.php:743
 msgid "Borrar las de más de 30 días ("
 msgstr ""
 
-#: includes/admin.php:748
+#: includes/admin.php:749
 msgid "Borrar todas"
 msgstr ""
 
-#: includes/admin.php:757
+#: includes/admin.php:758
 msgid "Solo los administradores pueden borrar copias."
 msgstr ""
 
-#: includes/admin.php:772
+#: includes/admin.php:773
 msgid "No tienes permisos para editar medios."
 msgstr ""
 
-#: includes/admin.php:791
+#: includes/admin.php:792
 msgid "Error al subir el archivo."
 msgstr ""
 
-#: includes/admin.php:799 includes/cli.php:52
+#: includes/admin.php:800 includes/cli.php:52
 msgid "El archivo está vacío o no tiene columna ID."
 msgstr ""
 
-#: includes/admin.php:818
+#: includes/admin.php:819
 msgid "No hay cambios que revisar."
 msgstr ""
 
-#: includes/admin.php:830 includes/bulk-filter.php:132
+#: includes/admin.php:831 includes/bulk-filter.php:132
 #: includes/cleanup-admin.php:232
 msgid "La sesión ha caducado. Vuelve a cargar los cambios."
 msgstr ""
 
-#: includes/admin.php:868
+#: includes/admin.php:869
 msgid "Esta importación no se puede deshacer."
 msgstr ""
 
-#: includes/admin.php:903
+#: includes/admin.php:904
 msgid "No hay imágenes seleccionadas."
 msgstr ""
 
-#: includes/admin.php:943
+#: includes/admin.php:944
 msgid "Copia de seguridad en uploads/inpulsia-medios-backups: se puede deshacer desde el Historial."
 msgstr ""
 
-#: includes/admin.php:943
+#: includes/admin.php:944
 msgid "Sin copia de seguridad: esta optimización no se podrá deshacer."
 msgstr ""
 
-#: includes/admin.php:944
+#: includes/admin.php:945
 #, php-format
 msgid "Ahorro estimado: unos %s."
 msgstr ""
 
-#: includes/admin.php:955 includes/ux.php:303
+#: includes/admin.php:956 includes/ux.php:311
 msgid "La sesión ha caducado. Vuelve a lanzar la optimización."
 msgstr ""
 
-#: includes/admin.php:996
+#: includes/admin.php:997
 msgid "Este campo no se guarda automáticamente."
 msgstr ""
 
@@ -834,8 +838,8 @@ msgstr ""
 msgid "Claude Haiku 5.5 (más barato)"
 msgstr ""
 
-#: includes/ai.php:37 includes/export.php:12 includes/ux.php:471
-#: includes/ux.php:490
+#: includes/ai.php:37 includes/export.php:12 includes/ux.php:479
+#: includes/ux.php:498
 msgid "No tienes permisos."
 msgstr ""
 
@@ -1032,7 +1036,7 @@ msgstr ""
 msgid "Volver a analizar"
 msgstr ""
 
-#: includes/cleanup-admin.php:113
+#: includes/cleanup-admin.php:113 includes/perf.php:363
 msgid "Página"
 msgstr ""
 
@@ -2208,7 +2212,7 @@ msgstr ""
 msgid "%s de %s · %s errores"
 msgstr ""
 
-#: includes/i18n-js.php:70 includes/ux.php:423
+#: includes/i18n-js.php:70 includes/ux.php:431
 msgid "Optimización en segundo plano terminada"
 msgstr ""
 
@@ -2222,6 +2226,27 @@ msgstr ""
 
 #: includes/i18n-js.php:73
 msgid "Deshecho"
+msgstr ""
+
+#: includes/i18n-js.php:74
+msgid "Comprobando…"
+msgstr ""
+
+#: includes/i18n-js.php:75
+msgid "Análisis terminado."
+msgstr ""
+
+#: includes/i18n-js.php:76
+#, php-format
+msgid "Analizando %s de %s: %s"
+msgstr ""
+
+#: includes/i18n-js.php:77
+msgid "móvil"
+msgstr ""
+
+#: includes/i18n-js.php:78
+msgid "escritorio"
 msgstr ""
 
 #: includes/media.php:15
@@ -2364,7 +2389,196 @@ msgstr ""
 msgid "El archivo Excel no tiene hojas legibles."
 msgstr ""
 
-#: includes/sizes.php:13 includes/ux.php:229
+#: includes/perf.php:230
+msgid "tiene carga diferida (lazy): el navegador la pide tarde"
+msgstr ""
+
+#: includes/perf.php:233
+msgid "no tiene prioridad alta (fetchpriority)"
+msgstr ""
+
+#: includes/perf.php:236
+msgid "es un fondo CSS: el navegador la descubre tarde"
+msgstr ""
+
+#: includes/perf.php:239
+#, php-format
+msgid "pesa %s"
+msgstr ""
+
+#: includes/perf.php:278
+msgid "No tienes permisos para editar esta página."
+msgstr ""
+
+#: includes/perf.php:308
+msgid "Comprobación de las imágenes cambiadas"
+msgstr ""
+
+#: includes/perf.php:309
+msgid "Cada día se abren, como lo haría un visitante, las imágenes optimizadas o renombradas en los últimos 30 días. Si alguna no carga, se avisa en Inicio."
+msgstr ""
+
+#: includes/perf.php:313
+#, php-format
+msgid "%d imagen no carga"
+msgid_plural "%d imágenes no cargan"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/perf.php:315
+msgid "Todas cargan bien"
+msgstr ""
+
+#: includes/perf.php:317
+#, php-format
+msgid "%1$d comprobadas hace %2$s"
+msgstr ""
+
+#: includes/perf.php:321
+msgid "Dirección"
+msgstr ""
+
+#: includes/perf.php:321
+msgid "Respuesta"
+msgstr ""
+
+#: includes/perf.php:332
+msgid "Ir a Limpieza para recuperarlas"
+msgstr ""
+
+#: includes/perf.php:335
+msgid "Todavía no se ha hecho ninguna comprobación."
+msgstr ""
+
+#: includes/perf.php:337
+msgid "Comprobar ahora"
+msgstr ""
+
+#: includes/perf.php:341
+msgid "Análisis de páginas"
+msgstr ""
+
+#: includes/perf.php:342
+msgid "Se abren las páginas principales en este navegador, en tamaño escritorio y móvil, y se mide qué imagen tarda más en aparecer (la que más pesa en Core Web Vitals) y qué imágenes se sirven mucho más grandes de lo que se ven."
+msgstr ""
+
+#: includes/perf.php:343
+msgid "También se mide al navegar por la web con tu sesión iniciada, una vez al día por página."
+msgstr ""
+
+#: includes/perf.php:345
+#, php-format
+msgid "Analizar %d páginas"
+msgstr ""
+
+#: includes/perf.php:346
+#, php-format
+msgid "Último análisis hace %s"
+msgstr ""
+
+#: includes/perf.php:356
+msgid "Imagen principal de cada página (LCP)"
+msgstr ""
+
+#: includes/perf.php:357
+msgid "Es la imagen grande que se ve al entrar. Google mide cuánto tarda en aparecer: debe cargarse la primera, sin carga diferida y con prioridad alta."
+msgstr ""
+
+#: includes/perf.php:359 includes/perf.php:406
+msgid "Sin datos todavía: pulsa «Analizar páginas»."
+msgstr ""
+
+#: includes/perf.php:363
+msgid "Dispositivo"
+msgstr ""
+
+#: includes/perf.php:363 includes/perf.php:410
+msgid "Imagen"
+msgstr ""
+
+#: includes/perf.php:363
+msgid "Aparece en"
+msgstr ""
+
+#: includes/perf.php:363
+msgid "Problemas"
+msgstr ""
+
+#: includes/perf.php:369
+msgid "Móvil"
+msgstr ""
+
+#: includes/perf.php:369
+msgid "Escritorio"
+msgstr ""
+
+#: includes/perf.php:374
+msgid "Arreglada: carga la primera con prioridad alta"
+msgstr ""
+
+#: includes/perf.php:378
+msgid "Correcta"
+msgstr ""
+
+#: includes/perf.php:383
+msgid "Quitar arreglo"
+msgstr ""
+
+#: includes/perf.php:385
+msgid "Arreglar"
+msgstr ""
+
+#: includes/perf.php:387
+msgid "Cambiar el fondo por una imagen"
+msgstr ""
+
+#: includes/perf.php:398
+msgid "«Arreglar» quita la carga diferida y da prioridad alta a esa imagen solo en esa página. Si usas un plugin de caché, se vacía solo; si no, vacíala tú."
+msgstr ""
+
+#: includes/perf.php:403
+msgid "Imágenes más grandes de lo que se ven"
+msgstr ""
+
+#: includes/perf.php:404
+msgid "El navegador descarga la imagen entera aunque se muestre pequeña. Aquí salen las que tienen más del doble de los píxeles necesarios, ordenadas por lo que se desperdicia."
+msgstr ""
+
+#: includes/perf.php:406
+msgid "Ninguna: todas se sirven a un tamaño adecuado."
+msgstr ""
+
+#: includes/perf.php:410
+msgid "Archivo / se ve a"
+msgstr ""
+
+#: includes/perf.php:410
+msgid "Se desperdicia"
+msgstr ""
+
+#: includes/perf.php:410
+msgid "Páginas"
+msgstr ""
+
+#: includes/perf.php:410
+msgid "Qué hacer"
+msgstr ""
+
+#: includes/perf.php:416
+#, php-format
+msgid "≈ %s"
+msgstr ""
+
+#: includes/perf.php:424
+msgid "Optimizar (reduce a 2560 px)"
+msgstr ""
+
+#: includes/perf.php:426
+#, php-format
+msgid "En la página, elige un tamaño de unos %d px (Mediano o Grande) en vez de «Completo»."
+msgstr ""
+
+#: includes/sizes.php:13 includes/ux.php:237
 msgid "Más de 300 KB"
 msgstr ""
 
@@ -2502,180 +2716,191 @@ msgstr ""
 
 #: includes/ux.php:146
 #, php-format
-msgid "Optimización en segundo plano: %1$d de %2$d imágenes."
+msgid "La comprobación diaria ha encontrado %d imagen cambiada que no carga."
+msgid_plural "La comprobación diaria ha encontrado %d imágenes cambiadas que no cargan."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/ux.php:146
+msgid "Ver cuáles"
 msgstr ""
 
 #: includes/ux.php:150
+#, php-format
+msgid "Optimización en segundo plano: %1$d de %2$d imágenes."
+msgstr ""
+
+#: includes/ux.php:154
 #, php-format
 msgid "%d optimización ha fallado esta semana (se mantuvo el original)."
 msgid_plural "%d optimizaciones han fallado esta semana (se mantuvo el original)."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/ux.php:150
+#: includes/ux.php:154
 msgid "Ver fallos"
 msgstr ""
 
-#: includes/ux.php:154
+#: includes/ux.php:158
 msgid "Ver diagnóstico"
 msgstr ""
 
-#: includes/ux.php:160
+#: includes/ux.php:164
 #, php-format
 msgid "Las copias de seguridad ocupan %s."
 msgstr ""
 
-#: includes/ux.php:160
+#: includes/ux.php:164
 msgid "Gestionar copias"
 msgstr ""
 
-#: includes/ux.php:218
+#: includes/ux.php:226
 msgid "Preferencia no válida."
 msgstr ""
 
-#: includes/ux.php:230
+#: includes/ux.php:238
 msgid "Nombres de cámara"
 msgstr ""
 
-#: includes/ux.php:231
+#: includes/ux.php:239
 msgid "En uso sin alt"
 msgstr ""
 
-#: includes/ux.php:232
+#: includes/ux.php:240
 msgid "Sin uso"
 msgstr ""
 
-#: includes/ux.php:247
+#: includes/ux.php:255
 msgid "Pon un nombre y algún filtro."
 msgstr ""
 
-#: includes/ux.php:269
+#: includes/ux.php:277
 msgid "Filtros guardados"
 msgstr ""
 
-#: includes/ux.php:270
+#: includes/ux.php:278
 msgid "Atajos:"
 msgstr ""
 
-#: includes/ux.php:277
+#: includes/ux.php:285
 #, php-format
 msgid "Borrar el filtro %s"
 msgstr ""
 
-#: includes/ux.php:281
+#: includes/ux.php:289
 msgid "+ Guardar este filtro"
 msgstr ""
 
-#: includes/ux.php:307
+#: includes/ux.php:315
 msgid "Ya hay otra optimización en segundo plano. Espera a que termine."
 msgstr ""
 
-#: includes/ux.php:423
+#: includes/ux.php:431
 msgid "Optimizando en segundo plano"
 msgstr ""
 
-#: includes/ux.php:425
+#: includes/ux.php:433
 #, php-format
 msgid "%1$d de %2$d · %3$d errores"
 msgstr ""
 
-#: includes/ux.php:427
+#: includes/ux.php:435
 msgid "Ver en el Historial"
 msgstr ""
 
-#: includes/ux.php:428
+#: includes/ux.php:436
 msgid "Ocultar"
 msgstr ""
 
-#: includes/ux.php:430
+#: includes/ux.php:438
 msgid "Puedes cerrar esta pestaña: sigue en el servidor."
 msgstr ""
 
-#: includes/ux.php:431
+#: includes/ux.php:439
 msgid "Detener"
 msgstr ""
 
-#: includes/ux.php:448
+#: includes/ux.php:456
 msgid "No hay nada que deshacer en esta imagen."
 msgstr ""
 
-#: includes/ux.php:502
+#: includes/ux.php:510
 msgid "recomendado"
 msgstr ""
 
-#: includes/ux.php:507
+#: includes/ux.php:515
 msgid "Valores por defecto de «Optimizar imágenes» y de la optimización al subir."
 msgstr ""
 
-#: includes/ux.php:518
+#: includes/ux.php:526
 #, php-format
 msgid "Recomendado: %s."
 msgstr ""
 
-#: includes/ux.php:523
+#: includes/ux.php:531
 msgid "Recomendado: 2560 px (lo que usa WordPress)."
 msgstr ""
 
-#: includes/ux.php:528
+#: includes/ux.php:536
 msgid "Recomendado: 82. Por debajo de 70 se notan artefactos en fotos."
 msgstr ""
 
-#: includes/ux.php:531
+#: includes/ux.php:539
 msgid "Seguridad"
 msgstr ""
 
-#: includes/ux.php:533
+#: includes/ux.php:541
 msgid "Copia de seguridad antes de optimizar (permite deshacer)"
 msgstr ""
 
-#: includes/ux.php:534
+#: includes/ux.php:542
 msgid "Borrar enseguida la imagen anterior (si no, se conserva 15 días)"
 msgstr ""
 
-#: includes/ux.php:538
+#: includes/ux.php:546
 msgid "Automático"
 msgstr ""
 
-#: includes/ux.php:540
+#: includes/ux.php:548
 msgid "Optimizar cada imagen que se suba"
 msgstr ""
 
-#: includes/ux.php:546
+#: includes/ux.php:554
 msgid "Guardar optimización"
 msgstr ""
 
-#: includes/ux.php:547
+#: includes/ux.php:555
 msgid "Restaurar valores recomendados"
 msgstr ""
 
-#: includes/ux.php:562
+#: includes/ux.php:570
 msgid "Mostrar u ocultar esta ayuda"
 msgstr ""
 
-#: includes/ux.php:563
+#: includes/ux.php:571
 msgid "Ir a Inicio, Editar, Limpieza o Historial"
 msgstr ""
 
-#: includes/ux.php:564
+#: includes/ux.php:572
 msgid "Buscar en Editar"
 msgstr ""
 
-#: includes/ux.php:565
+#: includes/ux.php:573
 msgid "En la tabla: bajar a la misma celda de la fila siguiente"
 msgstr ""
 
-#: includes/ux.php:566
+#: includes/ux.php:574
 msgid "En la tabla: revisar cambios"
 msgstr ""
 
-#: includes/ux.php:567
+#: includes/ux.php:575
 msgid "Cerrar la vista previa o esta ayuda"
 msgstr ""
 
-#: includes/ux.php:572
+#: includes/ux.php:580
 msgid "Atajos de teclado"
 msgstr ""
 
-#: includes/ux.php:578
+#: includes/ux.php:586
 msgid "Cerrar"
 msgstr ""

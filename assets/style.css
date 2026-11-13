@@ -268,3 +268,11 @@
 @media (prefers-reduced-motion: reduce) {
 	.inpulsia-medios-progress > div { transition: none; }
 }
+
+/* ---------- 1.9: Rendimiento ---------- */
+.im-text-ok { color: var(--im-ok); }
+.im-text-bad { color: var(--im-bad); }
+.im-lcp-img img { width: 48px; height: 48px; object-fit: cover; border-radius: 3px; vertical-align: middle; margin-right: 6px; }
+.im-lcp-img code { word-break: break-all; }
+.im-perf-frames { height: 230px; overflow: hidden; margin-top: 8px; border: 1px solid var(--im-border); border-radius: 4px; background: #fff; }
+.im-perf-frames iframe { border: 0; transform: scale(.25); transform-origin: 0 0; pointer-events: none; }

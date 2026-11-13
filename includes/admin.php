@@ -25,6 +25,7 @@ function inpulsia_medios_tabs() {
 		'inicio'        => __( 'Inicio', 'inpulsia-medios' ),
 		'editar'        => __( 'Editar', 'inpulsia-medios' ),
 		'limpieza'      => __( 'Limpieza', 'inpulsia-medios' ),
+		'rendimiento'   => __( 'Rendimiento', 'inpulsia-medios' ),
 		'historial'     => __( 'Historial', 'inpulsia-medios' ),
 		'importar'      => __( 'Importar', 'inpulsia-medios' ),
 		'exportar'      => __( 'Exportar', 'inpulsia-medios' ),
@@ -85,7 +86,7 @@ function inpulsia_medios_page() {
 			<?php foreach ( $tabs as $slug => $label ) : ?>
 				<a href="<?php echo esc_url( add_query_arg( 'tab', $slug, admin_url( 'upload.php?page=inpulsia-medios' ) ) ); ?>"
 					class="nav-tab <?php echo $tab === $slug ? 'nav-tab-active' : ''; ?> <?php echo in_array( $slug, [ 'importar', 'exportar', 'redirecciones', 'ajustes' ], true ) ? 'im-tab-secondary' : ''; ?>"
-					<?php echo $tab === $slug ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $label ); ?><?php if ( ! empty( $badges[ $slug ] ) ) : ?> <span class="im-badge is-<?php echo $slug === 'limpieza' ? 'bad' : 'warn'; ?>" title="<?php echo esc_attr( $slug === 'limpieza' ? __( 'Problemas pendientes', 'inpulsia-medios' ) : __( 'Imágenes sin alt', 'inpulsia-medios' ) ); ?>"><?php echo esc_html( number_format_i18n( $badges[ $slug ] ) ); ?></span><?php endif; ?></a>
+					<?php echo $tab === $slug ? 'aria-current="page"' : ''; ?>><?php echo esc_html( $label ); ?><?php if ( ! empty( $badges[ $slug ] ) ) : ?> <span class="im-badge is-<?php echo $slug === 'editar' ? 'warn' : 'bad'; ?>" title="<?php echo esc_attr( $slug === 'editar' ? __( 'Imágenes sin alt', 'inpulsia-medios' ) : __( 'Problemas pendientes', 'inpulsia-medios' ) ); ?>"><?php echo esc_html( number_format_i18n( $badges[ $slug ] ) ); ?></span><?php endif; ?></a>
 			<?php endforeach; ?>
 		</nav>
 		<?php inpulsia_medios_bg_markup(); ?>

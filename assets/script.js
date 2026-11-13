@@ -721,4 +721,32 @@
 		setTimeout(function () { lastKey = ''; }, 1000);
 	});
 
+	/* ---------- 1.9: Rendimiento ---------- */
+	$('#im-health-now').on('click', function () {
+		var $b = $(this).prop('disabled', true).addClass('is-loading').text(t('Comprobando…'));
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_health_now', nonce: cfg.nonce }).always(function () { location.reload(); });
+	});
+	$(document).on('click', '.im-lcp-fix', function () {
+		var $b = $(this).prop('disabled', true);
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_lcp_fix', nonce: cfg.nonce, page: $b.data('page'), id: $b.data('id') })
+			.done(function (r) { if (r.success) location.reload(); else { alert(r.data); $b.prop('disabled', false); } });
+	});
+	$('#im-perf-run').on('click', function () {
+		var urls = $(this).data('urls') || [], jobs = [];
+		urls.forEach(function (u) { jobs.push([u, 1366, 900], [u, 390, 844]); });
+		if (!jobs.length) return;
+		var $btn = $(this).prop('disabled', true), $box = $('#im-perf-progress').prop('hidden', false);
+		var $bar = $box.find('.inpulsia-medios-progress > div'), $st = $box.find('.im-perf-status'), $frames = $box.find('.im-perf-frames');
+		var i = 0, timer = null, done = null;
+		window.addEventListener('message', function (e) { if (e.origin === location.origin && e.data && e.data.inpulsiaPerf && done) done(); });
+		(function next() {
+			if (i >= jobs.length) { $st.text(t('Análisis terminado.')); return setTimeout(function () { location.reload(); }, 800); }
+			var j = jobs[i];
+			$st.text(t('Analizando %s de %s: %s', i + 1, jobs.length, j[1] < 768 ? t('móvil') : t('escritorio')));
+			$frames.empty().append($('<iframe>').attr({ src: j[0], width: j[1], height: j[2], tabindex: -1, title: '' }));
+			done = function () { done = null; clearTimeout(timer); i++; $bar.css('width', Math.round(i / jobs.length * 100) + '%'); setTimeout(next, 300); };
+			timer = setTimeout(function () { if (done) done(); }, 25000);
+		})();
+	});
+
 })(jQuery);

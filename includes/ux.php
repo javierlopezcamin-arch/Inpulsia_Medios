@@ -141,6 +141,10 @@ function inpulsia_medios_alerts() {
 	if ( $lost ) {
 		$out[] = [ 'bad', sprintf( _n( '%d imagen no tiene archivo en el servidor y se ve rota en la web.', '%d imágenes no tienen archivo en el servidor y se ven rotas en la web.', $lost, 'inpulsia-medios' ), $lost ), inpulsia_medios_url( 'limpieza' ), __( 'Revisar y recuperar', 'inpulsia-medios' ) ];
 	}
+	$health = function_exists( 'inpulsia_medios_health_result' ) ? inpulsia_medios_health_result() : null;
+	if ( $health && $health['failed'] ) {
+		$out[] = [ 'bad', sprintf( _n( 'La comprobación diaria ha encontrado %d imagen cambiada que no carga.', 'La comprobación diaria ha encontrado %d imágenes cambiadas que no cargan.', count( $health['failed'] ), 'inpulsia-medios' ), count( $health['failed'] ) ), inpulsia_medios_url( 'rendimiento' ), __( 'Ver cuáles', 'inpulsia-medios' ) ];
+	}
 	$job = inpulsia_medios_bg_job();
 	if ( $job && empty( $job['done'] ) ) {
 		$out[] = [ 'info', sprintf( __( 'Optimización en segundo plano: %1$d de %2$d imágenes.', 'inpulsia-medios' ), $job['offset'], count( $job['ids'] ) ), '', '' ];
@@ -188,6 +192,10 @@ function inpulsia_medios_tab_badges() {
 		$b['editar'] = inpulsia_medios_count( [ 'missing_alt' => true ] );
 	}
 	$b['limpieza'] = inpulsia_medios_lost_count() + count( inpulsia_medios_recent_errors() );
+	if ( function_exists( 'inpulsia_medios_perf_problem_count' ) ) {
+		$health            = inpulsia_medios_health_result();
+		$b['rendimiento'] = inpulsia_medios_perf_problem_count() + ( $health ? count( $health['failed'] ) : 0 );
+	}
 	return array_filter( $b );
 }
 
