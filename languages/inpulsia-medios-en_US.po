@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inpulsia Medios\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 23:20+0100\n"
+"POT-Creation-Date: 2026-11-13 23:28+0100\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,7 +17,7 @@ msgstr "Home"
 msgid "Editar"
 msgstr "Edit"
 
-#: includes/admin.php:27 includes/admin.php:530
+#: includes/admin.php:27 includes/admin.php:534
 msgid "Limpieza"
 msgstr "Cleanup"
 
@@ -169,7 +169,7 @@ msgstr "Any usage"
 msgid "En uso en la web"
 msgstr "Used on the site"
 
-#: includes/admin.php:252 includes/admin.php:429 includes/i18n-js.php:91
+#: includes/admin.php:252 includes/admin.php:430 includes/i18n-js.php:91
 msgid "Sin uso detectado"
 msgstr "No usage detected"
 
@@ -426,451 +426,459 @@ msgstr "Caption"
 msgid "Descripción"
 msgstr "Description"
 
-#: includes/admin.php:416
+#: includes/admin.php:417
 #, php-format
 msgid "Seleccionar imagen %d"
 msgstr "Select image %d"
 
-#: includes/admin.php:419
+#: includes/admin.php:420
 msgid "Abrir ficha"
 msgstr "Open image sheet"
 
-#: includes/admin.php:445
+#: includes/admin.php:442
+msgid "El archivo no está en el servidor (la web la muestra rota). No se puede renombrar:"
+msgstr "The file is not on the server (the site shows it broken). It cannot be renamed:"
+
+#: includes/admin.php:442
+msgid "recupérala en Limpieza"
+msgstr "recover it in Clean-up"
+
+#: includes/admin.php:449
 msgid "Sugerir alt, nombre y título con IA"
 msgstr "Suggest alt, name and title with AI"
 
-#: includes/admin.php:445
+#: includes/admin.php:449
 #, php-format
 msgid "Sugerir textos con IA para la imagen %d"
 msgstr "Suggest texts with AI for image %d"
 
-#: includes/admin.php:450
+#: includes/admin.php:454
 msgid "No hay imágenes con estos filtros."
 msgstr "No images match these filters."
 
-#: includes/admin.php:464
+#: includes/admin.php:468
 msgid "Acciones con las imágenes seleccionadas"
 msgstr "Actions for the selected images"
 
-#: includes/admin.php:467 includes/ux.php:621 includes/ux.php:637
+#: includes/admin.php:471 includes/ux.php:621 includes/ux.php:637
 msgid "Sugerir con IA"
 msgstr "Suggest with AI"
 
-#: includes/admin.php:469 includes/editors.php:30 includes/perf.php:390
+#: includes/admin.php:473 includes/editors.php:30 includes/perf.php:390
 msgid "Optimizar"
 msgstr "Optimize"
 
-#: includes/admin.php:470
+#: includes/admin.php:474
 msgid "Copia el campo en el que estabas escribiendo a todas las seleccionadas"
 msgstr "Copies the field you were typing in to all selected images"
 
-#: includes/admin.php:470
+#: includes/admin.php:474
 msgid "Copiar campo a seleccionadas"
 msgstr "Copy field to selected"
 
-#: includes/admin.php:471
+#: includes/admin.php:475
 msgid "Quitar selección"
 msgstr "Clear selection"
 
-#: includes/admin.php:482
+#: includes/admin.php:486
 msgid "Exportar biblioteca a CSV"
 msgstr "Export library to CSV"
 
-#: includes/admin.php:488 includes/admin.php:527
+#: includes/admin.php:492 includes/admin.php:531
 msgid "Tipo"
 msgstr "Type"
 
-#: includes/admin.php:491
+#: includes/admin.php:495
 msgid "Solo imágenes"
 msgstr "Images only"
 
-#: includes/admin.php:492
+#: includes/admin.php:496
 msgid "Todos los medios"
 msgstr "All media"
 
-#: includes/admin.php:497
+#: includes/admin.php:501
 msgid "Filtro"
 msgstr "Filter"
 
-#: includes/admin.php:498
+#: includes/admin.php:502
 msgid "Solo imágenes sin texto alternativo"
 msgstr "Only images without alt text"
 
-#: includes/admin.php:501
+#: includes/admin.php:505
 msgid "Subidas entre"
 msgstr "Uploaded between"
 
-#: includes/admin.php:505
+#: includes/admin.php:509
 msgid "Contexto"
 msgstr "Context"
 
-#: includes/admin.php:507
+#: includes/admin.php:511
 msgid "Incluir columna"
 msgstr "Include column"
 
-#: includes/admin.php:508
+#: includes/admin.php:512
 msgid "Indica en qué páginas, entradas, productos o plantillas de Elementor aparece cada imagen. En bibliotecas muy grandes la exportación tarda más."
 msgstr "Shows which pages, posts, products or Elementor templates each image appears on. Very large libraries take longer to export."
 
-#: includes/admin.php:512
+#: includes/admin.php:516
 msgid "Descargar CSV"
 msgstr "Download CSV"
 
-#: includes/admin.php:522
+#: includes/admin.php:526
 msgid "Últimas importaciones"
 msgstr "Latest imports"
 
-#: includes/admin.php:523
+#: includes/admin.php:527
 msgid "Se guardan las 20 últimas. Deshacer restaura los valores anteriores, incluidos los nombres de archivo y sus URLs. Abre una fila para deshacer solo una imagen."
 msgstr "The last 20 are kept. Undo restores the previous values, including file names and their URLs. Open a row to undo a single image."
 
-#: includes/admin.php:526
+#: includes/admin.php:530
 msgid "Buscar por origen o usuario"
 msgstr "Search by source or user"
 
-#: includes/admin.php:526
+#: includes/admin.php:530
 msgid "Buscar en el historial"
 msgstr "Search the history"
 
-#: includes/admin.php:528
+#: includes/admin.php:532
 msgid "Todos los tipos"
 msgstr "All types"
 
-#: includes/admin.php:529 includes/admin.php:664 includes/ux.php:514
+#: includes/admin.php:533 includes/admin.php:668 includes/ux.php:514
 msgid "Optimización"
 msgstr "Optimization"
 
-#: includes/admin.php:531
+#: includes/admin.php:535
 msgid "Ediciones e importaciones"
 msgstr "Edits and imports"
 
-#: includes/admin.php:533 includes/admin.php:545 includes/cli.php:169
+#: includes/admin.php:537 includes/admin.php:549 includes/cli.php:169
 msgid "Usuario"
 msgstr "User"
 
-#: includes/admin.php:534
+#: includes/admin.php:538
 msgid "Todos los usuarios"
 msgstr "All users"
 
-#: includes/admin.php:542
+#: includes/admin.php:546
 msgid "Todavía no hay importaciones."
 msgstr "No imports yet."
 
-#: includes/admin.php:545 includes/cli.php:169
+#: includes/admin.php:549 includes/cli.php:169
 msgid "Fecha"
 msgstr "Date"
 
-#: includes/admin.php:545 includes/admin.php:608 includes/cli.php:169
+#: includes/admin.php:549 includes/admin.php:612 includes/cli.php:169
 msgid "Origen"
 msgstr "Source"
 
-#: includes/admin.php:545
+#: includes/admin.php:549
 msgid "Filas"
 msgstr "Rows"
 
-#: includes/admin.php:545
+#: includes/admin.php:549
 msgid "Medios cambiados"
 msgstr "Media changed"
 
-#: includes/admin.php:545 includes/cli.php:169
+#: includes/admin.php:549 includes/cli.php:169
 msgid "Estado"
 msgstr "Status"
 
-#: includes/admin.php:554
+#: includes/admin.php:558
 msgid "Ver imágenes"
 msgstr "Show images"
 
-#: includes/admin.php:560
+#: includes/admin.php:564
 msgid "aplicado"
 msgstr "applied"
 
-#: includes/admin.php:560
+#: includes/admin.php:564
 msgid "deshecho"
 msgstr "undone"
 
-#: includes/admin.php:560
+#: includes/admin.php:564
 msgid "incompleto"
 msgstr "incomplete"
 
-#: includes/admin.php:563 includes/guide.php:197 includes/i18n-js.php:86
+#: includes/admin.php:567 includes/guide.php:197 includes/i18n-js.php:86
 msgid "Deshacer"
 msgstr "Undo"
 
-#: includes/admin.php:575
+#: includes/admin.php:579
 msgid "Deshacer esta"
 msgstr "Undo this one"
 
-#: includes/admin.php:579
+#: includes/admin.php:583
 #, php-format
 msgid "Y %d más."
 msgstr "And %d more."
 
-#: includes/admin.php:589
+#: includes/admin.php:593
 msgid "Deshaciendo"
 msgstr "Undoing"
 
-#: includes/admin.php:598
+#: includes/admin.php:602
 msgid "Redirecciones 301 de archivos renombrados"
 msgstr "301 redirects for renamed files"
 
-#: includes/admin.php:599
+#: includes/admin.php:603
 msgid "Cuando alguien (o Google Imágenes) pide la URL antigua de un archivo renombrado, se le redirige a la nueva. Funciona en servidores donde las peticiones a archivos que no existen llegan a WordPress, que es lo habitual en Apache y en la mayoría de configuraciones de Nginx."
 msgstr "When someone (or Google Images) requests the old URL of a renamed file, they are redirected to the new one. This works on servers that pass requests for missing files to WordPress, which is usual on Apache and most Nginx setups."
 
-#: includes/admin.php:601
+#: includes/admin.php:605
 msgid "Redirecciones eliminadas."
 msgstr "Redirects deleted."
 
-#: includes/admin.php:604
+#: includes/admin.php:608
 msgid "No hay redirecciones."
 msgstr "No redirects."
 
-#: includes/admin.php:606
+#: includes/admin.php:610
 #, php-format
 msgid "%d redirecciones"
 msgstr "%d redirects"
 
-#: includes/admin.php:606
+#: includes/admin.php:610
 #, php-format
 msgid "(se muestran las %d más recientes)"
 msgstr "(showing the %d most recent)"
 
-#: includes/admin.php:608
+#: includes/admin.php:612
 msgid "Destino"
 msgstr "Target"
 
-#: includes/admin.php:608
+#: includes/admin.php:612
 msgid "Visitas"
 msgstr "Hits"
 
-#: includes/admin.php:608
+#: includes/admin.php:612
 msgid "Creada"
 msgstr "Created"
 
-#: includes/admin.php:621
+#: includes/admin.php:625
 msgid "Eliminar"
 msgstr "Delete"
 
-#: includes/admin.php:632
+#: includes/admin.php:636
 msgid "Eliminar todas"
 msgstr "Delete all"
 
-#: includes/admin.php:642
+#: includes/admin.php:646
 msgid "Solo los administradores pueden eliminar redirecciones."
 msgstr "Only administrators can delete redirects."
 
-#: includes/admin.php:663
+#: includes/admin.php:667
 msgid "Secciones de ajustes"
 msgstr "Settings sections"
 
-#: includes/admin.php:665
+#: includes/admin.php:669
 msgid "IA"
 msgstr "AI"
 
-#: includes/admin.php:666 includes/admin.php:742
+#: includes/admin.php:670 includes/admin.php:746
 msgid "Seguridad y copias"
 msgstr "Safety and backups"
 
-#: includes/admin.php:667 includes/admin.php:728
+#: includes/admin.php:671 includes/admin.php:732
 msgid "Diagnóstico del servidor"
 msgstr "Server check"
 
-#: includes/admin.php:670
+#: includes/admin.php:674
 msgid "Ajustes guardados."
 msgstr "Settings saved."
 
-#: includes/admin.php:674
+#: includes/admin.php:678
 msgid "Sugerencias con IA"
 msgstr "AI suggestions"
 
-#: includes/admin.php:675
+#: includes/admin.php:679
 msgid "Puedes usar proveedores gratuitos, Claude o ninguno. Basta con uno."
 msgstr "You can use free providers, Claude or none. One is enough."
 
-#: includes/admin.php:681
+#: includes/admin.php:685
 msgid "Clave de la API de Claude"
 msgstr "Claude API key"
 
-#: includes/admin.php:681 includes/ai.php:579
+#: includes/admin.php:685 includes/ai.php:579
 msgid "activo"
 msgstr "active"
 
-#: includes/admin.php:681 includes/ai.php:575
+#: includes/admin.php:685 includes/ai.php:575
 msgid "sin configurar"
 msgstr "not set up"
 
-#: includes/admin.php:684
+#: includes/admin.php:688
 msgid "Se usa la clave definida en"
 msgstr "Using the key defined in"
 
-#: includes/admin.php:684 includes/admin.php:691
+#: includes/admin.php:688 includes/admin.php:695
 msgid "wp-config.php"
 msgstr "wp-config.php"
 
-#: includes/admin.php:684
+#: includes/admin.php:688
 msgid "INPULSIA_MEDIOS_CLAUDE_KEY"
 msgstr "INPULSIA_MEDIOS_CLAUDE_KEY"
 
-#: includes/admin.php:687 includes/ai.php:567
+#: includes/admin.php:691 includes/ai.php:567
 #, php-format
 msgid "Guardada (…%s)"
 msgstr "Saved (…%s)"
 
-#: includes/admin.php:689
+#: includes/admin.php:693
 msgid "Borrar la clave guardada"
 msgstr "Delete the saved key"
 
-#: includes/admin.php:691
+#: includes/admin.php:695
 msgid "Déjalo en blanco para mantener la actual. Es más seguro definirla en"
 msgstr "Leave blank to keep the current one. It is safer to define it in"
 
-#: includes/admin.php:691
+#: includes/admin.php:695
 msgid "define( 'INPULSIA_MEDIOS_CLAUDE_KEY', 'sk-ant-…' );"
 msgstr "define( 'INPULSIA_MEDIOS_CLAUDE_KEY', 'sk-ant-…' );"
 
-#: includes/admin.php:696 includes/ai.php:584
+#: includes/admin.php:700 includes/ai.php:584
 msgid "Modelo"
 msgstr "Model"
 
-#: includes/admin.php:707
+#: includes/admin.php:711
 msgid "Contexto SEO de la web"
 msgstr "Site SEO context"
 
-#: includes/admin.php:709
+#: includes/admin.php:713
 msgid "Ej.: Reformas integrales en Santander. Palabras clave: reformas de cocina, baños, Cantabria."
 msgstr "E.g.: Home renovations in Santander. Keywords: kitchen renovations, bathrooms, Cantabria."
 
-#: includes/admin.php:710
+#: includes/admin.php:714
 msgid "Negocio, ubicación y palabras clave. Se envía en cada sugerencia junto con la imagen y las páginas donde aparece."
 msgstr "Business, location and keywords. Sent with every suggestion along with the image and the pages where it appears."
 
-#: includes/admin.php:714
+#: includes/admin.php:718
 msgid "Ciudad o zona"
 msgstr "City or area"
 
-#: includes/admin.php:716
+#: includes/admin.php:720
 msgid "Ej.: Santander"
 msgstr "E.g.: Manchester"
 
-#: includes/admin.php:717
+#: includes/admin.php:721
 msgid "Se añade al alt cuando encaja y se puede usar en las plantillas como {ciudad}."
 msgstr "It is added to the alt when it fits and can be used in templates as {ciudad}."
 
-#: includes/admin.php:721
+#: includes/admin.php:725
 msgid "Guardar ajustes"
 msgstr "Save settings"
 
-#: includes/admin.php:729
+#: includes/admin.php:733
 msgid "Lo que el servidor necesita para optimizar sin errores."
 msgstr "What the server needs to optimize without errors."
 
-#: includes/admin.php:744
+#: includes/admin.php:748
 msgid "archivos antiguos eliminados."
 msgstr "old files deleted."
 
-#: includes/admin.php:747
+#: includes/admin.php:751
 msgid "copias eliminadas."
 msgstr "backups deleted."
 
-#: includes/admin.php:749
+#: includes/admin.php:753
 msgid "copias,"
 msgstr "backups,"
 
-#: includes/admin.php:749
+#: includes/admin.php:753
 msgid "en"
 msgstr "in"
 
-#: includes/admin.php:749
+#: includes/admin.php:753
 msgid "uploads/inpulsia-medios-backups"
 msgstr "uploads/inpulsia-medios-backups"
 
-#: includes/admin.php:749
+#: includes/admin.php:753
 msgid ". Sin copia, una optimización ya no se puede deshacer."
 msgstr ". Without a backup, an optimization can no longer be undone."
 
-#: includes/admin.php:751
+#: includes/admin.php:755
 msgid "archivos antiguos ("
 msgstr "old files ("
 
-#: includes/admin.php:751
+#: includes/admin.php:755
 msgid ") se conservan durante"
 msgstr ") are kept for"
 
-#: includes/admin.php:751
+#: includes/admin.php:755
 msgid "días tras renombrar u optimizar, para que las cachés y los enlaces externos no muestren imágenes rotas. Se borran solos."
 msgstr "days after renaming or optimizing, so caches and external links never show broken images. They are deleted automatically."
 
-#: includes/admin.php:756
+#: includes/admin.php:760
 msgid "Borrar ya los archivos antiguos"
 msgstr "Delete old files now"
 
-#: includes/admin.php:763
+#: includes/admin.php:767
 msgid "Borrar las de más de 30 días ("
 msgstr "Delete those older than 30 days ("
 
-#: includes/admin.php:769
+#: includes/admin.php:773
 msgid "Borrar todas"
 msgstr "Delete all"
 
-#: includes/admin.php:778
+#: includes/admin.php:782
 msgid "Solo los administradores pueden borrar copias."
 msgstr "Only administrators can delete backups."
 
-#: includes/admin.php:794
+#: includes/admin.php:798
 msgid "No tienes permisos para editar medios."
 msgstr "You do not have permission to edit media."
 
-#: includes/admin.php:813
+#: includes/admin.php:817
 msgid "Error al subir el archivo."
 msgstr "Error uploading the file."
 
-#: includes/admin.php:821 includes/cli.php:52
+#: includes/admin.php:825 includes/cli.php:52
 msgid "El archivo está vacío o no tiene columna ID."
 msgstr "The file is empty or has no ID column."
 
-#: includes/admin.php:840
+#: includes/admin.php:844
 msgid "No hay cambios que revisar."
 msgstr "There are no changes to review."
 
-#: includes/admin.php:852 includes/bulk-filter.php:135
+#: includes/admin.php:856 includes/bulk-filter.php:135
 #: includes/cleanup-admin.php:232
 msgid "La sesión ha caducado. Vuelve a cargar los cambios."
 msgstr "The session has expired. Load the changes again."
 
-#: includes/admin.php:890
+#: includes/admin.php:894
 msgid "Esta importación no se puede deshacer."
 msgstr "This import cannot be undone."
 
-#: includes/admin.php:925
+#: includes/admin.php:929
 msgid "No hay imágenes seleccionadas."
 msgstr "No images selected."
 
-#: includes/admin.php:965
+#: includes/admin.php:969
 msgid "Copia de seguridad en uploads/inpulsia-medios-backups: se puede deshacer desde el Historial."
 msgstr "Backup in uploads/inpulsia-medios-backups: it can be undone from History."
 
-#: includes/admin.php:965
+#: includes/admin.php:969
 msgid "Sin copia de seguridad: esta optimización no se podrá deshacer."
 msgstr "No backup: this optimization cannot be undone."
 
-#: includes/admin.php:966
+#: includes/admin.php:970
 #, php-format
 msgid "Ahorro estimado: unos %s."
 msgstr "Estimated saving: about %s."
 
-#: includes/admin.php:977 includes/ux.php:311
+#: includes/admin.php:981 includes/ux.php:311
 msgid "La sesión ha caducado. Vuelve a lanzar la optimización."
 msgstr "The session has expired. Start the optimization again."
 
-#: includes/admin.php:1018
+#: includes/admin.php:1022
 msgid "Este campo no se guarda automáticamente."
 msgstr "This field is not autosaved."
 
-#: includes/admin.php:1021
+#: includes/admin.php:1025
 msgid "El nombre de archivo no puede quedar vacío."
 msgstr "The file name cannot be empty."
 
-#: includes/admin.php:1084
+#: includes/admin.php:1088
 #, php-format
 msgid "Error del servidor: %1$s (%2$s, línea %3$d)"
 msgstr "Server error: %1$s (%2$s, line %3$d)"
@@ -1449,8 +1457,9 @@ msgid "Imagen original restaurada."
 msgstr "Original image restored."
 
 #: includes/core.php:296
-msgid "archivo no encontrado en el servidor."
-msgstr "file not found on the server."
+#, php-format
+msgid "el archivo %s no está en el servidor, así que no se puede renombrar. Recupéralo en Limpieza → Imágenes sin archivo o vuelve a subirlo."
+msgstr "the file %s is not on the server, so it cannot be renamed. Recover it in Clean-up → Images with no file, or upload it again."
 
 #: includes/core.php:299
 msgid "nombre vacío."
@@ -2547,6 +2556,10 @@ msgstr "Not saved: %s."
 msgid "Reintentar"
 msgstr "Retry"
 
+#: includes/i18n-js.php:109
+msgid "Falta el archivo en el servidor"
+msgstr "The file is missing on the server"
+
 #: includes/media.php:15
 msgid "SEO de imagen"
 msgstr "Image SEO"
@@ -3230,6 +3243,9 @@ msgstr "Skip"
 #: includes/ux.php:638
 msgid "Terminar"
 msgstr "Finish"
+
+#~ msgid "archivo no encontrado en el servidor."
+#~ msgstr "file not found on the server."
 
 #~ msgid "Falta la clave de la API de Claude en Ajustes."
 #~ msgstr "The Claude API key is missing in Settings."

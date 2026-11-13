@@ -409,10 +409,11 @@ function inpulsia_medios_tab_editar() {
 				$where = inpulsia_medios_where_used( $post->ID );
 				$lang  = inpulsia_medios_lang( $post->ID );
 				$large = wp_get_attachment_image_url( $post->ID, 'medium_large' );
+				$lost  = ! $path || ! file_exists( $path );
 				$head  = $where ? inpulsia_medios_nearest_heading( (int) $where[0]['id'], $post->ID, $cur['filename'] ) : '';
 				$cat   = $where ? wp_list_pluck( (array) get_the_category( (int) $where[0]['id'] ), 'name' ) : [];
 				?>
-				<tr data-id="<?php echo (int) $post->ID; ?>" data-large="<?php echo esc_url( (string) $large ); ?>" data-ext="<?php echo esc_attr( $ext ); ?>" data-info="<?php echo esc_attr( (int) ( $meta['width'] ?? 0 ) . '×' . (int) ( $meta['height'] ?? 0 ) . ' · ' . ( file_exists( $path ) ? size_format( filesize( $path ), 0 ) : '—' ) ); ?>" data-heading="<?php echo esc_attr( $head ); ?>" data-category="<?php echo esc_attr( $cat ? $cat[0] : '' ); ?>" data-where="<?php echo esc_attr( wp_json_encode( array_map( function ( $w ) { return [ 't' => $w['title'], 'u' => $w['url'], 'k' => $w['keyword'] ]; }, array_slice( $where, 0, 6 ) ) ) ); ?>" data-page="<?php echo esc_attr( $where ? $where[0]['title'] : '' ); ?>" data-keyword="<?php echo esc_attr( implode( ' ', array_slice( array_filter( wp_list_pluck( $where, 'keyword' ) ), 0, 1 ) ) ); ?>">
+				<tr data-id="<?php echo (int) $post->ID; ?>" <?php echo $lost ? 'data-lost="1" class="is-lost"' : ''; ?> data-large="<?php echo esc_url( (string) $large ); ?>" data-ext="<?php echo esc_attr( $ext ); ?>" data-info="<?php echo esc_attr( (int) ( $meta['width'] ?? 0 ) . '×' . (int) ( $meta['height'] ?? 0 ) . ' · ' . ( file_exists( $path ) ? size_format( filesize( $path ), 0 ) : '—' ) ); ?>" data-heading="<?php echo esc_attr( $head ); ?>" data-category="<?php echo esc_attr( $cat ? $cat[0] : '' ); ?>" data-where="<?php echo esc_attr( wp_json_encode( array_map( function ( $w ) { return [ 't' => $w['title'], 'u' => $w['url'], 'k' => $w['keyword'] ]; }, array_slice( $where, 0, 6 ) ) ) ); ?>" data-page="<?php echo esc_attr( $where ? $where[0]['title'] : '' ); ?>" data-keyword="<?php echo esc_attr( implode( ' ', array_slice( array_filter( wp_list_pluck( $where, 'keyword' ) ), 0, 1 ) ) ); ?>">
 					<th class="check-column"><input type="checkbox" class="inpulsia-medios-row-check" aria-label="<?php echo esc_attr( sprintf( __( 'Seleccionar imagen %d', 'inpulsia-medios' ), $post->ID ) ); ?>" /></th>
 					<td class="col-thumb">
 						<span class="im-row-status" role="img"></span>
@@ -434,9 +435,12 @@ function inpulsia_medios_tab_editar() {
 							<?php if ( $field === 'description' || $field === 'caption' ) : ?>
 								<textarea rows="2" aria-label="<?php echo esc_attr( $labels[ $field ] . ' #' . $post->ID ); ?>" data-field="<?php echo esc_attr( $field ); ?>" data-orig="<?php echo esc_attr( $cur[ $field ] ); ?>"><?php echo esc_textarea( $cur[ $field ] ); ?></textarea>
 							<?php else : ?>
-								<input type="text" aria-label="<?php echo esc_attr( $labels[ $field ] . ' #' . $post->ID ); ?>" data-field="<?php echo esc_attr( $field ); ?>" data-orig="<?php echo esc_attr( $cur[ $field ] ); ?>" value="<?php echo esc_attr( $cur[ $field ] ); ?>" />
+								<input type="text" <?php echo $lost && $field === 'filename' ? 'readonly' : ''; ?> aria-label="<?php echo esc_attr( $labels[ $field ] . ' #' . $post->ID ); ?>" data-field="<?php echo esc_attr( $field ); ?>" data-orig="<?php echo esc_attr( $cur[ $field ] ); ?>" value="<?php echo esc_attr( $cur[ $field ] ); ?>" />
 							<?php endif; ?>
 							<?php if ( $field === 'filename' && $ext ) : ?><small class="muted">.<?php echo esc_html( $ext ); ?></small><?php endif; ?>
+							<?php if ( $field === 'filename' && $lost ) : ?>
+								<small class="im-lost-msg"><?php esc_html_e( 'El archivo no está en el servidor (la web la muestra rota). No se puede renombrar:', 'inpulsia-medios' ); ?> <a href="<?php echo esc_url( inpulsia_medios_url( 'limpieza' ) ); ?>"><?php esc_html_e( 'recupérala en Limpieza', 'inpulsia-medios' ); ?></a></small>
+							<?php endif; ?>
 							<?php if ( $field === 'alt' ) : ?><small class="inpulsia-medios-chars"></small><?php endif; ?>
 							<small class="im-hint" data-for="<?php echo esc_attr( $field ); ?>"></small>
 						</td>

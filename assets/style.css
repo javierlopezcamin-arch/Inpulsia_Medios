@@ -317,3 +317,6 @@ body.im-sheet-open .inpulsia-medios-wrap { margin-right: 410px; }
 .im-focus-hint { display: block; color: var(--im-muted); margin-top: 4px; }
 .im-focus-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .im-focus-actions kbd { font-size: 10px; margin-left: 4px; }
+
+.im-lost-msg { display: block; color: var(--im-bad); margin-top: 2px; }
+.inpulsia-medios-grid tr.is-lost [data-field="filename"] { background: var(--im-bad-bg); }

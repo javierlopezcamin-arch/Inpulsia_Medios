@@ -131,8 +131,8 @@
 	function rowStatus($tr) {
 		var alt = ($tr.find('[data-field="alt"]').val() || '').trim();
 		var name = $tr.find('[data-field="filename"]').val() || '';
-		var state = $tr.find('.is-save-error').length ? 'error' : (!alt || CAMERA.test(name) ? 'todo' : 'ok');
-		var label = { ok: t('Completa'), todo: !alt ? t('Falta el alt') : t('Nombre poco claro'), error: t('No se ha guardado') }[state];
+		var state = $tr.data('lost') ? 'error' : $tr.find('.is-save-error').length ? 'error' : (!alt || CAMERA.test(name) ? 'todo' : 'ok');
+		var label = $tr.data('lost') ? t('Falta el archivo en el servidor') : { ok: t('Completa'), todo: !alt ? t('Falta el alt') : t('Nombre poco claro'), error: t('No se ha guardado') }[state];
 		$tr.attr('data-state', state).find('.im-row-status').attr({ 'class': 'im-row-status is-' + state, title: label, 'aria-label': label });
 	}
 
@@ -916,6 +916,7 @@
 	var $focus = $('#im-focus'), queue = [], qi = 0, qTotal = 0;
 
 	function missingField($tr) {
+		if ($tr.data('lost')) return '';
 		if (!($tr.find('[data-field="alt"]').val() || '').trim()) return 'alt';
 		if (CAMERA.test($tr.find('[data-field="filename"]').val() || '')) return 'filename';
 		return '';

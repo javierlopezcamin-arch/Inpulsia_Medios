@@ -106,5 +106,6 @@ function inpulsia_medios_js_i18n() {
 		'error %s' => __( 'error %s', 'inpulsia-medios' ),
 		'No se ha guardado: %s.' => __( 'No se ha guardado: %s.', 'inpulsia-medios' ),
 		'Reintentar' => __( 'Reintentar', 'inpulsia-medios' ),
+		'Falta el archivo en el servidor' => __( 'Falta el archivo en el servidor', 'inpulsia-medios' ),
 	];
 }
