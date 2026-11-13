@@ -277,7 +277,10 @@
 					web: cfg.site || '',
 					nombre: $tr.find('[data-field="filename"]').val() || '',
 					alt: $tr.find('[data-field="alt"]').val() || '',
-					n: String(n)
+					n: String(n),
+					encabezado: $tr.data('heading') || $tr.data('page') || '',
+					categoria: $tr.data('category') || '',
+					ciudad: cfg.city || ''
 				};
 				var v = tpl.replace(/\{(\w+)\}/g, function (m, k) { return k in vars ? vars[k] : m; })
 					.replace(/\s+-\s+-\s+/g, ' - ').replace(/^[\s-]+|[\s-]+$/g, '').replace(/\s{2,}/g, ' ');
@@ -334,6 +337,7 @@
 					$tr.find('.col-ai').append(txt('div', res.data || t('Error'), 'ai-error'));
 					return;
 				}
+				if (res.data.source === 'context') $tr.find('.col-ai').append(txt('div', t('Sin IA: sacado de la página'), 'muted ai-note'));
 				$.each(['alt', 'filename', 'title'], function (_, f) {
 					var $f = $tr.find('[data-field="' + f + '"]');
 					if (res.data[f] && res.data[f] !== $f.val()) { $f.val(res.data[f]).addClass('is-ai'); save($f); }

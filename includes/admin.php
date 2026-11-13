@@ -51,6 +51,7 @@ function inpulsia_medios_assets( $hook ) {
 		'edit_url' => admin_url( 'post.php?action=edit&post=' ),
 		'history'  => admin_url( 'upload.php?page=inpulsia-medios&tab=historial' ),
 		'site'     => get_bloginfo( 'name' ),
+		'city'     => function_exists( 'inpulsia_medios_settings' ) ? inpulsia_medios_settings()['city'] : '',
 		'i18n'     => determine_locale() === 'es_ES' ? [] : inpulsia_medios_js_i18n(),
 		'urls'     => [
 			'i' => inpulsia_medios_url( 'inicio' ),
@@ -339,7 +340,7 @@ function inpulsia_medios_tab_editar() {
 				<button type="button" class="button button-primary" id="im-tpl-filter"><?php echo esc_html( sprintf( __( 'Aplicar a las %d del filtro', 'inpulsia-medios' ), $query->found_posts ) ); ?></button>
 			</div>
 			<p class="description"><?php esc_html_e( 'Variables:', 'inpulsia-medios' ); ?>
-				<?php foreach ( [ '{pagina}' => __( 'título de la página donde se usa', 'inpulsia-medios' ), '{keyword}' => __( 'palabra clave de Rank Math, Yoast o SEOPress de esa página', 'inpulsia-medios' ), '{titulo}' => __( 'título de la imagen', 'inpulsia-medios' ), '{web}' => 'nombre de la web', '{nombre}' => 'nombre de archivo actual', '{alt}' => 'alt actual', '{n}' => __( 'número 1, 2, 3…', 'inpulsia-medios' ) ] as $var => $help ) : ?>
+				<?php foreach ( [ '{pagina}' => __( 'título de la página donde se usa', 'inpulsia-medios' ), '{keyword}' => __( 'palabra clave de Rank Math, Yoast o SEOPress de esa página', 'inpulsia-medios' ), '{titulo}' => __( 'título de la imagen', 'inpulsia-medios' ), '{web}' => 'nombre de la web', '{nombre}' => 'nombre de archivo actual', '{alt}' => 'alt actual', '{n}' => __( 'número 1, 2, 3…', 'inpulsia-medios' ), '{encabezado}' => __( 'encabezado más cercano a la imagen en la página', 'inpulsia-medios' ), '{categoria}' => __( 'categoría de la entrada donde se usa', 'inpulsia-medios' ), '{ciudad}' => __( 'ciudad o zona de Ajustes', 'inpulsia-medios' ) ] as $var => $help ) : ?>
 					<button type="button" class="button-link im-var" data-var="<?php echo esc_attr( $var ); ?>" title="<?php echo esc_attr( $help ); ?>"><code><?php echo esc_html( $var ); ?></code></button>
 				<?php endforeach; ?>
 				<?php esc_html_e( '· Se aplica a las seleccionadas, o a toda la página si no hay ninguna. Después revisa y aplica.', 'inpulsia-medios' ); ?>
@@ -408,8 +409,10 @@ function inpulsia_medios_tab_editar() {
 				$where = inpulsia_medios_where_used( $post->ID );
 				$lang  = inpulsia_medios_lang( $post->ID );
 				$large = wp_get_attachment_image_url( $post->ID, 'medium_large' );
+				$head  = $where ? inpulsia_medios_nearest_heading( (int) $where[0]['id'], $post->ID, $cur['filename'] ) : '';
+				$cat   = $where ? wp_list_pluck( (array) get_the_category( (int) $where[0]['id'] ), 'name' ) : [];
 				?>
-				<tr data-id="<?php echo (int) $post->ID; ?>" data-large="<?php echo esc_url( (string) $large ); ?>" data-ext="<?php echo esc_attr( $ext ); ?>" data-info="<?php echo esc_attr( (int) ( $meta['width'] ?? 0 ) . '×' . (int) ( $meta['height'] ?? 0 ) . ' · ' . ( file_exists( $path ) ? size_format( filesize( $path ), 0 ) : '—' ) ); ?>" data-where="<?php echo esc_attr( wp_json_encode( array_map( function ( $w ) { return [ 't' => $w['title'], 'u' => $w['url'], 'k' => $w['keyword'] ]; }, array_slice( $where, 0, 6 ) ) ) ); ?>" data-page="<?php echo esc_attr( $where ? $where[0]['title'] : '' ); ?>" data-keyword="<?php echo esc_attr( implode( ' ', array_slice( array_filter( wp_list_pluck( $where, 'keyword' ) ), 0, 1 ) ) ); ?>">
+				<tr data-id="<?php echo (int) $post->ID; ?>" data-large="<?php echo esc_url( (string) $large ); ?>" data-ext="<?php echo esc_attr( $ext ); ?>" data-info="<?php echo esc_attr( (int) ( $meta['width'] ?? 0 ) . '×' . (int) ( $meta['height'] ?? 0 ) . ' · ' . ( file_exists( $path ) ? size_format( filesize( $path ), 0 ) : '—' ) ); ?>" data-heading="<?php echo esc_attr( $head ); ?>" data-category="<?php echo esc_attr( $cat ? $cat[0] : '' ); ?>" data-where="<?php echo esc_attr( wp_json_encode( array_map( function ( $w ) { return [ 't' => $w['title'], 'u' => $w['url'], 'k' => $w['keyword'] ]; }, array_slice( $where, 0, 6 ) ) ) ); ?>" data-page="<?php echo esc_attr( $where ? $where[0]['title'] : '' ); ?>" data-keyword="<?php echo esc_attr( implode( ' ', array_slice( array_filter( wp_list_pluck( $where, 'keyword' ) ), 0, 1 ) ) ); ?>">
 					<th class="check-column"><input type="checkbox" class="inpulsia-medios-row-check" aria-label="<?php echo esc_attr( sprintf( __( 'Seleccionar imagen %d', 'inpulsia-medios' ), $post->ID ) ); ?>" /></th>
 					<td class="col-thumb">
 						<span class="im-row-status" role="img"></span>
@@ -669,12 +672,13 @@ function inpulsia_medios_tab_ajustes() {
 	<?php inpulsia_medios_opt_settings_card(); ?>
 	<div class="inpulsia-medios-card" id="im-ai">
 		<h2><span class="dashicons dashicons-lightbulb" aria-hidden="true"></span> <?php esc_html_e( 'Sugerencias con IA', 'inpulsia-medios' ); ?></h2>
+		<p class="description"><?php esc_html_e( 'Puedes usar proveedores gratuitos, Claude o ninguno. Basta con uno.', 'inpulsia-medios' ); ?></p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="inpulsia_medios_settings" />
 			<?php wp_nonce_field( 'inpulsia_medios_settings' ); ?>
 			<table class="form-table" role="presentation">
 				<tr>
-					<th scope="row"><label for="im-key"><?php esc_html_e( 'Clave de la API de Claude', 'inpulsia-medios' ); ?></label></th>
+					<th scope="row"><label for="im-key"><?php esc_html_e( 'Clave de la API de Claude', 'inpulsia-medios' ); ?></label><br><?php echo in_array( 'claude', inpulsia_medios_ai_providers(), true ) ? '<span class="im-text-ok">' . esc_html__( 'activo', 'inpulsia-medios' ) . '</span>' : '<span class="muted">' . esc_html__( 'sin configurar', 'inpulsia-medios' ) . '</span>'; ?></th>
 					<td>
 						<?php if ( $from_conf ) : ?>
 							<p><?php esc_html_e( 'Se usa la clave definida en', 'inpulsia-medios' ); ?> <code><?php esc_html_e( 'wp-config.php', 'inpulsia-medios' ); ?></code> (<code><?php esc_html_e( 'INPULSIA_MEDIOS_CLAUDE_KEY', 'inpulsia-medios' ); ?></code>).</p>
@@ -698,11 +702,19 @@ function inpulsia_medios_tab_ajustes() {
 						</select>
 					</td>
 				</tr>
+				<?php inpulsia_medios_ai_provider_rows( $s ); ?>
 				<tr>
 					<th scope="row"><label for="im-context"><?php esc_html_e( 'Contexto SEO de la web', 'inpulsia-medios' ); ?></label></th>
 					<td>
 						<textarea id="im-context" name="context" rows="5" class="large-text" placeholder="<?php esc_attr_e( 'Ej.: Reformas integrales en Santander. Palabras clave: reformas de cocina, baños, Cantabria.', 'inpulsia-medios' ); ?>"><?php echo esc_textarea( $s['context'] ); ?></textarea>
 						<p class="description"><?php esc_html_e( 'Negocio, ubicación y palabras clave. Se envía en cada sugerencia junto con la imagen y las páginas donde aparece.', 'inpulsia-medios' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label for="im-city"><?php esc_html_e( 'Ciudad o zona', 'inpulsia-medios' ); ?></label></th>
+					<td>
+						<input type="text" id="im-city" name="city" value="<?php echo esc_attr( $s['city'] ); ?>" class="regular-text" placeholder="<?php esc_attr_e( 'Ej.: Santander', 'inpulsia-medios' ); ?>" />
+						<p class="description"><?php esc_html_e( 'Se añade al alt cuando encaja y se puede usar en las plantillas como {ciudad}.', 'inpulsia-medios' ); ?></p>
 					</td>
 				</tr>
 			</table>

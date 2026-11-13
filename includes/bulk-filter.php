@@ -46,6 +46,12 @@ function inpulsia_medios_template_value( $id, $tpl, $field, $n ) {
 		'alt'     => $cur['alt'],
 		'n'       => (string) $n,
 	];
+	if ( preg_match( '/\{(encabezado|categoria|ciudad)\}/', $tpl ) && function_exists( 'inpulsia_medios_image_context' ) ) {
+		$c                  = inpulsia_medios_image_context( $id );
+		$vars['encabezado'] = $c['heading'] !== '' ? $c['heading'] : $page;
+		$vars['categoria']  = $c['category'];
+		$vars['ciudad']     = $c['city'];
+	}
 	$v = preg_replace_callback( '/\{(\w+)\}/', function ( $m ) use ( $vars ) {
 		return $vars[ $m[1] ] ?? $m[0];
 	}, $tpl );
@@ -83,9 +89,6 @@ function inpulsia_medios_ajax_tpl_stage() {
 // Images of the filter that need AI: no alt, or a camera/unfriendly name.
 function inpulsia_medios_ajax_ai_stage() {
 	inpulsia_medios_check_ajax();
-	if ( inpulsia_medios_api_key() === '' ) {
-		wp_send_json_error( __( 'Falta la clave de la API de Claude en Ajustes.', 'inpulsia-medios' ) );
-	}
 	$jobs  = [];
 	$items = [];
 	foreach ( inpulsia_medios_filter_ids() as $id ) {
@@ -118,7 +121,7 @@ function inpulsia_medios_ajax_ai_stage() {
 		'mode'    => 'optimize',
 		'action'  => 'inpulsia_medios_ai_apply',
 		'label'   => sprintf( __( 'Completar %d imágenes con IA', 'inpulsia-medios' ), count( $jobs ) ),
-		'summary' => sprintf( __( '%d imágenes · una consulta a Claude por imagen', 'inpulsia-medios' ), count( $jobs ) ),
+		'summary' => inpulsia_medios_ai_ready() ? sprintf( __( '%d imágenes · una consulta de IA por imagen; si se agota la cuota gratuita, el resto queda en cola', 'inpulsia-medios' ), count( $jobs ) ) : sprintf( __( '%d imágenes · sin IA configurada: se propone a partir de la foto y la página donde se usa', 'inpulsia-medios' ), count( $jobs ) ),
 		'title'   => __( 'Completando con IA', 'inpulsia-medios' ),
 	] );
 }
@@ -146,29 +149,31 @@ function inpulsia_medios_ajax_ai_apply() {
 	if ( function_exists( 'set_time_limit' ) ) {
 		@set_time_limit( 300 );
 	}
-	$rows = [];
-	$fail = [];
-	foreach ( array_slice( $ids, $offset, 2 ) as $id ) {
-		$cur = inpulsia_medios_current( $id );
-		$s   = inpulsia_medios_suggest( $id );
+	$rows   = [];
+	$fail   = [];
+	$queued = 0;
+	$next   = min( $offset + 2, count( $ids ) );
+	foreach ( array_slice( $ids, $offset, 2 ) as $i => $id ) {
+		$s = inpulsia_medios_suggest( $id );
+		if ( is_wp_error( $s ) && $s->get_error_code() === 'quota' ) {
+			// Free quota gone: the rest waits in the queue and is completed automatically when it resets.
+			$rest   = array_slice( $ids, $offset + $i );
+			$queued = count( $rest );
+			inpulsia_medios_ai_queue_add( $rest, get_current_user_id() );
+			$fail[] = [ 'id' => $id, 'status' => 'skip', 'msg' => sprintf( __( 'Cuota gratuita agotada: %d imágenes quedan en cola y se completarán solas.', 'inpulsia-medios' ), $queued ) ];
+			$next   = count( $ids );
+			break;
+		}
 		if ( is_wp_error( $s ) ) {
 			$fail[] = [ 'id' => $id, 'status' => 'error', 'msg' => $s->get_error_message() ];
 			continue;
 		}
-		$row = [ 'id' => $id ];
-		if ( $cur['alt'] === '' && $s['alt'] !== '' ) {
-			$row['alt'] = $s['alt'];
+		$row = inpulsia_medios_ai_row( $id, $s );
+		if ( $row ) {
+			$rows[] = $row;
 		}
-		if ( inpulsia_medios_is_bad_name( $cur['filename'] ) && $s['filename'] !== '' ) {
-			$row['filename'] = $s['filename'];
-			if ( $cur['title'] === '' || $cur['title'] === $cur['filename'] || inpulsia_medios_is_camera_name( $cur['title'] ) ) {
-				$row['title'] = $s['title'];
-			}
-		}
-		$rows[] = $row;
 	}
 	$results = array_merge( $fail, $rows ? inpulsia_medios_apply_rows( $token, $rows ) : [] );
-	$next    = min( $offset + 2, count( $ids ) );
 	$done    = $next >= count( $ids );
 	$purged  = [];
 	if ( $done ) {
@@ -176,5 +181,6 @@ function inpulsia_medios_ajax_ai_apply() {
 		delete_transient( 'inpulsia_medios_ai_' . $token );
 		$purged = inpulsia_medios_purge_caches();
 	}
-	wp_send_json_success( compact( 'results', 'next', 'done', 'purged' ) + [ 'total' => count( $ids ), 'notes' => [] ] );
+	$notes = $queued ? [ sprintf( __( 'Se ha agotado la cuota gratuita de IA. %d imágenes quedan en cola y se completarán solas cuando se renueve (cada hora se comprueba).', 'inpulsia-medios' ), $queued ) ] : [];
+	wp_send_json_success( compact( 'results', 'next', 'done', 'purged', 'notes' ) + [ 'total' => count( $ids ) ] );
 }

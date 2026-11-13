@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inpulsia Medios\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 22:45+0100\n"
+"POT-Creation-Date: 2026-11-13 22:57+0100\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,7 +17,7 @@ msgstr "Inici"
 msgid "Editar"
 msgstr "Edita"
 
-#: includes/admin.php:27 includes/admin.php:527
+#: includes/admin.php:27 includes/admin.php:530
 msgid "Limpieza"
 msgstr "Neteja"
 
@@ -45,889 +45,1051 @@ msgstr "Redireccions"
 msgid "Ajustes"
 msgstr "Configuració"
 
-#: includes/admin.php:76
+#: includes/admin.php:77
 msgid "Tema"
 msgstr "Tema"
 
-#: includes/admin.php:78
+#: includes/admin.php:79
 msgid "Tema del sistema"
 msgstr "Tema del sistema"
 
-#: includes/admin.php:79
+#: includes/admin.php:80
 msgid "Claro"
 msgstr "Clar"
 
-#: includes/admin.php:80
+#: includes/admin.php:81
 msgid "Oscuro"
 msgstr "Fosc"
 
-#: includes/admin.php:82
+#: includes/admin.php:83
 msgid "Atajos"
 msgstr "Dreceres"
 
-#: includes/admin.php:85
+#: includes/admin.php:86
 msgid "Secciones de Inpulsia Medios"
 msgstr "Seccions d'Inpulsia Medios"
 
-#: includes/admin.php:89
+#: includes/admin.php:90
 msgid "Imágenes sin alt"
 msgstr "Imatges sense alt"
 
-#: includes/admin.php:89
+#: includes/admin.php:90
 msgid "Problemas pendientes"
 msgstr "Problemes pendents"
 
-#: includes/admin.php:102
+#: includes/admin.php:103
 msgid "Vista previa"
 msgstr "Previsualització"
 
-#: includes/admin.php:104
+#: includes/admin.php:105
 msgid "Mostrar solo filas con avisos"
 msgstr "Mostra només les files amb avisos"
 
-#: includes/admin.php:106
+#: includes/admin.php:107
 msgid "Cambios"
 msgstr "Canvis"
 
-#: includes/admin.php:106 includes/ux.php:176
+#: includes/admin.php:107 includes/ux.php:176
 msgid "Avisos"
 msgstr "Avisos"
 
-#: includes/admin.php:110
+#: includes/admin.php:111
 msgid "Aplicar cambios"
 msgstr "Aplica els canvis"
 
-#: includes/admin.php:111
+#: includes/admin.php:112
 msgid "Cancelar"
 msgstr "Cancel·la"
 
-#: includes/admin.php:115
+#: includes/admin.php:116
 msgid "Procesando"
 msgstr "Processant"
 
-#: includes/admin.php:132
+#: includes/admin.php:133
 msgid "Subir CSV o Excel"
 msgstr "Puja un CSV o Excel"
 
-#: includes/admin.php:133
+#: includes/admin.php:134
 msgid "Columnas:"
 msgstr "Columnes:"
 
-#: includes/admin.php:133
+#: includes/admin.php:134
 msgid "(obligatoria),"
 msgstr "(obligatòria),"
 
-#: includes/admin.php:133
+#: includes/admin.php:134
 msgid ". Las demás se ignoran."
 msgstr ". La resta s'ignoren."
 
-#: includes/admin.php:134
+#: includes/admin.php:135
 msgid "Descargar plantilla"
 msgstr "Baixa la plantilla"
 
-#: includes/admin.php:135
+#: includes/admin.php:136
 msgid "Exportar medios actuales"
 msgstr "Exporta els mitjans actuals"
 
-#: includes/admin.php:137
+#: includes/admin.php:138
 msgid "Celda vacía = no cambiar. Escribe"
 msgstr "Cel·la buida = no canviar. Escriu"
 
-#: includes/admin.php:137
+#: includes/admin.php:138
 msgid "para vaciar un campo."
 msgstr "per buidar un camp."
 
-#: includes/admin.php:138
+#: includes/admin.php:139
 msgid "El nombre de archivo se normaliza para SEO (minúsculas, guiones, sin tildes) y conserva la extensión original."
 msgstr "El nom de fitxer es normalitza per a SEO (minúscules, guions, sense accents) i conserva l'extensió original."
 
-#: includes/admin.php:139
+#: includes/admin.php:140
 msgid "Al renombrar se actualizan las URLs en todo el sitio, se renombran las copias WebP/AVIF y se crean redirecciones 301 desde las URLs antiguas."
 msgstr "En canviar el nom s'actualitzen les URL a tot el lloc, es reanomenen les còpies WebP/AVIF i es creen redireccions 301 des de les URL antigues."
 
-#: includes/admin.php:140
+#: includes/admin.php:141
 msgid "Al cambiar el alt también se actualiza en las imágenes ya insertadas en entradas y páginas."
 msgstr "En canviar l'alt també s'actualitza a les imatges ja inserides en entrades i pàgines."
 
-#: includes/admin.php:144
+#: includes/admin.php:145
 msgid "Ver vista previa"
 msgstr "Previsualitza"
 
-#: includes/admin.php:247
+#: includes/admin.php:248
 msgid "Buscar medios"
 msgstr "Cerca mitjans"
 
-#: includes/admin.php:248
+#: includes/admin.php:249
 msgid "Uso"
 msgstr "Ús"
 
-#: includes/admin.php:249
+#: includes/admin.php:250
 msgid "Cualquier uso"
 msgstr "Qualsevol ús"
 
-#: includes/admin.php:250 includes/guide.php:185
+#: includes/admin.php:251 includes/guide.php:185
 msgid "En uso en la web"
 msgstr "En ús al web"
 
-#: includes/admin.php:251 includes/admin.php:426 includes/i18n-js.php:91
+#: includes/admin.php:252 includes/admin.php:429 includes/i18n-js.php:91
 msgid "Sin uso detectado"
 msgstr "Sense ús detectat"
 
-#: includes/admin.php:253 includes/admin.php:304 includes/ux.php:521
+#: includes/admin.php:254 includes/admin.php:305 includes/ux.php:521
 msgid "Formato"
 msgstr "Format"
 
-#: includes/admin.php:254
+#: includes/admin.php:255
 msgid "Todos los formatos"
 msgstr "Tots els formats"
 
-#: includes/admin.php:259 includes/editors.php:24
+#: includes/admin.php:260 includes/editors.php:24
 msgid "Peso"
 msgstr "Pes"
 
-#: includes/admin.php:260
+#: includes/admin.php:261
 msgid "Cualquier peso"
 msgstr "Qualsevol pes"
 
-#: includes/admin.php:266
+#: includes/admin.php:267
 msgid "Idioma"
 msgstr "Idioma"
 
-#: includes/admin.php:267
+#: includes/admin.php:268
 msgid "Idioma activo"
 msgstr "Idioma actiu"
 
-#: includes/admin.php:268
+#: includes/admin.php:269
 msgid "Todos los idiomas"
 msgstr "Tots els idiomes"
 
-#: includes/admin.php:271 includes/ux.php:236
+#: includes/admin.php:272 includes/ux.php:236
 msgid "Sin alt"
 msgstr "Sense alt"
 
-#: includes/admin.php:272
+#: includes/admin.php:273
 msgid "Nombre poco amigable"
 msgstr "Nom poc amigable"
 
-#: includes/admin.php:273
+#: includes/admin.php:274
 msgid "Filtrar"
 msgstr "Filtra"
 
-#: includes/admin.php:275
+#: includes/admin.php:276
 msgid "Quitar filtros"
 msgstr "Treu els filtres"
 
-#: includes/admin.php:277
+#: includes/admin.php:278
 msgid "Imágenes por página"
 msgstr "Imatges per pàgina"
 
-#: includes/admin.php:279
+#: includes/admin.php:280
 #, php-format
 msgid "%d por página"
 msgstr "%d per pàgina"
 
-#: includes/admin.php:282 includes/cleanup-admin.php:51
+#: includes/admin.php:283 includes/cleanup-admin.php:51
 #: includes/cleanup-admin.php:74
 msgid "imágenes"
 msgstr "imatges"
 
-#: includes/admin.php:284 includes/cleanup-admin.php:80
+#: includes/admin.php:285 includes/cleanup-admin.php:80
 msgid "Recalcular uso"
 msgstr "Recalcula l'ús"
 
-#: includes/admin.php:299 includes/guide.php:189
+#: includes/admin.php:300 includes/guide.php:189
 msgid "Optimizar imágenes"
 msgstr "Optimitza les imatges"
 
-#: includes/admin.php:299
+#: includes/admin.php:300
 msgid "convertir, reducir peso, nombres amigables y alt"
 msgstr "convertir, reduir pes, noms amigables i alt"
 
-#: includes/admin.php:301
+#: includes/admin.php:302
 msgid "Esta web ya usa"
 msgstr "Aquest web ja fa servir"
 
-#: includes/admin.php:301
+#: includes/admin.php:302
 msgid ". Optimizar también aquí puede comprimir dos veces: revisa su configuración antes."
 msgstr ". Optimitzar també aquí pot comprimir dues vegades: revisa'n abans la configuració."
 
-#: includes/admin.php:306
+#: includes/admin.php:307
 msgid "JPG"
 msgstr "JPG"
 
-#: includes/admin.php:307
+#: includes/admin.php:308
 msgid "WebP (≈30 % menos peso)"
 msgstr "WebP (≈30 % menys pes)"
 
-#: includes/admin.php:310 includes/ux.php:529
+#: includes/admin.php:311 includes/ux.php:529
 msgid "Ancho máximo"
 msgstr "Amplada màxima"
 
-#: includes/admin.php:311 includes/ux.php:534
+#: includes/admin.php:312 includes/ux.php:534
 msgid "Calidad"
 msgstr "Qualitat"
 
-#: includes/admin.php:312
+#: includes/admin.php:313
 msgid "Copia de seguridad (permite deshacer)"
 msgstr "Còpia de seguretat (permet desfer)"
 
-#: includes/admin.php:314
+#: includes/admin.php:315
 msgid "Borrar del servidor la imagen anterior al sustituirla"
 msgstr "Esborra del servidor la imatge anterior en substituir-la"
 
-#: includes/admin.php:316
+#: includes/admin.php:317
 msgid "Configura la clave de Claude en Ajustes"
 msgstr "Configura la clau de Claude a Configuració"
 
-#: includes/admin.php:317 includes/ux.php:549
+#: includes/admin.php:318 includes/ux.php:549
 msgid "Nombre y alt con IA si faltan o son de cámara"
 msgstr "Nom i alt amb IA si falten o són de càmera"
 
-#: includes/admin.php:320
+#: includes/admin.php:321
 msgid "Los PNG con transparencia (logos, iconos) se mantienen en PNG. Los GIF animados no se tocan. Las URLs antiguas redirigen a las nuevas."
 msgstr "Els PNG amb transparència (logotips, icones) es mantenen en PNG. Els GIF animats no es toquen. Les URL antigues redirigeixen a les noves."
 
-#: includes/admin.php:322
+#: includes/admin.php:323
 msgid "Optimizar las"
 msgstr "Optimitza les"
 
-#: includes/admin.php:322
+#: includes/admin.php:323
 msgid "del filtro"
 msgstr "del filtre"
 
-#: includes/admin.php:327
+#: includes/admin.php:328
 msgid "Rellenar con plantilla"
 msgstr "Omple amb plantilla"
 
-#: includes/admin.php:327
+#: includes/admin.php:328
 msgid "el mismo patrón para muchas imágenes, sin IA"
 msgstr "el mateix patró per a moltes imatges, sense IA"
 
-#: includes/admin.php:329
+#: includes/admin.php:330
 msgid "Campo"
 msgstr "Camp"
 
-#: includes/admin.php:336
+#: includes/admin.php:337
 msgid "Plantilla"
 msgstr "Plantilla"
 
-#: includes/admin.php:337
+#: includes/admin.php:338
 msgid "Solo donde esté vacío o tenga nombre de cámara"
 msgstr "Només on estigui buit o tingui nom de càmera"
 
-#: includes/admin.php:338
+#: includes/admin.php:339
 msgid "Aplicar en esta página"
 msgstr "Aplica en aquesta pàgina"
 
-#: includes/admin.php:339
+#: includes/admin.php:340
 #, php-format
 msgid "Aplicar a las %d del filtro"
 msgstr "Aplica a les %d del filtre"
 
-#: includes/admin.php:341
+#: includes/admin.php:342
 msgid "Variables:"
 msgstr "Variables:"
 
-#: includes/admin.php:342
+#: includes/admin.php:343
 msgid "título de la página donde se usa"
 msgstr "títol de la pàgina on s'utilitza"
 
-#: includes/admin.php:342
+#: includes/admin.php:343
 msgid "palabra clave de Rank Math, Yoast o SEOPress de esa página"
 msgstr "paraula clau de Rank Math, Yoast o SEOPress d'aquesta pàgina"
 
-#: includes/admin.php:342
+#: includes/admin.php:343
 msgid "título de la imagen"
 msgstr "títol de la imatge"
 
-#: includes/admin.php:342
+#: includes/admin.php:343
 msgid "número 1, 2, 3…"
 msgstr "número 1, 2, 3…"
 
-#: includes/admin.php:345
+#: includes/admin.php:343
+msgid "encabezado más cercano a la imagen en la página"
+msgstr "encapçalament més proper a la imatge a la pàgina"
+
+#: includes/admin.php:343
+msgid "categoría de la entrada donde se usa"
+msgstr "categoria de l'entrada on es fa servir"
+
+#: includes/admin.php:343
+msgid "ciudad o zona de Ajustes"
+msgstr "ciutat o zona de Configuració"
+
+#: includes/admin.php:346
 msgid "· Se aplica a las seleccionadas, o a toda la página si no hay ninguna. Después revisa y aplica."
 msgstr "· S'aplica a les seleccionades, o a tota la pàgina si no n'hi ha cap. Després revisa i aplica."
 
-#: includes/admin.php:354
+#: includes/admin.php:355
 #, php-format
 msgid "Cambios de hoy: %d"
 msgstr "Canvis d'avui: %d"
 
-#: includes/admin.php:355
+#: includes/admin.php:356
 msgid "Deshacer todos"
 msgstr "Desfés-ho tot"
 
-#: includes/admin.php:357
+#: includes/admin.php:358
 msgid "Se guarda solo al salir de cada campo · Intro: fila siguiente · Clic en la foto: ficha"
 msgstr "Es desa sol en sortir de cada camp · Retorn: fila següent · Clic a la foto: fitxa"
 
-#: includes/admin.php:359
+#: includes/admin.php:360
 msgid "Completar lo que falta"
 msgstr "Completa el que falta"
 
-#: includes/admin.php:361
+#: includes/admin.php:362
 #, php-format
 msgid "Completar con IA las %d del filtro"
 msgstr "Completa amb IA les %d del filtre"
 
-#: includes/admin.php:363 includes/guide.php:193
+#: includes/admin.php:364 includes/guide.php:193
 msgid "Revisar cambios"
 msgstr "Revisa els canvis"
 
-#: includes/admin.php:365
+#: includes/admin.php:366
 msgid "Configura la IA en Ajustes"
 msgstr "Configura la IA a Configuració"
 
-#: includes/admin.php:372
+#: includes/admin.php:373
 msgid "Densidad"
 msgstr "Densitat"
 
-#: includes/admin.php:374
+#: includes/admin.php:375
 msgid "Cómoda"
 msgstr "Còmoda"
 
-#: includes/admin.php:375
+#: includes/admin.php:376
 msgid "Compacta"
 msgstr "Compacta"
 
-#: includes/admin.php:379
+#: includes/admin.php:380
 msgid "Columnas"
 msgstr "Columnes"
 
-#: includes/admin.php:392
+#: includes/admin.php:393
 msgid "Seleccionar todas las imágenes de la página"
 msgstr "Selecciona totes les imatges de la pàgina"
 
-#: includes/admin.php:394 includes/editors.php:25
+#: includes/admin.php:395 includes/editors.php:25
 msgid "Nombre de archivo"
 msgstr "Nom de fitxer"
 
-#: includes/admin.php:395 includes/core.php:13
+#: includes/admin.php:396 includes/core.php:13
 msgid "Título"
 msgstr "Títol"
 
-#: includes/admin.php:397 includes/core.php:15
+#: includes/admin.php:398 includes/core.php:15
 msgid "Leyenda"
 msgstr "Llegenda"
 
-#: includes/admin.php:398 includes/core.php:16
+#: includes/admin.php:399 includes/core.php:16
 msgid "Descripción"
 msgstr "Descripció"
 
-#: includes/admin.php:413
+#: includes/admin.php:416
 #, php-format
 msgid "Seleccionar imagen %d"
 msgstr "Selecciona la imatge %d"
 
-#: includes/admin.php:416
+#: includes/admin.php:419
 msgid "Abrir ficha"
 msgstr "Obre la fitxa"
 
-#: includes/admin.php:442
+#: includes/admin.php:445
 msgid "Sugerir alt, nombre y título con IA"
 msgstr "Suggereix alt, nom i títol amb IA"
 
-#: includes/admin.php:442
+#: includes/admin.php:445
 #, php-format
 msgid "Sugerir textos con IA para la imagen %d"
 msgstr "Suggereix textos amb IA per a la imatge %d"
 
-#: includes/admin.php:447
+#: includes/admin.php:450
 msgid "No hay imágenes con estos filtros."
 msgstr "No hi ha imatges amb aquests filtres."
 
-#: includes/admin.php:461
+#: includes/admin.php:464
 msgid "Acciones con las imágenes seleccionadas"
 msgstr "Accions amb les imatges seleccionades"
 
-#: includes/admin.php:464 includes/ux.php:621 includes/ux.php:637
+#: includes/admin.php:467 includes/ux.php:621 includes/ux.php:637
 msgid "Sugerir con IA"
 msgstr "Suggereix amb IA"
 
-#: includes/admin.php:466 includes/editors.php:30 includes/perf.php:390
+#: includes/admin.php:469 includes/editors.php:30 includes/perf.php:390
 msgid "Optimizar"
 msgstr "Optimitza"
 
-#: includes/admin.php:467
+#: includes/admin.php:470
 msgid "Copia el campo en el que estabas escribiendo a todas las seleccionadas"
 msgstr "Copia el camp on escrivies a totes les seleccionades"
 
-#: includes/admin.php:467
+#: includes/admin.php:470
 msgid "Copiar campo a seleccionadas"
 msgstr "Copia el camp a les seleccionades"
 
-#: includes/admin.php:468
+#: includes/admin.php:471
 msgid "Quitar selección"
 msgstr "Treu la selecció"
 
-#: includes/admin.php:479
+#: includes/admin.php:482
 msgid "Exportar biblioteca a CSV"
 msgstr "Exporta la biblioteca a CSV"
 
-#: includes/admin.php:485 includes/admin.php:524
+#: includes/admin.php:488 includes/admin.php:527
 msgid "Tipo"
 msgstr "Tipus"
 
-#: includes/admin.php:488
+#: includes/admin.php:491
 msgid "Solo imágenes"
 msgstr "Només imatges"
 
-#: includes/admin.php:489
+#: includes/admin.php:492
 msgid "Todos los medios"
 msgstr "Tots els mitjans"
 
-#: includes/admin.php:494
+#: includes/admin.php:497
 msgid "Filtro"
 msgstr "Filtre"
 
-#: includes/admin.php:495
+#: includes/admin.php:498
 msgid "Solo imágenes sin texto alternativo"
 msgstr "Només imatges sense text alternatiu"
 
-#: includes/admin.php:498
+#: includes/admin.php:501
 msgid "Subidas entre"
 msgstr "Pujades entre"
 
-#: includes/admin.php:502
+#: includes/admin.php:505
 msgid "Contexto"
 msgstr "Context"
 
-#: includes/admin.php:504
+#: includes/admin.php:507
 msgid "Incluir columna"
 msgstr "Inclou la columna"
 
-#: includes/admin.php:505
+#: includes/admin.php:508
 msgid "Indica en qué páginas, entradas, productos o plantillas de Elementor aparece cada imagen. En bibliotecas muy grandes la exportación tarda más."
 msgstr "Indica en quines pàgines, entrades, productes o plantilles d'Elementor apareix cada imatge. En biblioteques molt grans l'exportació triga més."
 
-#: includes/admin.php:509
+#: includes/admin.php:512
 msgid "Descargar CSV"
 msgstr "Baixa el CSV"
 
-#: includes/admin.php:519
+#: includes/admin.php:522
 msgid "Últimas importaciones"
 msgstr "Últimes importacions"
 
-#: includes/admin.php:520
+#: includes/admin.php:523
 msgid "Se guardan las 20 últimas. Deshacer restaura los valores anteriores, incluidos los nombres de archivo y sus URLs. Abre una fila para deshacer solo una imagen."
 msgstr "Es guarden les 20 últimes. Desfer restaura els valors anteriors, inclosos els noms de fitxer i les seves URL. Obre una fila per desfer només una imatge."
 
-#: includes/admin.php:523
+#: includes/admin.php:526
 msgid "Buscar por origen o usuario"
 msgstr "Cerca per origen o usuari"
 
-#: includes/admin.php:523
+#: includes/admin.php:526
 msgid "Buscar en el historial"
 msgstr "Cerca a l'historial"
 
-#: includes/admin.php:525
+#: includes/admin.php:528
 msgid "Todos los tipos"
 msgstr "Tots els tipus"
 
-#: includes/admin.php:526 includes/admin.php:661 includes/ux.php:514
+#: includes/admin.php:529 includes/admin.php:664 includes/ux.php:514
 msgid "Optimización"
 msgstr "Optimització"
 
-#: includes/admin.php:528
+#: includes/admin.php:531
 msgid "Ediciones e importaciones"
 msgstr "Edicions i importacions"
 
-#: includes/admin.php:530 includes/admin.php:542 includes/cli.php:169
+#: includes/admin.php:533 includes/admin.php:545 includes/cli.php:169
 msgid "Usuario"
 msgstr "Usuari"
 
-#: includes/admin.php:531
+#: includes/admin.php:534
 msgid "Todos los usuarios"
 msgstr "Tots els usuaris"
 
-#: includes/admin.php:539
+#: includes/admin.php:542
 msgid "Todavía no hay importaciones."
 msgstr "Encara no hi ha importacions."
 
-#: includes/admin.php:542 includes/cli.php:169
+#: includes/admin.php:545 includes/cli.php:169
 msgid "Fecha"
 msgstr "Data"
 
-#: includes/admin.php:542 includes/admin.php:605 includes/cli.php:169
+#: includes/admin.php:545 includes/admin.php:608 includes/cli.php:169
 msgid "Origen"
 msgstr "Origen"
 
-#: includes/admin.php:542
+#: includes/admin.php:545
 msgid "Filas"
 msgstr "Files"
 
-#: includes/admin.php:542
+#: includes/admin.php:545
 msgid "Medios cambiados"
 msgstr "Mitjans canviats"
 
-#: includes/admin.php:542 includes/cli.php:169
+#: includes/admin.php:545 includes/cli.php:169
 msgid "Estado"
 msgstr "Estat"
 
-#: includes/admin.php:551
+#: includes/admin.php:554
 msgid "Ver imágenes"
 msgstr "Mostra les imatges"
 
-#: includes/admin.php:557
+#: includes/admin.php:560
 msgid "aplicado"
 msgstr "aplicat"
 
-#: includes/admin.php:557
+#: includes/admin.php:560
 msgid "deshecho"
 msgstr "desfet"
 
-#: includes/admin.php:557
+#: includes/admin.php:560
 msgid "incompleto"
 msgstr "incomplet"
 
-#: includes/admin.php:560 includes/guide.php:197 includes/i18n-js.php:86
+#: includes/admin.php:563 includes/guide.php:197 includes/i18n-js.php:86
 msgid "Deshacer"
 msgstr "Desfés"
 
-#: includes/admin.php:572
+#: includes/admin.php:575
 msgid "Deshacer esta"
 msgstr "Desfés aquesta"
 
-#: includes/admin.php:576
+#: includes/admin.php:579
 #, php-format
 msgid "Y %d más."
 msgstr "I %d més."
 
-#: includes/admin.php:586
+#: includes/admin.php:589
 msgid "Deshaciendo"
 msgstr "Desfent"
 
-#: includes/admin.php:595
+#: includes/admin.php:598
 msgid "Redirecciones 301 de archivos renombrados"
 msgstr "Redireccions 301 de fitxers reanomenats"
 
-#: includes/admin.php:596
+#: includes/admin.php:599
 msgid "Cuando alguien (o Google Imágenes) pide la URL antigua de un archivo renombrado, se le redirige a la nueva. Funciona en servidores donde las peticiones a archivos que no existen llegan a WordPress, que es lo habitual en Apache y en la mayoría de configuraciones de Nginx."
 msgstr "Quan algú (o Google Imatges) demana la URL antiga d'un fitxer reanomenat, se'l redirigeix a la nova. Funciona en servidors on les peticions a fitxers que no existeixen arriben a WordPress, cosa habitual a Apache i a la majoria de configuracions de Nginx."
 
-#: includes/admin.php:598
+#: includes/admin.php:601
 msgid "Redirecciones eliminadas."
 msgstr "Redireccions eliminades."
 
-#: includes/admin.php:601
+#: includes/admin.php:604
 msgid "No hay redirecciones."
 msgstr "No hi ha redireccions."
 
-#: includes/admin.php:603
+#: includes/admin.php:606
 #, php-format
 msgid "%d redirecciones"
 msgstr "%d redireccions"
 
-#: includes/admin.php:603
+#: includes/admin.php:606
 #, php-format
 msgid "(se muestran las %d más recientes)"
 msgstr "(es mostren les %d més recents)"
 
-#: includes/admin.php:605
+#: includes/admin.php:608
 msgid "Destino"
 msgstr "Destí"
 
-#: includes/admin.php:605
+#: includes/admin.php:608
 msgid "Visitas"
 msgstr "Visites"
 
-#: includes/admin.php:605
+#: includes/admin.php:608
 msgid "Creada"
 msgstr "Creada"
 
-#: includes/admin.php:618
+#: includes/admin.php:621
 msgid "Eliminar"
 msgstr "Elimina"
 
-#: includes/admin.php:629
+#: includes/admin.php:632
 msgid "Eliminar todas"
 msgstr "Elimina-les totes"
 
-#: includes/admin.php:639
+#: includes/admin.php:642
 msgid "Solo los administradores pueden eliminar redirecciones."
 msgstr "Només els administradors poden eliminar redireccions."
 
-#: includes/admin.php:660
+#: includes/admin.php:663
 msgid "Secciones de ajustes"
 msgstr "Seccions de configuració"
 
-#: includes/admin.php:662
+#: includes/admin.php:665
 msgid "IA"
 msgstr "IA"
 
-#: includes/admin.php:663 includes/admin.php:730
+#: includes/admin.php:666 includes/admin.php:742
 msgid "Seguridad y copias"
 msgstr "Seguretat i còpies"
 
-#: includes/admin.php:664 includes/admin.php:716
+#: includes/admin.php:667 includes/admin.php:728
 msgid "Diagnóstico del servidor"
 msgstr "Diagnòstic del servidor"
 
-#: includes/admin.php:667
+#: includes/admin.php:670
 msgid "Ajustes guardados."
 msgstr "Configuració desada."
 
-#: includes/admin.php:671
+#: includes/admin.php:674
 msgid "Sugerencias con IA"
 msgstr "Suggeriments amb IA"
 
-#: includes/admin.php:677
+#: includes/admin.php:675
+msgid "Puedes usar proveedores gratuitos, Claude o ninguno. Basta con uno."
+msgstr "Pots fer servir proveïdors gratuïts, Claude o cap. N'hi ha prou amb un."
+
+#: includes/admin.php:681
 msgid "Clave de la API de Claude"
 msgstr "Clau de l'API de Claude"
 
-#: includes/admin.php:680
+#: includes/admin.php:681 includes/ai.php:579
+msgid "activo"
+msgstr "actiu"
+
+#: includes/admin.php:681 includes/ai.php:575
+msgid "sin configurar"
+msgstr "sense configurar"
+
+#: includes/admin.php:684
 msgid "Se usa la clave definida en"
 msgstr "S'utilitza la clau definida a"
 
-#: includes/admin.php:680 includes/admin.php:687
+#: includes/admin.php:684 includes/admin.php:691
 msgid "wp-config.php"
 msgstr "wp-config.php"
 
-#: includes/admin.php:680
+#: includes/admin.php:684
 msgid "INPULSIA_MEDIOS_CLAUDE_KEY"
 msgstr "INPULSIA_MEDIOS_CLAUDE_KEY"
 
-#: includes/admin.php:683
+#: includes/admin.php:687 includes/ai.php:567
 #, php-format
 msgid "Guardada (…%s)"
 msgstr "Desada (…%s)"
 
-#: includes/admin.php:685
+#: includes/admin.php:689
 msgid "Borrar la clave guardada"
 msgstr "Esborra la clau desada"
 
-#: includes/admin.php:687
+#: includes/admin.php:691
 msgid "Déjalo en blanco para mantener la actual. Es más seguro definirla en"
 msgstr "Deixa-ho en blanc per mantenir l'actual. És més segur definir-la a"
 
-#: includes/admin.php:687
+#: includes/admin.php:691
 msgid "define( 'INPULSIA_MEDIOS_CLAUDE_KEY', 'sk-ant-…' );"
 msgstr "define( 'INPULSIA_MEDIOS_CLAUDE_KEY', 'sk-ant-…' );"
 
-#: includes/admin.php:692
+#: includes/admin.php:696 includes/ai.php:584
 msgid "Modelo"
 msgstr "Model"
 
-#: includes/admin.php:702
+#: includes/admin.php:707
 msgid "Contexto SEO de la web"
 msgstr "Context SEO del web"
 
-#: includes/admin.php:704
+#: includes/admin.php:709
 msgid "Ej.: Reformas integrales en Santander. Palabras clave: reformas de cocina, baños, Cantabria."
 msgstr "Ex.: Reformes integrals a Girona. Paraules clau: reformes de cuina, banys, Catalunya."
 
-#: includes/admin.php:705
+#: includes/admin.php:710
 msgid "Negocio, ubicación y palabras clave. Se envía en cada sugerencia junto con la imagen y las páginas donde aparece."
 msgstr "Negoci, ubicació i paraules clau. S'envia amb cada suggeriment juntament amb la imatge i les pàgines on apareix."
 
-#: includes/admin.php:709
+#: includes/admin.php:714
+msgid "Ciudad o zona"
+msgstr "Ciutat o zona"
+
+#: includes/admin.php:716
+msgid "Ej.: Santander"
+msgstr "Ex.: Girona"
+
+#: includes/admin.php:717
+msgid "Se añade al alt cuando encaja y se puede usar en las plantillas como {ciudad}."
+msgstr "S'afegeix a l'alt quan encaixa i es pot fer servir a les plantilles com a {ciudad}."
+
+#: includes/admin.php:721
 msgid "Guardar ajustes"
 msgstr "Desa la configuració"
 
-#: includes/admin.php:717
+#: includes/admin.php:729
 msgid "Lo que el servidor necesita para optimizar sin errores."
 msgstr "El que el servidor necessita per optimitzar sense errors."
 
-#: includes/admin.php:732
+#: includes/admin.php:744
 msgid "archivos antiguos eliminados."
 msgstr "fitxers antics eliminats."
 
-#: includes/admin.php:735
+#: includes/admin.php:747
 msgid "copias eliminadas."
 msgstr "còpies eliminades."
 
-#: includes/admin.php:737
+#: includes/admin.php:749
 msgid "copias,"
 msgstr "còpies,"
 
-#: includes/admin.php:737
+#: includes/admin.php:749
 msgid "en"
 msgstr "a"
 
-#: includes/admin.php:737
+#: includes/admin.php:749
 msgid "uploads/inpulsia-medios-backups"
 msgstr "uploads/inpulsia-medios-backups"
 
-#: includes/admin.php:737
+#: includes/admin.php:749
 msgid ". Sin copia, una optimización ya no se puede deshacer."
 msgstr ". Sense còpia, una optimització ja no es pot desfer."
 
-#: includes/admin.php:739
+#: includes/admin.php:751
 msgid "archivos antiguos ("
 msgstr "fitxers antics ("
 
-#: includes/admin.php:739
+#: includes/admin.php:751
 msgid ") se conservan durante"
 msgstr ") es conserven durant"
 
-#: includes/admin.php:739
+#: includes/admin.php:751
 msgid "días tras renombrar u optimizar, para que las cachés y los enlaces externos no muestren imágenes rotas. Se borran solos."
 msgstr "dies després de reanomenar o optimitzar, perquè les memòries cau i els enllaços externs no mostrin imatges trencades. S'esborren sols."
 
-#: includes/admin.php:744
+#: includes/admin.php:756
 msgid "Borrar ya los archivos antiguos"
 msgstr "Esborra ara els fitxers antics"
 
-#: includes/admin.php:751
+#: includes/admin.php:763
 msgid "Borrar las de más de 30 días ("
 msgstr "Esborra les de més de 30 dies ("
 
-#: includes/admin.php:757
+#: includes/admin.php:769
 msgid "Borrar todas"
 msgstr "Esborra-les totes"
 
-#: includes/admin.php:766
+#: includes/admin.php:778
 msgid "Solo los administradores pueden borrar copias."
 msgstr "Només els administradors poden esborrar còpies."
 
-#: includes/admin.php:781
+#: includes/admin.php:793
 msgid "No tienes permisos para editar medios."
 msgstr "No tens permisos per editar mitjans."
 
-#: includes/admin.php:800
+#: includes/admin.php:812
 msgid "Error al subir el archivo."
 msgstr "Error en pujar el fitxer."
 
-#: includes/admin.php:808 includes/cli.php:52
+#: includes/admin.php:820 includes/cli.php:52
 msgid "El archivo está vacío o no tiene columna ID."
 msgstr "El fitxer és buit o no té columna ID."
 
-#: includes/admin.php:827
+#: includes/admin.php:839
 msgid "No hay cambios que revisar."
 msgstr "No hi ha canvis per revisar."
 
-#: includes/admin.php:839 includes/bulk-filter.php:132
+#: includes/admin.php:851 includes/bulk-filter.php:135
 #: includes/cleanup-admin.php:232
 msgid "La sesión ha caducado. Vuelve a cargar los cambios."
 msgstr "La sessió ha caducat. Torna a carregar els canvis."
 
-#: includes/admin.php:877
+#: includes/admin.php:889
 msgid "Esta importación no se puede deshacer."
 msgstr "Aquesta importació no es pot desfer."
 
-#: includes/admin.php:912
+#: includes/admin.php:924
 msgid "No hay imágenes seleccionadas."
 msgstr "No hi ha imatges seleccionades."
 
-#: includes/admin.php:952
+#: includes/admin.php:964
 msgid "Copia de seguridad en uploads/inpulsia-medios-backups: se puede deshacer desde el Historial."
 msgstr "Còpia de seguretat a uploads/inpulsia-medios-backups: es pot desfer des de l'Historial."
 
-#: includes/admin.php:952
+#: includes/admin.php:964
 msgid "Sin copia de seguridad: esta optimización no se podrá deshacer."
 msgstr "Sense còpia de seguretat: aquesta optimització no es podrà desfer."
 
-#: includes/admin.php:953
+#: includes/admin.php:965
 #, php-format
 msgid "Ahorro estimado: unos %s."
 msgstr "Estalvi estimat: uns %s."
 
-#: includes/admin.php:964 includes/ux.php:311
+#: includes/admin.php:976 includes/ux.php:311
 msgid "La sesión ha caducado. Vuelve a lanzar la optimización."
 msgstr "La sessió ha caducat. Torna a llançar l'optimització."
 
-#: includes/admin.php:1005
+#: includes/admin.php:1017
 msgid "Este campo no se guarda automáticamente."
 msgstr "Aquest camp no es desa automàticament."
 
-#: includes/admin.php:1008
+#: includes/admin.php:1020
 msgid "El nombre de archivo no puede quedar vacío."
 msgstr "El nom del fitxer no pot quedar buit."
 
-#: includes/ai.php:11
+#: includes/ai.php:13
 msgid "Claude Opus 5.5 (mejor calidad)"
 msgstr "Claude Opus 5.5 (millor qualitat)"
 
-#: includes/ai.php:12
+#: includes/ai.php:14
 msgid "Claude Sonnet 5.5 (equilibrado)"
 msgstr "Claude Sonnet 5.5 (equilibrat)"
 
-#: includes/ai.php:13
+#: includes/ai.php:15
 msgid "Claude Haiku 5.5 (más barato)"
 msgstr "Claude Haiku 5.5 (més econòmic)"
 
-#: includes/ai.php:37 includes/export.php:12 includes/ux.php:479
+#: includes/ai.php:116 includes/export.php:12 includes/ux.php:479
 #: includes/ux.php:498
 msgid "No tienes permisos."
 msgstr "No tens permisos."
 
-#: includes/ai.php:62 includes/core.php:89 includes/core.php:150
+#: includes/ai.php:157 includes/core.php:89 includes/core.php:150
 #: includes/optimize.php:220
 msgid "No tienes permisos para editar este medio."
 msgstr "No tens permisos per editar aquest mitjà."
 
-#: includes/ai.php:96 includes/bulk-filter.php:87
-msgid "Falta la clave de la API de Claude en Ajustes."
-msgstr "Falta la clau de l'API de Claude a Configuració."
+#: includes/ai.php:284
+msgid "No hay datos para proponer nada: la imagen no tiene título propio ni se usa en ninguna página. Configura un proveedor de IA en Ajustes."
+msgstr "No hi ha dades per proposar res: la imatge no té títol propi ni es fa servir a cap pàgina. Configura un proveïdor d'IA a Configuració."
 
-#: includes/ai.php:183
+#: includes/ai.php:385
+msgid "Se ha agotado la cuota gratuita de IA de hoy en todos los proveedores. Se renueva a medianoche (UTC)."
+msgstr "S'ha esgotat la quota gratuïta d'IA d'avui a tots els proveïdors. Es renova a mitjanit (UTC)."
+
+#: includes/ai.php:450
+#, php-format
+msgid "No se pudo conectar con %1$s: %2$s"
+msgstr "No s'ha pogut connectar amb %1$s: %2$s"
+
+#: includes/ai.php:456
+#, php-format
+msgid "%s: cuota gratuita agotada por hoy."
+msgstr "%s: quota gratuïta esgotada per avui."
+
+#: includes/ai.php:461
+#, php-format
+msgid "%s: la clave no es válida o no tiene permiso."
+msgstr "%s: la clau no és vàlida o no té permís."
+
+#: includes/ai.php:461
+#, php-format
+msgid "%1$s: error %2$d. %3$s"
+msgstr "%1$s: error %2$d. %3$s"
+
+#: includes/ai.php:468
+#, php-format
+msgid "Respuesta inesperada de %s."
+msgstr "Resposta inesperada de %s."
+
+#: includes/ai.php:532
 #, php-format
 msgid "No se pudo conectar con Claude: %s"
 msgstr "No s'ha pogut connectar amb Claude: %s"
 
-#: includes/ai.php:190
+#: includes/ai.php:539
 msgid "La clave de la API no es válida."
 msgstr "La clau de l'API no és vàlida."
 
-#: includes/ai.php:191
+#: includes/ai.php:540
 msgid "La clave no tiene permiso para este modelo."
 msgstr "La clau no té permís per a aquest model."
 
-#: includes/ai.php:192
+#: includes/ai.php:541
 msgid "Límite de uso de la API alcanzado. Espera un momento."
 msgstr "S'ha arribat al límit d'ús de l'API. Espera un moment."
 
-#: includes/ai.php:195
+#: includes/ai.php:544
 #, php-format
 msgid "Error de la API (%1$d). %2$s"
 msgstr "Error de l'API (%1$d). %2$s"
 
-#: includes/ai.php:198
+#: includes/ai.php:547
 msgid "Claude no ha querido describir esta imagen."
 msgstr "Claude no ha volgut descriure aquesta imatge."
 
-#: includes/ai.php:201
+#: includes/ai.php:550
 msgid "La respuesta se cortó. Vuelve a intentarlo."
 msgstr "La resposta s'ha tallat. Torna-ho a provar."
 
-#: includes/ai.php:212
+#: includes/ai.php:559
 msgid "Respuesta inesperada de Claude."
 msgstr "Resposta inesperada de Claude."
 
-#: includes/bulk-filter.php:62 includes/cleanup-admin.php:200
+#: includes/ai.php:569
+msgid "Borrar"
+msgstr "Esborra"
+
+#: includes/ai.php:577
+msgid "cuota de hoy agotada"
+msgstr "quota d'avui esgotada"
+
+#: includes/ai.php:584
+msgid "obligatorio"
+msgstr "obligatori"
+
+#: includes/ai.php:590
+msgid "Orden"
+msgstr "Ordre"
+
+#: includes/ai.php:592
+msgid "Primero los gratuitos; Claude solo si se agotan"
+msgstr "Primer els gratuïts; Claude només si s'esgoten"
+
+#: includes/ai.php:593
+msgid "Primero Claude (mejor calidad, de pago)"
+msgstr "Primer Claude (millor qualitat, de pagament)"
+
+#: includes/ai.php:594
+msgid "Si un proveedor agota su cuota gratuita, se pasa al siguiente. Sin ninguno configurado, las sugerencias salen de los metadatos de la foto y de la página donde se usa."
+msgstr "Si un proveïdor esgota la quota gratuïta, es passa al següent. Sense cap configurat, els suggeriments surten de les metadades de la foto i de la pàgina on es fa servir."
+
+#: includes/ai.php:595
+#, php-format
+msgid "Ahora: %s."
+msgstr "Ara: %s."
+
+#: includes/ai.php:595
+msgid "Ahora: sin IA (solo contexto)."
+msgstr "Ara: sense IA (només context)."
+
+#: includes/ai.php:599 includes/ai.php:607 includes/ai.php:616
+#: includes/ai.php:624
+msgid "gratis"
+msgstr "gratis"
+
+#: includes/ai.php:603
+msgid "Crear clave en Google AI Studio"
+msgstr "Crea una clau a Google AI Studio"
+
+#: includes/ai.php:603
+msgid "Buena calidad en español. En el plan gratuito Google puede usar las imágenes para mejorar sus modelos."
+msgstr "Bona qualitat en castellà. Al pla gratuït Google pot fer servir les imatges per millorar els seus models."
+
+#: includes/ai.php:609
+msgid "ID de cuenta"
+msgstr "ID del compte"
+
+#: includes/ai.php:610
+msgid "Token con permiso Workers AI"
+msgstr "Token amb permís de Workers AI"
+
+#: includes/ai.php:612
+msgid "Workers AI en el panel de Cloudflare"
+msgstr "Workers AI al tauler de Cloudflare"
+
+#: includes/ai.php:612
+msgid "10.000 neuronas gratis al día, compartidas entre todos los modelos."
+msgstr "10.000 neurones gratis al dia, compartides entre tots els models."
+
+#: includes/ai.php:620
+msgid "Crear clave en Groq"
+msgstr "Crea una clau a Groq"
+
+#: includes/ai.php:620
+msgid "Muy rápido; usa un modelo que acepte imágenes."
+msgstr "Molt ràpid; fes servir un model que accepti imatges."
+
+#: includes/ai.php:628
+msgid "Modelos gratuitos de OpenRouter"
+msgstr "Models gratuïts d'OpenRouter"
+
+#: includes/ai.php:628
+msgid "Elige uno con visión que termine en «:free»."
+msgstr "Tria'n un amb visió que acabi en «:free»."
+
+#: includes/bulk-filter.php:68 includes/cleanup-admin.php:200
 msgid "Acción no válida."
 msgstr "Acció no vàlida."
 
-#: includes/bulk-filter.php:78 includes/i18n-js.php:41
+#: includes/bulk-filter.php:84 includes/i18n-js.php:41
 msgid "No había ningún campo que rellenar con esas condiciones."
 msgstr "No hi havia cap camp per omplir amb aquestes condicions."
 
-#: includes/bulk-filter.php:95 includes/optimize.php:151
+#: includes/bulk-filter.php:98 includes/optimize.php:151
 msgid "Alt: vacío → propuesto por IA"
 msgstr "Alt: buit → proposat per IA"
 
-#: includes/bulk-filter.php:98 includes/optimize.php:148
+#: includes/bulk-filter.php:101 includes/optimize.php:148
 #, php-format
 msgid "Nombre: «%s» → propuesto por IA"
 msgstr "Nom: «%s» → proposat per IA"
 
-#: includes/bulk-filter.php:109
+#: includes/bulk-filter.php:112
 msgid "Todas las imágenes del filtro tienen alt y nombre claros."
 msgstr "Totes les imatges del filtre tenen alt i nom clars."
 
-#: includes/bulk-filter.php:120
+#: includes/bulk-filter.php:123
 #, php-format
 msgid "Completar %d imágenes con IA"
 msgstr "Completa %d imatges amb IA"
 
-#: includes/bulk-filter.php:121
+#: includes/bulk-filter.php:124
 #, php-format
-msgid "%d imágenes · una consulta a Claude por imagen"
-msgstr "%d imatges · una consulta a Claude per imatge"
+msgid "%d imágenes · una consulta de IA por imagen; si se agota la cuota gratuita, el resto queda en cola"
+msgstr "%d imatges · una consulta d'IA per imatge; si s'esgota la quota gratuïta, la resta queda en cua"
 
-#: includes/bulk-filter.php:122
+#: includes/bulk-filter.php:124
+#, php-format
+msgid "%d imágenes · sin IA configurada: se propone a partir de la foto y la página donde se usa"
+msgstr "%d imatges · sense IA configurada: es proposa a partir de la foto i de la pàgina on es fa servir"
+
+#: includes/bulk-filter.php:125
 msgid "Completando con IA"
 msgstr "Completant amb IA"
+
+#: includes/bulk-filter.php:163
+#, php-format
+msgid "Cuota gratuita agotada: %d imágenes quedan en cola y se completarán solas."
+msgstr "Quota gratuïta esgotada: %d imatges queden en cua i es completaran soles."
+
+#: includes/bulk-filter.php:184
+#, php-format
+msgid "Se ha agotado la cuota gratuita de IA. %d imágenes quedan en cola y se completarán solas cuando se renueve (cada hora se comprueba)."
+msgstr "S'ha esgotat la quota gratuïta d'IA. %d imatges queden en cua i es completaran soles quan es renovi (es comprova cada hora)."
 
 #: includes/cleanup-admin.php:50
 msgid "Imágenes sin archivo en el servidor"
@@ -1367,19 +1529,23 @@ msgid "Limpieza: recuperar archivos perdidos"
 msgstr "Neteja: recuperar fitxers perduts"
 
 #: includes/core.php:710
+msgid "IA pendiente completada"
+msgstr "IA pendent completada"
+
+#: includes/core.php:711
 msgid "Optimización desde el editor"
 msgstr "Optimització des de l'editor"
 
-#: includes/core.php:711
+#: includes/core.php:712
 msgid "Completar con IA"
 msgstr "Completa amb IA"
 
-#: includes/core.php:718
+#: includes/core.php:719
 #, php-format
 msgid "Plantilla: %s"
 msgstr "Plantilla: %s"
 
-#: includes/core.php:722
+#: includes/core.php:723
 #, php-format
 msgid "Optimización (%1$s, %2$d px)"
 msgstr "Optimització (%1$s, %2$d px)"
@@ -2345,6 +2511,10 @@ msgstr "Tab accepta el suggeriment en gris."
 msgid "En esta página no falta nada. Usa los atajos «Sin alt» o «Nombres de cámara» para ver más."
 msgstr "En aquesta pàgina no falta res. Fes servir les dreceres «Sense alt» o «Noms de càmera» per veure'n més."
 
+#: includes/i18n-js.php:102
+msgid "Sin IA: sacado de la página"
+msgstr "Sense IA: tret de la pàgina"
+
 #: includes/media.php:15
 msgid "SEO de imagen"
 msgstr "SEO d'imatge"
@@ -3028,6 +3198,13 @@ msgstr "Omet"
 #: includes/ux.php:638
 msgid "Terminar"
 msgstr "Acaba"
+
+#~ msgid "Falta la clave de la API de Claude en Ajustes."
+#~ msgstr "Falta la clau de l'API de Claude a Configuració."
+
+#, php-format
+#~ msgid "%d imágenes · una consulta a Claude por imagen"
+#~ msgstr "%d imatges · una consulta a Claude per imatge"
 
 #~ msgid "Guardar automáticamente alt, título, leyenda y descripción"
 #~ msgstr "Desa automàticament alt, títol, llegenda i descripció"

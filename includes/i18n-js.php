@@ -99,5 +99,6 @@ function inpulsia_medios_js_i18n() {
 		'Solo letras, números y guiones. La URL antigua redirigirá a la nueva.' => __( 'Solo letras, números y guiones. La URL antigua redirigirá a la nueva.', 'inpulsia-medios' ),
 		'Tab acepta la sugerencia en gris.' => __( 'Tab acepta la sugerencia en gris.', 'inpulsia-medios' ),
 		'En esta página no falta nada. Usa los atajos «Sin alt» o «Nombres de cámara» para ver más.' => __( 'En esta página no falta nada. Usa los atajos «Sin alt» o «Nombres de cámara» para ver más.', 'inpulsia-medios' ),
+		'Sin IA: sacado de la página' => __( 'Sin IA: sacado de la página', 'inpulsia-medios' ),
 	];
 }

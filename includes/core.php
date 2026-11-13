@@ -707,6 +707,7 @@ function inpulsia_medios_history_label( $label ) {
 		'Limpieza: duplicados'             => __( 'Limpieza: duplicados', 'inpulsia-medios' ),
 		'Limpieza: imágenes rotas'         => __( 'Limpieza: imágenes rotas', 'inpulsia-medios' ),
 		'Limpieza: recuperar archivos perdidos' => __( 'Limpieza: recuperar archivos perdidos', 'inpulsia-medios' ),
+		'IA pendiente completada' => __( 'IA pendiente completada', 'inpulsia-medios' ),
 		'Optimización desde el editor'     => __( 'Optimización desde el editor', 'inpulsia-medios' ),
 		'Completar con IA'                 => __( 'Completar con IA', 'inpulsia-medios' ),
 	];

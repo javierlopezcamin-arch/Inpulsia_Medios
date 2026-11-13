@@ -18,6 +18,7 @@ tests_add_filter( 'muplugins_loaded', function () use ( $root ) {
 	require_once $root . '/includes/export.php';
 	require_once $root . '/includes/usage.php';
 	require_once $root . '/includes/optimize.php';
+	require_once $root . '/includes/ai.php';
 	require_once $root . '/includes/admin.php';
 	require_once $root . '/includes/media.php';
 	require_once $root . '/includes/guide.php';

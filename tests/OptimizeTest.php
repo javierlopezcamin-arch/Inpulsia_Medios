@@ -655,4 +655,70 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertSame( 2, $today['count'] );
 		$this->assertSame( 'piscina-de-obra', inpulsia_medios_current( $id )['filename'] );
 	}
+
+	private function ai_settings( $extra ) {
+		update_option( 'inpulsia_medios_settings', $extra + [ 'api_key' => '' ] );
+		foreach ( [ 'gemini', 'cloudflare', 'groq', 'openrouter', 'claude' ] as $p ) {
+			delete_transient( 'inpulsia_medios_ai_quota_' . $p );
+		}
+	}
+
+	public function test_without_ai_the_suggestion_comes_from_the_page() {
+		$this->ai_settings( [ 'city' => 'Santander' ] );
+		$id   = $this->upload( 'IMG_7788.jpg', 600, 300 );
+		$page = self::factory()->post->create( [ 'post_type' => 'page', 'post_title' => 'Reformas', 'post_content' => '<h2>Cocina reformada en blanco</h2><img class="wp-image-' . $id . '" src="' . wp_get_attachment_url( $id ) . '">' ] );
+		inpulsia_medios_usage_flush();
+		$s = inpulsia_medios_suggest( $id );
+		$this->assertNotWPError( $s );
+		$this->assertSame( 'context', $s['source'] );
+		$this->assertSame( 'Cocina reformada en blanco en Santander', $s['alt'] );
+		$this->assertSame( 'cocina-reformada-en-blanco-santander', $s['filename'] );
+		$this->assertSame( 'Cocina reformada en blanco', inpulsia_medios_template_value( $id, '{encabezado} - {ciudad}', 'title', 1 ) );
+		unset( $page );
+	}
+
+	public function test_free_providers_fail_over_on_quota_and_answers_are_cached() {
+		$this->ai_settings( [ 'gemini_key' => 'g', 'groq_key' => 'q' ] );
+		$id    = $this->upload( 'proveedores.png', 600, 300 );
+		$calls = [];
+		add_filter( 'pre_http_request', function ( $pre, $args, $url ) use ( &$calls ) {
+			$calls[] = $url;
+			if ( strpos( $url, 'generativelanguage' ) !== false ) {
+				return [ 'response' => [ 'code' => 429, 'message' => '' ], 'headers' => [], 'body' => '{"error":{"message":"quota"}}' ];
+			}
+			$body = json_decode( $args['body'], true );
+			$this->assertStringStartsWith( 'data:image/jpeg;base64,', $body['messages'][1]['content'][1]['image_url']['url'] );
+			return [ 'response' => [ 'code' => 200, 'message' => '' ], 'headers' => [], 'body' => wp_json_encode( [ 'choices' => [ [ 'message' => [ 'content' => "```json\n{\"alt\":\"Piscina azul\",\"filename\":\"Piscina Azul\",\"title\":\"Piscina\"}\n```" ] ] ] ] ) ];
+		}, 10, 3 );
+		$s = inpulsia_medios_suggest( $id );
+		$this->assertSame( 'groq', $s['source'] );
+		$this->assertSame( 'piscina-azul', $s['filename'] );
+		$this->assertTrue( inpulsia_medios_ai_exhausted( 'gemini' ) );
+		$this->assertCount( 2, $calls );
+		$again = inpulsia_medios_suggest( $id );
+		$this->assertSame( 'cache', $again['source'] );
+		$this->assertCount( 2, $calls, 'A cached image spends no quota.' );
+	}
+
+	public function test_images_wait_in_a_queue_when_every_free_quota_is_spent() {
+		$this->ai_settings( [ 'gemini_key' => 'g' ] );
+		$id = $this->upload( 'IMG_9911.png', 600, 300 );
+		add_filter( 'pre_http_request', function () {
+			return [ 'response' => [ 'code' => 429, 'message' => '' ], 'headers' => [], 'body' => '{}' ];
+		} );
+		$s = inpulsia_medios_suggest( $id );
+		$this->assertSame( 'quota', $s->get_error_code() );
+		inpulsia_medios_ai_queue_add( [ $id ], get_current_user_id() );
+		$this->assertSame( 0, inpulsia_medios_ai_queue_run() );
+		$this->assertArrayHasKey( $id, inpulsia_medios_ai_queue(), 'Still waiting for the quota to reset.' );
+		remove_all_filters( 'pre_http_request' );
+		delete_transient( 'inpulsia_medios_ai_quota_gemini' );
+		add_filter( 'pre_http_request', function () {
+			return [ 'response' => [ 'code' => 200, 'message' => '' ], 'headers' => [], 'body' => wp_json_encode( [ 'candidates' => [ [ 'content' => [ 'parts' => [ [ 'text' => '{"alt":"Escalera de piscina","filename":"escalera-piscina","title":"Escalera"}' ] ] ] ] ] ] ) ];
+		} );
+		$this->assertSame( 1, inpulsia_medios_ai_queue_run() );
+		$this->assertSame( [], inpulsia_medios_ai_queue() );
+		$this->assertSame( 'Escalera de piscina', inpulsia_medios_current( $id )['alt'] );
+		$this->assertSame( 'escalera-piscina', inpulsia_medios_current( $id )['filename'] );
+	}
 }
