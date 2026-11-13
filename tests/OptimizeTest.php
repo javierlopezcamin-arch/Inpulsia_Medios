@@ -353,6 +353,12 @@ class OptimizeTest extends WP_UnitTestCase {
 		$id = $this->upload( 'subida.png', 800, 400 );
 		$this->assertNotFalse( wp_next_scheduled( 'inpulsia_medios_auto_optimize', [ $id, 0 ] ) );
 
+		inpulsia_medios_auto_run( $id );
+		$this->assertSame( 'image/png', get_post_mime_type( $id ), 'A fresh upload waits for WordPress to finish its sizes.' );
+		$this->assertNotFalse( wp_next_scheduled( 'inpulsia_medios_auto_optimize', [ $id, 1 ] ) );
+
+		$GLOBALS['wpdb']->update( $GLOBALS['wpdb']->posts, [ 'post_date_gmt' => gmdate( 'Y-m-d H:i:s', time() - 300 ) ], [ 'ID' => $id ] );
+		clean_post_cache( $id );
 		wp_set_current_user( 0 );
 		inpulsia_medios_auto_run( $id );
 		$this->assertSame( 'image/jpeg', get_post_mime_type( $id ) );
