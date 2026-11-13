@@ -100,11 +100,14 @@
 			dirty = dirty || changed;
 		});
 		$tr.toggleClass('row-dirty', dirty);
-		var n = $grid.find('tr.row-dirty').length;
-		$('#inpulsia-medios-dirty').text(n ? t('%s imágenes con cambios sin revisar', n) : '');
-		var len = ($tr.find('[data-field="alt"]').val() || '').length;
-		$tr.find('.inpulsia-medios-chars').text(len + '/125').toggleClass('too-long', len > 125);
+		var errors = $grid.find('.is-save-error').length;
+		$('#inpulsia-medios-dirty').text(errors ? t('%s campos sin guardar', errors) : '');
+		$('#inpulsia-medios-review').prop('hidden', !errors);
+		var len = ($tr.find('[data-field="alt"]').val() || '').trim().length;
+		$tr.find('.inpulsia-medios-chars').text(len + '/125').toggleClass('too-long', len > 125).toggleClass('too-short', len > 0 && len < 15);
 		hints($tr);
+		rowStatus($tr);
+		placeholders($tr);
 	}
 
 	function selectedRows() {
@@ -122,31 +125,65 @@
 		updateRowState($f.closest('tr'));
 	}
 
-	/* Autosave (text fields only; renaming always goes through the preview) */
-	var autosave = false;
-	try { autosave = localStorage.getItem('inpulsiaMediosAutosave') === '1'; } catch (e) {}
-	$('#im-autosave').prop('checked', autosave).on('change', function () {
-		autosave = this.checked;
-		try { localStorage.setItem('inpulsiaMediosAutosave', autosave ? '1' : '0'); } catch (e) {}
-		if (autosave) $grid.find('[data-field]').not('[data-field="filename"]').filter('.is-dirty').each(function () { save($(this)); });
-	});
+	/* Every field saves itself when you leave it, file names included (old URLs redirect). */
+	var pending = 0;
+
+	function rowStatus($tr) {
+		var alt = ($tr.find('[data-field="alt"]').val() || '').trim();
+		var name = $tr.find('[data-field="filename"]').val() || '';
+		var state = $tr.find('.is-save-error').length ? 'error' : (!alt || CAMERA.test(name) ? 'todo' : 'ok');
+		var label = { ok: t('Completa'), todo: !alt ? t('Falta el alt') : t('Nombre poco claro'), error: t('No se ha guardado') }[state];
+		$tr.attr('data-state', state).find('.im-row-status').attr({ 'class': 'im-row-status is-' + state, title: label, 'aria-label': label });
+	}
+
+	// A grey suggestion inside empty alt/title fields; Tab accepts it.
+	function suggestion($tr, field) {
+		var title = ($tr.find('[data-field="title"]').val() || '').trim();
+		var name = $tr.find('[data-field="filename"]').val() || '';
+		var page = String($tr.data('page') || '');
+		if (field === 'alt') return title && !CAMERA.test(title) && slug(title) !== name ? title : page;
+		if (field === 'title') return !CAMERA.test(name) ? name.replace(/-/g, ' ').replace(/^./, function (c) { return c.toUpperCase(); }) : page;
+		return '';
+	}
+	function placeholders($tr) {
+		['alt', 'title'].forEach(function (f) { $tr.find('[data-field="' + f + '"]').attr('placeholder', suggestion($tr, f)); });
+	}
+
+	function updateToday(today) {
+		if (!today) return;
+		$('.im-today').prop('hidden', !today.count).attr('data-token', today.token).find('.im-today-text').text(t('Cambios de hoy: %s', today.count));
+	}
 
 	function save($f) {
 		var field = $f.data('field');
-		if (!autosave || field === 'filename' || $f.val() === $f.attr('data-orig')) return;
+		var before = $f.attr('data-orig');
+		if ($f.val() === before) return $.Deferred().resolve().promise();
 		var $td = $f.closest('td').removeClass('is-saved is-save-error').addClass('is-saving');
+		$td.find('.im-cell-undo').remove();
 		var sent = $f.val();
-		$.post(cfg.ajax_url, { action: 'inpulsia_medios_autosave', nonce: cfg.nonce, id: $f.closest('tr').data('id'), field: field, value: sent }, null, 'json')
+		pending++;
+		return $.post(cfg.ajax_url, { action: 'inpulsia_medios_autosave', nonce: cfg.nonce, id: $f.closest('tr').data('id'), field: field, value: sent }, null, 'json')
 			.done(function (res) {
 				if (!res.success) { $td.addClass('is-save-error').attr('title', res.data || t('Error')); return; }
+				$td.removeAttr('title');
 				$f.attr('data-orig', res.data.value);
 				if ($f.val() === sent) $f.val(res.data.value);
+				$f.removeClass('is-ai');
 				$td.addClass('is-saved');
-				setTimeout(function () { $td.removeClass('is-saved'); }, 1500);
+				updateToday(res.data.today);
+				// Ten seconds to change your mind, without going to the Historial.
+				var $undo = $('<button type="button" class="button-link im-cell-undo">').text('↶ ' + t('Deshacer')).attr('aria-label', t('Deshacer este cambio')).on('click', function () {
+					$undo.remove();
+					$f.val(before);
+					save($f).always(function () { updateRowState($f.closest('tr')); });
+				});
+				$td.append($undo);
+				setTimeout(function () { $td.removeClass('is-saved'); $undo.remove(); }, 10000);
 				updateRowState($f.closest('tr'));
+				sheetSync();
 			})
 			.fail(function () { $td.addClass('is-save-error').attr('title', t('Error de conexión: no se ha guardado')); })
-			.always(function () { $td.removeClass('is-saving'); });
+			.always(function () { pending--; $td.removeClass('is-saving'); updateRowState($f.closest('tr')); });
 	}
 
 	if ($grid.length) {
@@ -154,6 +191,13 @@
 		$grid.on('input', '[data-field]', function () { updateRowState($(this).closest('tr')); });
 		$grid.on('change', '[data-field]', function () { save($(this)); });
 		$grid.on('focus', '[data-field]', function () { lastField = this; });
+		$grid.on('keydown', '[data-field="alt"], [data-field="title"]', function (e) {
+			if (e.key === 'Tab' && !e.shiftKey && !this.value && this.placeholder) {
+				e.preventDefault();
+				setField($(this), this.placeholder);
+				save($(this));
+			}
+		});
 
 		// Enter (Ctrl+Enter in multi-line fields) moves to the same field in the next row; Shift goes back.
 		$grid.on('keydown', '[data-field]', function (e) {
@@ -240,16 +284,18 @@
 				if (field === 'filename') v = slug(v);
 				if (v) { setField($f, v); save($f); changed++; }
 			});
-			alert(changed ? t('%s campos rellenados. Revisa la tabla y pulsa «Revisar cambios».', changed) : t('No había ningún campo que rellenar con esas condiciones.'));
+			alert(changed ? t('%s campos rellenados y guardados. Puedes deshacerlos con «Deshacer todos».', changed) : t('No había ningún campo que rellenar con esas condiciones.'));
 		});
 
 		window.addEventListener('beforeunload', function (e) {
-			if ($grid.find('tr.row-dirty').length && !window.inpulsiaMediosSaving) {
+			if ((pending || $grid.find('.is-save-error').length) && !window.inpulsiaMediosSaving) {
 				e.preventDefault();
 				e.returnValue = '';
 			}
 		});
 	}
+
+	var sheetSync = function () {};
 
 	$('#inpulsia-medios-review').on('click', function () {
 		var rows = [];
@@ -289,7 +335,8 @@
 					return;
 				}
 				$.each(['alt', 'filename', 'title'], function (_, f) {
-					if (res.data[f]) $tr.find('[data-field="' + f + '"]').val(res.data[f]).addClass('is-ai');
+					var $f = $tr.find('[data-field="' + f + '"]');
+					if (res.data[f] && res.data[f] !== $f.val()) { $f.val(res.data[f]).addClass('is-ai'); save($f); }
 				});
 				updateRowState($tr);
 			})
@@ -747,6 +794,169 @@
 			done = function () { done = null; clearTimeout(timer); i++; $bar.css('width', Math.round(i / jobs.length * 100) + '%'); setTimeout(next, 300); };
 			timer = setTimeout(function () { if (done) done(); }, 25000);
 		})();
+	});
+
+	/* ---------- 1.10: today bar, image sheet, complete-what-is-missing ---------- */
+	$('.im-today-undo').on('click', function () {
+		var tok = $('.im-today').attr('data-token');
+		if (!tok || !confirm(t('¿Deshacer todos los cambios que has guardado hoy desde la tabla?'))) return;
+		run('inpulsia_medios_undo', tok, t('Deshaciendo los cambios de hoy'));
+	});
+
+	var FIELDS = ['filename', 'title', 'alt', 'caption', 'description'];
+	var $sheet = $('#im-sheet'), $sheetRow = null;
+
+	function rows() { return $grid.find('tbody tr[data-id]'); }
+
+	function whereList($tr) {
+		var w = [];
+		try { w = JSON.parse($tr.attr('data-where') || '[]'); } catch (e) {}
+		return w;
+	}
+
+	function openSheet($tr) {
+		$sheetRow = $tr;
+		rows().removeClass('is-open');
+		$tr.addClass('is-open');
+		$sheet.find('.im-sheet-id').text('#' + $tr.data('id') + ' · ' + String($tr.data('ext') || '').toUpperCase());
+		$sheet.find('.im-sheet-img').attr('href', $tr.find('.im-thumb').attr('href')).find('img').attr('src', $tr.data('large') || $tr.find('.im-thumb img').attr('src'));
+		$sheet.find('.im-sheet-info').text($tr.data('info') || '');
+		var $w = $sheet.find('.im-sheet-where').empty(), w = whereList($tr);
+		if (w.length) {
+			$w.append(txt('strong', t('Se usa en:') + ' '));
+			w.forEach(function (x, i) {
+				if (i) $w.append(', ');
+				$w.append($('<a target="_blank" rel="noopener">').attr('href', x.u).text(x.t));
+				if (x.k) $w.append(txt('span', ' (' + x.k + ')', 'muted'));
+			});
+		} else $w.append(txt('span', t('Sin uso detectado'), 'muted'));
+		sheetSync();
+		$sheet.prop('hidden', false);
+		$('body').addClass('im-sheet-open');
+	}
+
+	sheetSync = function () {
+		if (!$sheetRow || $sheet.prop('hidden') && !$sheetRow) return;
+		FIELDS.forEach(function (f) {
+			var $src = $sheetRow.find('[data-field="' + f + '"]'), $box = $sheet.find('.im-sheet-field[data-for="' + f + '"]');
+			var $in = $box.find('input, textarea');
+			if (!$in.is(':focus')) $in.val($src.val());
+			$in.attr('placeholder', $src.attr('placeholder') || '');
+			var $td = $src.closest('td');
+			$box.find('.im-sheet-state').text($td.hasClass('is-saving') ? t('guardando…') : $td.hasClass('is-save-error') ? t('no se ha guardado') : $td.hasClass('is-saved') ? '✓ ' + t('guardado') : '')
+				.attr('class', 'im-sheet-state' + ($td.hasClass('is-save-error') ? ' is-error' : ''));
+			$box.find('.im-sheet-hint').text($td.find('.im-hint').text() + (f === 'alt' ? ' ' + $td.find('.inpulsia-medios-chars').text() : ''));
+		});
+	};
+
+	function closeSheet() {
+		$sheet.prop('hidden', true);
+		$('body').removeClass('im-sheet-open');
+		if ($sheetRow) { $sheetRow.removeClass('is-open').find('.im-thumb').trigger('focus'); }
+		$sheetRow = null;
+	}
+
+	function moveSheet(step) {
+		if (!$sheetRow) return;
+		var $r = rows(), i = $r.index($sheetRow) + step;
+		if (i >= 0 && i < $r.length) openSheet($r.eq(i));
+	}
+
+	if ($grid.length) {
+		$grid.on('click', '.im-thumb', function (e) {
+			if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+			e.preventDefault();
+			openSheet($(this).closest('tr'));
+			$sheet.find('#im-sheet-alt').trigger('focus');
+		});
+		$sheet.on('input', 'input, textarea', function () {
+			if (!$sheetRow) return;
+			var f = $(this).closest('.im-sheet-field').data('for');
+			setField($sheetRow.find('[data-field="' + f + '"]'), $(this).val());
+		});
+		$sheet.on('change', 'input, textarea', function () {
+			if (!$sheetRow) return;
+			save($sheetRow.find('[data-field="' + $(this).closest('.im-sheet-field').data('for') + '"]'));
+		});
+		$sheet.on('keydown', 'input', function (e) {
+			if (e.key === 'Tab' && !e.shiftKey && !this.value && this.placeholder) { e.preventDefault(); $(this).val(this.placeholder).trigger('input').trigger('change'); }
+			if (e.key === 'Enter') { e.preventDefault(); $(this).trigger('change'); moveSheet(1); }
+		});
+		$sheet.on('keydown', function (e) {
+			if (e.altKey && e.key === 'ArrowDown') { e.preventDefault(); $(document.activeElement).trigger('change'); moveSheet(1); }
+			if (e.altKey && e.key === 'ArrowUp') { e.preventDefault(); $(document.activeElement).trigger('change'); moveSheet(-1); }
+			if (e.key === 'Escape') { e.stopPropagation(); $(document.activeElement).trigger('change'); closeSheet(); }
+		});
+		$sheet.find('.im-sheet-close').on('click', closeSheet);
+		$sheet.find('.im-sheet-next').on('click', function () { moveSheet(1); });
+		$sheet.find('.im-sheet-prev').on('click', function () { moveSheet(-1); });
+		$sheet.find('.im-sheet-suggest').on('click', function () {
+			var $b = $(this).prop('disabled', true).addClass('is-busy');
+			suggest($sheetRow).always(function () { $b.prop('disabled', false).removeClass('is-busy'); sheetSync(); });
+		});
+	}
+
+	/* Complete what is missing: one image and one field at a time. */
+	var $focus = $('#im-focus'), queue = [], qi = 0, qTotal = 0;
+
+	function missingField($tr) {
+		if (!($tr.find('[data-field="alt"]').val() || '').trim()) return 'alt';
+		if (CAMERA.test($tr.find('[data-field="filename"]').val() || '')) return 'filename';
+		return '';
+	}
+
+	function showFocus() {
+		while (qi < queue.length && !missingField(queue[qi])) qi++;
+		if (qi >= queue.length) {
+			$focus.find('h2').text(t('¡Listo! No queda nada pendiente en esta página.'));
+			$focus.find('.im-focus-img, .im-focus-input, .im-focus-save, .im-focus-skip, .im-focus-ai, .im-focus-hint, .im-focus-where').hide();
+			$focus.find('.im-focus-count').text('');
+			return $focus.find('.im-focus-close').trigger('focus');
+		}
+		var $tr = queue[qi], f = missingField($tr), $src = $tr.find('[data-field="' + f + '"]');
+		$focus.find('.im-focus-img, .im-focus-input, .im-focus-save, .im-focus-skip, .im-focus-ai, .im-focus-hint, .im-focus-where').show();
+		$focus.find('.im-focus-count').text(t('%s de %s', qi + 1, qTotal));
+		$focus.find('h2').text(f === 'alt' ? t('Describe lo que se ve (texto alternativo)') : t('Pon un nombre de archivo claro'));
+		$focus.find('.im-focus-img').attr('src', $tr.data('large') || $tr.find('.im-thumb img').attr('src'));
+		var w = whereList($tr);
+		$focus.find('.im-focus-where').text(w.length ? t('Se usa en:') + ' ' + w.map(function (x) { return x.t + (x.k ? ' (' + x.k + ')' : ''); }).join(', ') : t('Sin uso detectado'));
+		$focus.find('.im-focus-input').val(f === 'filename' ? $src.val() : '').attr('placeholder', $src.attr('placeholder') || '').data('field', f).trigger('focus').trigger('select');
+		$focus.find('.im-focus-hint').text(f === 'filename' ? t('Solo letras, números y guiones. La URL antigua redirigirá a la nueva.') : t('Tab acepta la sugerencia en gris.'));
+	}
+
+	function focusSave() {
+		var $tr = queue[qi], $in = $focus.find('.im-focus-input'), v = $in.val().trim() || ($in.data('field') === 'alt' ? '' : '');
+		if (!v) return $in.trigger('focus');
+		var $f = $tr.find('[data-field="' + $in.data('field') + '"]');
+		setField($f, $in.data('field') === 'filename' ? slug(v) : v);
+		save($f);
+		qi++;
+		showFocus();
+	}
+
+	$('#im-focus-mode').on('click', function () {
+		queue = rows().map(function () { return $(this); }).get().filter(function ($tr) { return missingField($tr); });
+		qi = 0;
+		qTotal = queue.length;
+		if (!qTotal) return alert(t('En esta página no falta nada. Usa los atajos «Sin alt» o «Nombres de cámara» para ver más.'));
+		$focus.prop('hidden', false);
+		showFocus();
+	});
+	$focus.find('.im-focus-save').on('click', focusSave);
+	$focus.find('.im-focus-skip').on('click', function () { qi++; showFocus(); });
+	$focus.find('.im-focus-close').on('click', function () { $focus.prop('hidden', true); $('#im-focus-mode').trigger('focus'); });
+	$focus.find('.im-focus-ai').on('click', function () {
+		var $b = $(this).prop('disabled', true).addClass('is-busy'), $tr = queue[qi], f = $focus.find('.im-focus-input').data('field');
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_suggest', nonce: cfg.nonce, id: $tr.data('id') }, null, 'json')
+			.done(function (res) { if (res.success && res.data[f]) $focus.find('.im-focus-input').val(res.data[f]).trigger('focus'); else alert(res.data || t('Error')); })
+			.always(function () { $b.prop('disabled', false).removeClass('is-busy'); });
+	});
+	$focus.on('keydown', function (e) {
+		var $in = $focus.find('.im-focus-input');
+		if (e.key === 'Escape') { e.stopPropagation(); return $focus.find('.im-focus-close').trigger('click'); }
+		if (!$(e.target).is($in)) return;
+		if (e.key === 'Enter') { e.preventDefault(); focusSave(); }
+		if (e.key === 'Tab' && !e.shiftKey && !$in.val() && $in.attr('placeholder')) { e.preventDefault(); $in.val($in.attr('placeholder')); }
 	});
 
 })(jQuery);

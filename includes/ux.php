@@ -588,3 +588,56 @@ function inpulsia_medios_shortcuts_markup() {
 	</div>
 	<?php
 }
+
+/* ---------- 1.10: image sheet and "complete what is missing" mode ---------- */
+
+function inpulsia_medios_sheet_markup( $has_ai ) {
+	$labels = inpulsia_medios_field_labels();
+	?>
+	<aside id="im-sheet" class="im-sheet" hidden aria-labelledby="im-sheet-title" role="dialog">
+		<header>
+			<h2 id="im-sheet-title"><?php esc_html_e( 'Ficha de la imagen', 'inpulsia-medios' ); ?> <span class="im-sheet-id muted"></span></h2>
+			<button type="button" class="button-link im-sheet-close" aria-label="<?php esc_attr_e( 'Cerrar ficha', 'inpulsia-medios' ); ?>"><span class="dashicons dashicons-no-alt" aria-hidden="true"></span></button>
+		</header>
+		<div class="im-sheet-body">
+			<a class="im-sheet-img" target="_blank" rel="noopener"><img alt="" /></a>
+			<p class="im-sheet-info muted"></p>
+			<div class="im-sheet-where"></div>
+			<?php foreach ( $labels as $f => $label ) : ?>
+				<div class="im-sheet-field" data-for="<?php echo esc_attr( $f ); ?>">
+					<label for="im-sheet-<?php echo esc_attr( $f ); ?>"><?php echo esc_html( $label ); ?> <span class="im-sheet-state" aria-live="polite"></span></label>
+					<?php if ( in_array( $f, [ 'caption', 'description' ], true ) ) : ?>
+						<textarea id="im-sheet-<?php echo esc_attr( $f ); ?>" rows="3"></textarea>
+					<?php else : ?>
+						<input type="text" id="im-sheet-<?php echo esc_attr( $f ); ?>" />
+					<?php endif; ?>
+					<small class="im-sheet-hint"></small>
+					<?php if ( $has_ai ) : ?><span class="im-sheet-ai" hidden></span><?php endif; ?>
+				</div>
+			<?php endforeach; ?>
+		</div>
+		<footer>
+			<button type="button" class="button im-sheet-prev"><?php esc_html_e( '← Anterior', 'inpulsia-medios' ); ?></button>
+			<?php if ( $has_ai ) : ?><button type="button" class="button im-sheet-suggest"><?php esc_html_e( 'Sugerir con IA', 'inpulsia-medios' ); ?></button><?php endif; ?>
+			<button type="button" class="button button-primary im-sheet-next"><?php esc_html_e( 'Siguiente →', 'inpulsia-medios' ); ?></button>
+		</footer>
+	</aside>
+
+	<div id="im-focus" class="im-keys" role="dialog" aria-modal="true" aria-labelledby="im-focus-title" hidden>
+		<div class="im-keys-box im-focus-box">
+			<p class="im-focus-count muted"></p>
+			<h2 id="im-focus-title"></h2>
+			<img class="im-focus-img" alt="" />
+			<p class="im-focus-where muted"></p>
+			<input type="text" class="im-focus-input large-text" />
+			<small class="im-focus-hint"></small>
+			<p class="im-focus-actions">
+				<button type="button" class="button button-primary im-focus-save"><?php esc_html_e( 'Guardar y siguiente', 'inpulsia-medios' ); ?> <kbd>Intro</kbd></button>
+				<button type="button" class="button im-focus-skip"><?php esc_html_e( 'Saltar', 'inpulsia-medios' ); ?></button>
+				<?php if ( $has_ai ) : ?><button type="button" class="button im-focus-ai"><?php esc_html_e( 'Sugerir con IA', 'inpulsia-medios' ); ?></button><?php endif; ?>
+				<button type="button" class="button-link im-focus-close"><?php esc_html_e( 'Terminar', 'inpulsia-medios' ); ?> <kbd>Esc</kbd></button>
+			</p>
+		</div>
+	</div>
+	<?php
+}

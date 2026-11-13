@@ -348,13 +348,19 @@ function inpulsia_medios_tab_editar() {
 		</div>
 
 		<div class="im-toolbar">
-			<label class="im-autosave"><input type="checkbox" id="im-autosave" /> <?php esc_html_e( 'Guardar automáticamente alt, título, leyenda y descripción', 'inpulsia-medios' ); ?></label>
-			<span class="muted im-keys"><?php esc_html_e( 'Intro: fila siguiente · Pega una columna de Excel para rellenar hacia abajo', 'inpulsia-medios' ); ?></span>
+			<?php $today = inpulsia_medios_today_changes(); ?>
+			<span class="im-today" data-token="<?php echo esc_attr( $today['token'] ); ?>" <?php echo $today['count'] ? '' : 'hidden'; ?>>
+				<span class="dashicons dashicons-saved" aria-hidden="true"></span>
+				<span class="im-today-text"><?php echo esc_html( sprintf( __( 'Cambios de hoy: %d', 'inpulsia-medios' ), $today['count'] ) ); ?></span>
+				<button type="button" class="button-link im-today-undo"><?php esc_html_e( 'Deshacer todos', 'inpulsia-medios' ); ?></button>
+			</span>
+			<span class="muted im-keys-hint"><?php esc_html_e( 'Se guarda solo al salir de cada campo · Intro: fila siguiente · Clic en la foto: ficha', 'inpulsia-medios' ); ?></span>
 			<span id="inpulsia-medios-dirty"></span>
+			<button type="button" id="im-focus-mode" class="button"><span class="dashicons dashicons-controls-play" aria-hidden="true"></span> <?php esc_html_e( 'Completar lo que falta', 'inpulsia-medios' ); ?></button>
 			<?php if ( $has_ai ) : ?>
 				<button type="button" id="im-ai-filter" class="button"><?php echo esc_html( sprintf( __( 'Completar con IA las %d del filtro', 'inpulsia-medios' ), $query->found_posts ) ); ?></button>
 			<?php endif; ?>
-			<button type="button" id="inpulsia-medios-review" class="button button-primary"><?php esc_html_e( 'Revisar cambios', 'inpulsia-medios' ); ?></button>
+			<button type="button" id="inpulsia-medios-review" class="button button-primary" hidden><?php esc_html_e( 'Revisar cambios', 'inpulsia-medios' ); ?></button>
 			<?php if ( ! $has_ai && current_user_can( 'manage_options' ) ) : ?>
 				<a href="<?php echo esc_url( admin_url( 'upload.php?page=inpulsia-medios&tab=ajustes' ) ); ?>"><?php esc_html_e( 'Configura la IA en Ajustes', 'inpulsia-medios' ); ?></a>
 			<?php endif; ?>
@@ -403,10 +409,11 @@ function inpulsia_medios_tab_editar() {
 				$lang  = inpulsia_medios_lang( $post->ID );
 				$large = wp_get_attachment_image_url( $post->ID, 'medium_large' );
 				?>
-				<tr data-id="<?php echo (int) $post->ID; ?>" data-page="<?php echo esc_attr( $where ? $where[0]['title'] : '' ); ?>" data-keyword="<?php echo esc_attr( implode( ' ', array_slice( array_filter( wp_list_pluck( $where, 'keyword' ) ), 0, 1 ) ) ); ?>">
+				<tr data-id="<?php echo (int) $post->ID; ?>" data-large="<?php echo esc_url( (string) $large ); ?>" data-ext="<?php echo esc_attr( $ext ); ?>" data-info="<?php echo esc_attr( (int) ( $meta['width'] ?? 0 ) . '×' . (int) ( $meta['height'] ?? 0 ) . ' · ' . ( file_exists( $path ) ? size_format( filesize( $path ), 0 ) : '—' ) ); ?>" data-where="<?php echo esc_attr( wp_json_encode( array_map( function ( $w ) { return [ 't' => $w['title'], 'u' => $w['url'], 'k' => $w['keyword'] ]; }, array_slice( $where, 0, 6 ) ) ) ); ?>" data-page="<?php echo esc_attr( $where ? $where[0]['title'] : '' ); ?>" data-keyword="<?php echo esc_attr( implode( ' ', array_slice( array_filter( wp_list_pluck( $where, 'keyword' ) ), 0, 1 ) ) ); ?>">
 					<th class="check-column"><input type="checkbox" class="inpulsia-medios-row-check" aria-label="<?php echo esc_attr( sprintf( __( 'Seleccionar imagen %d', 'inpulsia-medios' ), $post->ID ) ); ?>" /></th>
 					<td class="col-thumb">
-						<a class="im-thumb" href="<?php echo esc_url( get_edit_post_link( $post->ID ) ); ?>" target="_blank" rel="noopener"><?php echo wp_get_attachment_image( $post->ID, 'thumbnail' ); ?>
+						<span class="im-row-status" role="img"></span>
+						<a class="im-thumb" href="<?php echo esc_url( get_edit_post_link( $post->ID ) ); ?>" target="_blank" rel="noopener" title="<?php esc_attr_e( 'Abrir ficha', 'inpulsia-medios' ); ?>"><?php echo wp_get_attachment_image( $post->ID, 'thumbnail' ); ?>
 							<?php if ( $large ) : ?><span class="im-zoom" aria-hidden="true"><img src="<?php echo esc_url( $large ); ?>" alt="" loading="lazy" /></span><?php endif; ?>
 						</a>
 						<small>#<?php echo (int) $post->ID; ?> · <?php echo esc_html( strtoupper( $ext ) ); ?><?php echo $lang ? ' · <span class="im-lang">' . esc_html( strtoupper( $lang ) ) . '</span>' : ''; ?></small>
@@ -460,6 +467,7 @@ function inpulsia_medios_tab_editar() {
 			<button type="button" class="button" id="im-copy-down" title="<?php esc_attr_e( 'Copia el campo en el que estabas escribiendo a todas las seleccionadas', 'inpulsia-medios' ); ?>"><?php esc_html_e( 'Copiar campo a seleccionadas', 'inpulsia-medios' ); ?></button>
 			<button type="button" class="button-link" id="im-clear-selection"><?php esc_html_e( 'Quitar selección', 'inpulsia-medios' ); ?></button>
 		</div>
+		<?php inpulsia_medios_sheet_markup( $has_ai ); ?>
 	</div>
 	<?php
 	inpulsia_medios_preview_markup();
@@ -993,8 +1001,11 @@ function inpulsia_medios_ajax_autosave() {
 	$id    = absint( $_POST['id'] ?? 0 );
 	$field = sanitize_key( $_POST['field'] ?? '' );
 	$value = (string) wp_unslash( $_POST['value'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized per field in apply_row.
-	if ( ! in_array( $field, [ 'title', 'alt', 'caption', 'description' ], true ) ) {
+	if ( ! in_array( $field, [ 'filename', 'title', 'alt', 'caption', 'description' ], true ) ) {
 		wp_send_json_error( __( 'Este campo no se guarda automáticamente.', 'inpulsia-medios' ) );
+	}
+	if ( $field === 'filename' && trim( $value ) === '' ) {
+		wp_send_json_error( __( 'El nombre de archivo no puede quedar vacío.', 'inpulsia-medios' ) );
 	}
 	$token = inpulsia_medios_autosave_token();
 	list( $r ) = inpulsia_medios_apply_rows( $token, [ [ 'id' => $id, $field => $value === '' ? INPULSIA_MEDIOS_CLEAR : $value ] ] );
@@ -1003,7 +1014,24 @@ function inpulsia_medios_ajax_autosave() {
 	}
 	$entry = inpulsia_medios_history_find( $token );
 	inpulsia_medios_history_update( $token, [ 'rows' => (int) $entry['changed'] ] );
-	wp_send_json_success( [ 'value' => inpulsia_medios_current( $id )[ $field ] ] );
+	wp_send_json_success( [
+		'value' => inpulsia_medios_current( $id )[ $field ],
+		'today' => inpulsia_medios_today_changes(),
+		'token' => $token,
+	] );
+}
+
+// Changes saved from the table today by this user, without creating the day's Historial entry.
+function inpulsia_medios_today_changes() {
+	$saved = get_option( 'inpulsia_medios_daily_autosave_' . get_current_user_id() );
+	if ( ! is_array( $saved ) || $saved['day'] !== current_time( 'Y-m-d' ) ) {
+		return [ 'token' => '', 'count' => 0 ];
+	}
+	$entry = inpulsia_medios_history_find( $saved['token'] );
+	if ( ! $entry || $entry['status'] === 'deshecho' ) {
+		return [ 'token' => '', 'count' => 0 ];
+	}
+	return [ 'token' => $saved['token'], 'count' => count( (array) get_option( 'inpulsia_medios_log_' . $saved['token'], [] ) ) ];
 }
 
 function inpulsia_medios_autosave_token() {

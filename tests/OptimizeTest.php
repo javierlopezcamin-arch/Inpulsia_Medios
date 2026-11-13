@@ -643,4 +643,16 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertCount( 3, $i['lcp'][0]['problem'] );
 		$this->assertSame( 2, inpulsia_medios_perf_problem_count() );
 	}
+
+	public function test_table_changes_of_today_include_renames() {
+		$this->assertSame( 0, inpulsia_medios_today_changes()['count'] );
+		$id    = $this->upload( 'IMG_4455.jpg', 600, 300 );
+		$token = inpulsia_medios_autosave_token();
+		inpulsia_medios_apply_rows( $token, [ [ 'id' => $id, 'filename' => 'piscina-de-obra' ] ] );
+		inpulsia_medios_apply_rows( $token, [ [ 'id' => $id, 'alt' => 'Piscina de obra con escalera' ] ] );
+		$today = inpulsia_medios_today_changes();
+		$this->assertSame( $token, $today['token'] );
+		$this->assertSame( 2, $today['count'] );
+		$this->assertSame( 'piscina-de-obra', inpulsia_medios_current( $id )['filename'] );
+	}
 }
