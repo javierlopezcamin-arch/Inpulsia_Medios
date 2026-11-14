@@ -6,6 +6,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 add_action( 'wp_ajax_inpulsia_medios_clean_stage', 'inpulsia_medios_ajax_clean_stage' );
 add_action( 'wp_ajax_inpulsia_medios_clean_apply', 'inpulsia_medios_ajax_clean_apply' );
 add_action( 'wp_ajax_inpulsia_medios_relink', 'inpulsia_medios_ajax_relink' );
+add_action( 'wp_ajax_inpulsia_medios_lost_candidates', 'inpulsia_medios_ajax_lost_candidates' );
+
+// Looked up separately so a problem on one server never breaks the Limpieza page.
+function inpulsia_medios_ajax_lost_candidates() {
+	inpulsia_medios_check_ajax();
+	try {
+		$out = [];
+		foreach ( inpulsia_medios_lost_candidates( absint( $_POST['id'] ?? 0 ) ) as $c ) {
+			$out[] = $c + [ 'size' => size_format( $c['bytes'], 0 ), 'date' => wp_date( 'd/m/Y H:i', $c['time'] ) ];
+		}
+		wp_send_json_success( $out );
+	} catch ( Throwable $e ) {
+		wp_send_json_error( sprintf( __( 'No se ha podido buscar: %s', 'inpulsia-medios' ), $e->getMessage() ) );
+	}
+}
 
 function inpulsia_medios_ajax_relink() {
 	inpulsia_medios_check_ajax();
@@ -71,17 +86,7 @@ function inpulsia_medios_tab_limpieza() {
 							<td><code><?php echo esc_html( $l['file'] ); ?></code></td>
 							<td><?php echo $l['backup'] ? esc_html__( 'Sí', 'inpulsia-medios' ) : '<span class="muted">' . esc_html__( 'No', 'inpulsia-medios' ) . '</span>'; ?></td>
 							<td class="im-candidates">
-								<?php $cands = inpulsia_medios_lost_candidates( $l['id'] ); ?>
-								<?php if ( ! $cands ) : ?>
-									<span class="muted"><?php esc_html_e( 'Ninguno: vuelve a subirla o cámbiala en las páginas.', 'inpulsia-medios' ); ?></span>
-								<?php endif; ?>
-								<?php foreach ( $cands as $c ) : ?>
-									<div class="im-candidate">
-										<a href="<?php echo esc_url( $c['url'] ); ?>" target="_blank" rel="noopener"><img src="<?php echo esc_url( $c['url'] ); ?>" alt="" loading="lazy" /></a>
-										<span><code><?php echo esc_html( $c['name'] ); ?></code><br><small class="muted"><?php echo esc_html( size_format( $c['bytes'], 0 ) . ' · ' . wp_date( 'd/m/Y H:i', $c['time'] ) . ' · ' . $c['why'] ); ?></small></span>
-										<button type="button" class="button button-small im-relink" data-id="<?php echo (int) $l['id']; ?>" data-name="<?php echo esc_attr( $c['name'] ); ?>"><?php esc_html_e( 'Usar este', 'inpulsia-medios' ); ?></button>
-									</div>
-								<?php endforeach; ?>
+								<div class="im-candidates-list" data-id="<?php echo (int) $l['id']; ?>"><span class="muted"><?php esc_html_e( 'Buscando…', 'inpulsia-medios' ); ?></span></div>
 							</td>
 						</tr>
 					<?php endforeach; ?>

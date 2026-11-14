@@ -324,3 +324,7 @@ body.im-sheet-open .inpulsia-medios-wrap { margin-right: 410px; }
 .im-candidate { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
 .im-candidate img { width: 48px; height: 48px; object-fit: cover; border-radius: 3px; display: block; background: #f0f0f1; }
 .im-candidate span { flex: 1; min-width: 0; word-break: break-all; }
+
+#im-clean .im-clean-alert, #im-clean #im-errors { grid-column: 1 / -1; }
+.im-clean-alert .inpulsia-medios-scroll { overflow-x: auto; }
+.im-clean-alert table td { vertical-align: top; }

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inpulsia Medios\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-14 08:41+0100\n"
+"POT-Creation-Date: 2026-11-14 09:01+0100\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -138,16 +138,28 @@ msgid "para vaciar un campo."
 msgstr "per buidar un camp."
 
 #: includes/admin.php:139
-msgid "El nombre de archivo se normaliza para SEO (minúsculas, guiones, sin tildes) y conserva la extensión original."
-msgstr "El nom de fitxer es normalitza per a SEO (minúscules, guions, sense accents) i conserva l'extensió original."
+msgid ""
+"El nombre de archivo se normaliza para SEO (minúsculas, guiones, sin tildes) "
+"y conserva la extensión original."
+msgstr ""
+"El nom de fitxer es normalitza per a SEO (minúscules, guions, sense accents) "
+"i conserva l'extensió original."
 
 #: includes/admin.php:140
-msgid "Al renombrar se actualizan las URLs en todo el sitio, se renombran las copias WebP/AVIF y se crean redirecciones 301 desde las URLs antiguas."
-msgstr "En canviar el nom s'actualitzen les URL a tot el lloc, es reanomenen les còpies WebP/AVIF i es creen redireccions 301 des de les URL antigues."
+msgid ""
+"Al renombrar se actualizan las URLs en todo el sitio, se renombran las "
+"copias WebP/AVIF y se crean redirecciones 301 desde las URLs antiguas."
+msgstr ""
+"En canviar el nom s'actualitzen les URL a tot el lloc, es reanomenen les "
+"còpies WebP/AVIF i es creen redireccions 301 des de les URL antigues."
 
 #: includes/admin.php:141
-msgid "Al cambiar el alt también se actualiza en las imágenes ya insertadas en entradas y páginas."
-msgstr "En canviar l'alt també s'actualitza a les imatges ja inserides en entrades i pàgines."
+msgid ""
+"Al cambiar el alt también se actualiza en las imágenes ya insertadas en "
+"entradas y páginas."
+msgstr ""
+"En canviar l'alt també s'actualitza a les imatges ja inserides en entrades i "
+"pàgines."
 
 #: includes/admin.php:145
 msgid "Ver vista previa"
@@ -226,12 +238,12 @@ msgstr "Imatges per pàgina"
 msgid "%d por página"
 msgstr "%d per pàgina"
 
-#: includes/admin.php:283 includes/cleanup-admin.php:62
-#: includes/cleanup-admin.php:98
+#: includes/admin.php:283 includes/cleanup-admin.php:77
+#: includes/cleanup-admin.php:103
 msgid "imágenes"
 msgstr "imatges"
 
-#: includes/admin.php:285 includes/cleanup-admin.php:104
+#: includes/admin.php:285 includes/cleanup-admin.php:109
 msgid "Recalcular uso"
 msgstr "Recalcula l'ús"
 
@@ -248,8 +260,12 @@ msgid "Esta web ya usa"
 msgstr "Aquest web ja fa servir"
 
 #: includes/admin.php:302
-msgid ". Optimizar también aquí puede comprimir dos veces: revisa su configuración antes."
-msgstr ". Optimitzar també aquí pot comprimir dues vegades: revisa'n abans la configuració."
+msgid ""
+". Optimizar también aquí puede comprimir dos veces: revisa su configuración "
+"antes."
+msgstr ""
+". Optimitzar també aquí pot comprimir dues vegades: revisa'n abans la "
+"configuració."
 
 #: includes/admin.php:307
 msgid "JPG"
@@ -284,8 +300,12 @@ msgid "Nombre y alt con IA si faltan o son de cámara"
 msgstr "Nom i alt amb IA si falten o són de càmera"
 
 #: includes/admin.php:321
-msgid "Los PNG con transparencia (logos, iconos) se mantienen en PNG. Los GIF animados no se tocan. Las URLs antiguas redirigen a las nuevas."
-msgstr "Els PNG amb transparència (logotips, icones) es mantenen en PNG. Els GIF animats no es toquen. Les URL antigues redirigeixen a les noves."
+msgid ""
+"Los PNG con transparencia (logos, iconos) se mantienen en PNG. Los GIF "
+"animados no se tocan. Las URLs antiguas redirigen a las nuevas."
+msgstr ""
+"Els PNG amb transparència (logotips, icones) es mantenen en PNG. Els GIF "
+"animats no es toquen. Les URL antigues redirigeixen a les noves."
 
 #: includes/admin.php:323
 msgid "Optimizar las"
@@ -357,8 +377,12 @@ msgid "ciudad o zona de Ajustes"
 msgstr "ciutat o zona de Configuració"
 
 #: includes/admin.php:346
-msgid "· Se aplica a las seleccionadas, o a toda la página si no hay ninguna. Después revisa y aplica."
-msgstr "· S'aplica a les seleccionades, o a tota la pàgina si no n'hi ha cap. Després revisa i aplica."
+msgid ""
+"· Se aplica a las seleccionadas, o a toda la página si no hay ninguna. "
+"Después revisa y aplica."
+msgstr ""
+"· S'aplica a les seleccionades, o a tota la pàgina si no n'hi ha cap. "
+"Després revisa i aplica."
 
 #: includes/admin.php:355
 #, php-format
@@ -370,8 +394,12 @@ msgid "Deshacer todos"
 msgstr "Desfés-ho tot"
 
 #: includes/admin.php:358
-msgid "Se guarda solo al salir de cada campo · Intro: fila siguiente · Clic en la foto: ficha"
-msgstr "Es desa sol en sortir de cada camp · Retorn: fila següent · Clic a la foto: fitxa"
+msgid ""
+"Se guarda solo al salir de cada campo · Intro: fila siguiente · Clic en la "
+"foto: ficha"
+msgstr ""
+"Es desa sol en sortir de cada camp · Retorn: fila següent · Clic a la foto: "
+"fitxa"
 
 #: includes/admin.php:360
 msgid "Completar lo que falta"
@@ -436,8 +464,12 @@ msgid "Abrir ficha"
 msgstr "Obre la fitxa"
 
 #: includes/admin.php:442
-msgid "El archivo no está en el servidor (la web la muestra rota). No se puede renombrar:"
-msgstr "El fitxer no és al servidor (el web la mostra trencada). No se'n pot canviar el nom:"
+msgid ""
+"El archivo no está en el servidor (la web la muestra rota). No se puede "
+"renombrar:"
+msgstr ""
+"El fitxer no és al servidor (el web la mostra trencada). No se'n pot canviar "
+"el nom:"
 
 #: includes/admin.php:442
 msgid "recupérala en Limpieza"
@@ -517,8 +549,12 @@ msgid "Incluir columna"
 msgstr "Inclou la columna"
 
 #: includes/admin.php:512
-msgid "Indica en qué páginas, entradas, productos o plantillas de Elementor aparece cada imagen. En bibliotecas muy grandes la exportación tarda más."
-msgstr "Indica en quines pàgines, entrades, productes o plantilles d'Elementor apareix cada imatge. En biblioteques molt grans l'exportació triga més."
+msgid ""
+"Indica en qué páginas, entradas, productos o plantillas de Elementor aparece "
+"cada imagen. En bibliotecas muy grandes la exportación tarda más."
+msgstr ""
+"Indica en quines pàgines, entrades, productes o plantilles d'Elementor "
+"apareix cada imatge. En biblioteques molt grans l'exportació triga més."
 
 #: includes/admin.php:516
 msgid "Descargar CSV"
@@ -529,8 +565,14 @@ msgid "Últimas importaciones"
 msgstr "Últimes importacions"
 
 #: includes/admin.php:527
-msgid "Se guardan las 20 últimas. Deshacer restaura los valores anteriores, incluidos los nombres de archivo y sus URLs. Abre una fila para deshacer solo una imagen."
-msgstr "Es guarden les 20 últimes. Desfer restaura els valors anteriors, inclosos els noms de fitxer i les seves URL. Obre una fila per desfer només una imatge."
+msgid ""
+"Se guardan las 20 últimas. Deshacer restaura los valores anteriores, "
+"incluidos los nombres de archivo y sus URLs. Abre una fila para deshacer "
+"solo una imagen."
+msgstr ""
+"Es guarden les 20 últimes. Desfer restaura els valors anteriors, inclosos "
+"els noms de fitxer i les seves URL. Obre una fila per desfer només una "
+"imatge."
 
 #: includes/admin.php:530
 msgid "Buscar por origen o usuario"
@@ -622,8 +664,16 @@ msgid "Redirecciones 301 de archivos renombrados"
 msgstr "Redireccions 301 de fitxers reanomenats"
 
 #: includes/admin.php:603
-msgid "Cuando alguien (o Google Imágenes) pide la URL antigua de un archivo renombrado, se le redirige a la nueva. Funciona en servidores donde las peticiones a archivos que no existen llegan a WordPress, que es lo habitual en Apache y en la mayoría de configuraciones de Nginx."
-msgstr "Quan algú (o Google Imatges) demana la URL antiga d'un fitxer reanomenat, se'l redirigeix a la nova. Funciona en servidors on les peticions a fitxers que no existeixen arriben a WordPress, cosa habitual a Apache i a la majoria de configuracions de Nginx."
+msgid ""
+"Cuando alguien (o Google Imágenes) pide la URL antigua de un archivo "
+"renombrado, se le redirige a la nueva. Funciona en servidores donde las "
+"peticiones a archivos que no existen llegan a WordPress, que es lo habitual "
+"en Apache y en la mayoría de configuraciones de Nginx."
+msgstr ""
+"Quan algú (o Google Imatges) demana la URL antiga d'un fitxer reanomenat, "
+"se'l redirigeix a la nova. Funciona en servidors on les peticions a fitxers "
+"que no existeixen arriben a WordPress, cosa habitual a Apache i a la majoria "
+"de configuracions de Nginx."
 
 #: includes/admin.php:605
 msgid "Redirecciones eliminadas."
@@ -693,7 +743,8 @@ msgstr "Suggeriments amb IA"
 
 #: includes/admin.php:679
 msgid "Puedes usar proveedores gratuitos, Claude o ninguno. Basta con uno."
-msgstr "Pots fer servir proveïdors gratuïts, Claude o cap. N'hi ha prou amb un."
+msgstr ""
+"Pots fer servir proveïdors gratuïts, Claude o cap. N'hi ha prou amb un."
 
 #: includes/admin.php:685
 msgid "Clave de la API de Claude"
@@ -745,12 +796,20 @@ msgid "Contexto SEO de la web"
 msgstr "Context SEO del web"
 
 #: includes/admin.php:713
-msgid "Ej.: Reformas integrales en Santander. Palabras clave: reformas de cocina, baños, Cantabria."
-msgstr "Ex.: Reformes integrals a Girona. Paraules clau: reformes de cuina, banys, Catalunya."
+msgid ""
+"Ej.: Reformas integrales en Santander. Palabras clave: reformas de cocina, "
+"baños, Cantabria."
+msgstr ""
+"Ex.: Reformes integrals a Girona. Paraules clau: reformes de cuina, banys, "
+"Catalunya."
 
 #: includes/admin.php:714
-msgid "Negocio, ubicación y palabras clave. Se envía en cada sugerencia junto con la imagen y las páginas donde aparece."
-msgstr "Negoci, ubicació i paraules clau. S'envia amb cada suggeriment juntament amb la imatge i les pàgines on apareix."
+msgid ""
+"Negocio, ubicación y palabras clave. Se envía en cada sugerencia junto con "
+"la imagen y las páginas donde aparece."
+msgstr ""
+"Negoci, ubicació i paraules clau. S'envia amb cada suggeriment juntament amb "
+"la imatge i les pàgines on apareix."
 
 #: includes/admin.php:718
 msgid "Ciudad o zona"
@@ -761,8 +820,12 @@ msgid "Ej.: Santander"
 msgstr "Ex.: Girona"
 
 #: includes/admin.php:721
-msgid "Se añade al alt cuando encaja y se puede usar en las plantillas como {ciudad}."
-msgstr "S'afegeix a l'alt quan encaixa i es pot fer servir a les plantilles com a {ciudad}."
+msgid ""
+"Se añade al alt cuando encaja y se puede usar en las plantillas como "
+"{ciudad}."
+msgstr ""
+"S'afegeix a l'alt quan encaixa i es pot fer servir a les plantilles com a "
+"{ciudad}."
 
 #: includes/admin.php:725
 msgid "Guardar ajustes"
@@ -805,8 +868,12 @@ msgid ") se conservan durante"
 msgstr ") es conserven durant"
 
 #: includes/admin.php:755
-msgid "días tras renombrar u optimizar, para que las cachés y los enlaces externos no muestren imágenes rotas. Se borran solos."
-msgstr "dies després de reanomenar o optimitzar, perquè les memòries cau i els enllaços externs no mostrin imatges trencades. S'esborren sols."
+msgid ""
+"días tras renombrar u optimizar, para que las cachés y los enlaces externos "
+"no muestren imágenes rotas. Se borran solos."
+msgstr ""
+"dies després de reanomenar o optimitzar, perquè les memòries cau i els "
+"enllaços externs no mostrin imatges trencades. S'esborren sols."
 
 #: includes/admin.php:760
 msgid "Borrar ya los archivos antiguos"
@@ -841,7 +908,7 @@ msgid "No hay cambios que revisar."
 msgstr "No hi ha canvis per revisar."
 
 #: includes/admin.php:856 includes/bulk-filter.php:135
-#: includes/cleanup-admin.php:256
+#: includes/cleanup-admin.php:261
 msgid "La sesión ha caducado. Vuelve a cargar los cambios."
 msgstr "La sessió ha caducat. Torna a carregar els canvis."
 
@@ -854,8 +921,12 @@ msgid "No hay imágenes seleccionadas."
 msgstr "No hi ha imatges seleccionades."
 
 #: includes/admin.php:969
-msgid "Copia de seguridad en uploads/inpulsia-medios-backups: se puede deshacer desde el Historial."
-msgstr "Còpia de seguretat a uploads/inpulsia-medios-backups: es pot desfer des de l'Historial."
+msgid ""
+"Copia de seguridad en uploads/inpulsia-medios-backups: se puede deshacer "
+"desde el Historial."
+msgstr ""
+"Còpia de seguretat a uploads/inpulsia-medios-backups: es pot desfer des de "
+"l'Historial."
 
 #: includes/admin.php:969
 msgid "Sin copia de seguridad: esta optimización no se podrá deshacer."
@@ -906,12 +977,20 @@ msgid "No tienes permisos para editar este medio."
 msgstr "No tens permisos per editar aquest mitjà."
 
 #: includes/ai.php:284
-msgid "No hay datos para proponer nada: la imagen no tiene título propio ni se usa en ninguna página. Configura un proveedor de IA en Ajustes."
-msgstr "No hi ha dades per proposar res: la imatge no té títol propi ni es fa servir a cap pàgina. Configura un proveïdor d'IA a Configuració."
+msgid ""
+"No hay datos para proponer nada: la imagen no tiene título propio ni se usa "
+"en ninguna página. Configura un proveedor de IA en Ajustes."
+msgstr ""
+"No hi ha dades per proposar res: la imatge no té títol propi ni es fa servir "
+"a cap pàgina. Configura un proveïdor d'IA a Configuració."
 
 #: includes/ai.php:385
-msgid "Se ha agotado la cuota gratuita de IA de hoy en todos los proveedores. Se renueva a medianoche (UTC)."
-msgstr "S'ha esgotat la quota gratuïta d'IA d'avui a tots els proveïdors. Es renova a mitjanit (UTC)."
+msgid ""
+"Se ha agotado la cuota gratuita de IA de hoy en todos los proveedores. Se "
+"renueva a medianoche (UTC)."
+msgstr ""
+"S'ha esgotat la quota gratuïta d'IA d'avui a tots els proveïdors. Es renova "
+"a mitjanit (UTC)."
 
 #: includes/ai.php:450
 #, php-format
@@ -997,8 +1076,14 @@ msgid "Primero Claude (mejor calidad, de pago)"
 msgstr "Primer Claude (millor qualitat, de pagament)"
 
 #: includes/ai.php:594
-msgid "Si un proveedor agota su cuota gratuita, se pasa al siguiente. Sin ninguno configurado, las sugerencias salen de los metadatos de la foto y de la página donde se usa."
-msgstr "Si un proveïdor esgota la quota gratuïta, es passa al següent. Sense cap configurat, els suggeriments surten de les metadades de la foto i de la pàgina on es fa servir."
+msgid ""
+"Si un proveedor agota su cuota gratuita, se pasa al siguiente. Sin ninguno "
+"configurado, las sugerencias salen de los metadatos de la foto y de la "
+"página donde se usa."
+msgstr ""
+"Si un proveïdor esgota la quota gratuïta, es passa al següent. Sense cap "
+"configurat, els suggeriments surten de les metadades de la foto i de la "
+"pàgina on es fa servir."
 
 #: includes/ai.php:595
 #, php-format
@@ -1019,8 +1104,12 @@ msgid "Crear clave en Google AI Studio"
 msgstr "Crea una clau a Google AI Studio"
 
 #: includes/ai.php:603
-msgid "Buena calidad en español. En el plan gratuito Google puede usar las imágenes para mejorar sus modelos."
-msgstr "Bona qualitat en castellà. Al pla gratuït Google pot fer servir les imatges per millorar els seus models."
+msgid ""
+"Buena calidad en español. En el plan gratuito Google puede usar las imágenes "
+"para mejorar sus modelos."
+msgstr ""
+"Bona qualitat en castellà. Al pla gratuït Google pot fer servir les imatges "
+"per millorar els seus models."
 
 #: includes/ai.php:609
 msgid "ID de cuenta"
@@ -1054,7 +1143,7 @@ msgstr "Models gratuïts d'OpenRouter"
 msgid "Elige uno con visión que termine en «:free»."
 msgstr "Tria'n un amb visió que acabi en «:free»."
 
-#: includes/bulk-filter.php:68 includes/cleanup-admin.php:224
+#: includes/bulk-filter.php:68 includes/cleanup-admin.php:229
 msgid "Acción no válida."
 msgstr "Acció no vàlida."
 
@@ -1082,13 +1171,21 @@ msgstr "Completa %d imatges amb IA"
 
 #: includes/bulk-filter.php:124
 #, php-format
-msgid "%d imágenes · una consulta de IA por imagen; si se agota la cuota gratuita, el resto queda en cola"
-msgstr "%d imatges · una consulta d'IA per imatge; si s'esgota la quota gratuïta, la resta queda en cua"
+msgid ""
+"%d imágenes · una consulta de IA por imagen; si se agota la cuota gratuita, "
+"el resto queda en cola"
+msgstr ""
+"%d imatges · una consulta d'IA per imatge; si s'esgota la quota gratuïta, la "
+"resta queda en cua"
 
 #: includes/bulk-filter.php:124
 #, php-format
-msgid "%d imágenes · sin IA configurada: se propone a partir de la foto y la página donde se usa"
-msgstr "%d imatges · sense IA configurada: es proposa a partir de la foto i de la pàgina on es fa servir"
+msgid ""
+"%d imágenes · sin IA configurada: se propone a partir de la foto y la página "
+"donde se usa"
+msgstr ""
+"%d imatges · sense IA configurada: es proposa a partir de la foto i de la "
+"pàgina on es fa servir"
 
 #: includes/bulk-filter.php:125
 msgid "Completando con IA"
@@ -1096,229 +1193,264 @@ msgstr "Completant amb IA"
 
 #: includes/bulk-filter.php:163
 #, php-format
-msgid "Cuota gratuita agotada: %d imágenes quedan en cola y se completarán solas."
-msgstr "Quota gratuïta esgotada: %d imatges queden en cua i es completaran soles."
+msgid ""
+"Cuota gratuita agotada: %d imágenes quedan en cola y se completarán solas."
+msgstr ""
+"Quota gratuïta esgotada: %d imatges queden en cua i es completaran soles."
 
 #: includes/bulk-filter.php:184
 #, php-format
-msgid "Se ha agotado la cuota gratuita de IA. %d imágenes quedan en cola y se completarán solas cuando se renueve (cada hora se comprueba)."
-msgstr "S'ha esgotat la quota gratuïta d'IA. %d imatges queden en cua i es completaran soles quan es renovi (es comprova cada hora)."
+msgid ""
+"Se ha agotado la cuota gratuita de IA. %d imágenes quedan en cola y se "
+"completarán solas cuando se renueve (cada hora se comprueba)."
+msgstr ""
+"S'ha esgotat la quota gratuïta d'IA. %d imatges queden en cua i es "
+"completaran soles quan es renovi (es comprova cada hora)."
 
-#: includes/cleanup-admin.php:61
+#: includes/cleanup-admin.php:21 includes/i18n-js.php:114
+#, php-format
+msgid "No se ha podido buscar: %s"
+msgstr "No s'ha pogut cercar: %s"
+
+#: includes/cleanup-admin.php:76
 msgid "Imágenes sin archivo en el servidor"
 msgstr "Imatges sense fitxer al servidor"
 
-#: includes/cleanup-admin.php:62
+#: includes/cleanup-admin.php:77
 #, php-format
 msgid "%d se pueden recuperar de una copia"
 msgstr "%d es poden recuperar d'una còpia"
 
-#: includes/cleanup-admin.php:63
-msgid "La biblioteca las tiene, pero el archivo ya no está en uploads, así que la web las muestra rotas."
-msgstr "La biblioteca les té, però el fitxer ja no és a uploads, així que el web les mostra trencades."
+#: includes/cleanup-admin.php:78
+msgid ""
+"La biblioteca las tiene, pero el archivo ya no está en uploads, así que la "
+"web las muestra rotas."
+msgstr ""
+"La biblioteca les té, però el fitxer ja no és a uploads, així que el web les "
+"mostra trencades."
 
-#: includes/cleanup-admin.php:66
+#: includes/cleanup-admin.php:81
 msgid "Archivo que falta"
 msgstr "Fitxer que falta"
 
-#: includes/cleanup-admin.php:66
+#: includes/cleanup-admin.php:81
 msgid "Copia de seguridad"
 msgstr "Còpia de seguretat"
 
-#: includes/cleanup-admin.php:66
+#: includes/cleanup-admin.php:81
 msgid "Archivos parecidos en el servidor"
 msgstr "Fitxers semblants al servidor"
 
-#: includes/cleanup-admin.php:72
+#: includes/cleanup-admin.php:87
 msgid "Sí"
 msgstr "Sí"
 
-#: includes/cleanup-admin.php:72
+#: includes/cleanup-admin.php:87
 msgid "No"
 msgstr "No"
 
-#: includes/cleanup-admin.php:76
-msgid "Ninguno: vuelve a subirla o cámbiala en las páginas."
-msgstr "Cap: torna-la a pujar o canvia-la a les pàgines."
+#: includes/cleanup-admin.php:89
+msgid "Buscando…"
+msgstr "Cercant…"
 
-#: includes/cleanup-admin.php:82
-msgid "Usar este"
-msgstr "Fes servir aquest"
-
-#: includes/cleanup-admin.php:91
+#: includes/cleanup-admin.php:96
 #, php-format
 msgid "Recuperar las %d con copia"
 msgstr "Recupera les %d amb còpia"
 
-#: includes/cleanup-admin.php:94
-msgid "Antes de borrar o cambiar nada verás la lista completa. Las imágenes borradas se guardan en una copia y se pueden recuperar desde el Historial."
-msgstr "Abans d'esborrar o canviar res veuràs la llista completa. Les imatges esborrades es desen en una còpia i es poden recuperar des de l'Historial."
+#: includes/cleanup-admin.php:99
+msgid ""
+"Antes de borrar o cambiar nada verás la lista completa. Las imágenes "
+"borradas se guardan en una copia y se pueden recuperar desde el Historial."
+msgstr ""
+"Abans d'esborrar o canviar res veuràs la llista completa. Les imatges "
+"esborrades es desen en una còpia i es poden recuperar des de l'Historial."
 
-#: includes/cleanup-admin.php:97
+#: includes/cleanup-admin.php:102
 msgid "Imágenes sin uso"
 msgstr "Imatges sense ús"
 
-#: includes/cleanup-admin.php:99
-msgid "No aparecen en ninguna página, entrada, producto, plantilla de Elementor ni ajuste del tema. Se excluyen las subidas en los últimos 7 días."
-msgstr "No apareixen a cap pàgina, entrada, producte, plantilla d'Elementor ni ajust del tema. S'exclouen les pujades els últims 7 dies."
+#: includes/cleanup-admin.php:104
+msgid ""
+"No aparecen en ninguna página, entrada, producto, plantilla de Elementor ni "
+"ajuste del tema. Se excluyen las subidas en los últimos 7 días."
+msgstr ""
+"No apareixen a cap pàgina, entrada, producte, plantilla d'Elementor ni ajust "
+"del tema. S'exclouen les pujades els últims 7 dies."
 
-#: includes/cleanup-admin.php:100
-msgid "Si alguna imagen se usa desde código del tema, un CSS propio o una web externa, aquí no se detecta: revisa la lista antes de confirmar."
-msgstr "Si alguna imatge s'utilitza des del codi del tema, un CSS propi o un web extern, aquí no es detecta: revisa la llista abans de confirmar."
+#: includes/cleanup-admin.php:105
+msgid ""
+"Si alguna imagen se usa desde código del tema, un CSS propio o una web "
+"externa, aquí no se detecta: revisa la lista antes de confirmar."
+msgstr ""
+"Si alguna imatge s'utilitza des del codi del tema, un CSS propi o un web "
+"extern, aquí no es detecta: revisa la llista abans de confirmar."
 
-#: includes/cleanup-admin.php:102
+#: includes/cleanup-admin.php:107
 msgid "Revisar y mandar a la papelera"
 msgstr "Revisa i envia a la paperera"
 
-#: includes/cleanup-admin.php:103
+#: includes/cleanup-admin.php:108
 msgid "Verlas en Editar"
 msgstr "Mostra-les a Edita"
 
-#: includes/cleanup-admin.php:109
+#: includes/cleanup-admin.php:114
 msgid "Imágenes duplicadas"
 msgstr "Imatges duplicades"
 
-#: includes/cleanup-admin.php:110
+#: includes/cleanup-admin.php:115
 msgid "copias sobrantes"
 msgstr "còpies sobrants"
 
-#: includes/cleanup-admin.php:111
-msgid "La misma foto subida varias veces. Se conserva la que se usa (o la más antigua); las páginas que usan las copias pasan a usar esa y las direcciones antiguas redirigen a ella."
-msgstr "La mateixa foto pujada diverses vegades. Es conserva la que s'utilitza (o la més antiga); les pàgines que fan servir les còpies passen a fer servir aquesta i les adreces antigues hi redirigeixen."
-
 #: includes/cleanup-admin.php:116
+msgid ""
+"La misma foto subida varias veces. Se conserva la que se usa (o la más "
+"antigua); las páginas que usan las copias pasan a usar esa y las direcciones "
+"antiguas redirigen a ella."
+msgstr ""
+"La mateixa foto pujada diverses vegades. Es conserva la que s'utilitza (o la "
+"més antiga); les pàgines que fan servir les còpies passen a fer servir "
+"aquesta i les adreces antigues hi redirigeixen."
+
+#: includes/cleanup-admin.php:121
 msgid "Se conserva"
 msgstr "Es conserva"
 
-#: includes/cleanup-admin.php:117
+#: includes/cleanup-admin.php:122
 #, php-format
 msgid "%d copia"
 msgid_plural "%d copias"
 msgstr[0] "%d còpia"
 msgstr[1] "%d còpies"
 
-#: includes/cleanup-admin.php:122
+#: includes/cleanup-admin.php:127
 msgid "Revisar y unificar"
 msgstr "Revisa i unifica"
 
-#: includes/cleanup-admin.php:126
+#: includes/cleanup-admin.php:131
 msgid "Imágenes rotas"
 msgstr "Imatges trencades"
 
-#: includes/cleanup-admin.php:127
-msgid "Páginas y plantillas de Elementor que enlazan a imágenes que ya no existen en el servidor. Cuando se encuentra la misma imagen con otro nombre, tamaño o formato, se propone el cambio."
-msgstr "Pàgines i plantilles d'Elementor que enllacen a imatges que ja no existeixen al servidor. Quan es troba la mateixa imatge amb un altre nom, mida o format, es proposa el canvi."
+#: includes/cleanup-admin.php:132
+msgid ""
+"Páginas y plantillas de Elementor que enlazan a imágenes que ya no existen "
+"en el servidor. Cuando se encuentra la misma imagen con otro nombre, tamaño "
+"o formato, se propone el cambio."
+msgstr ""
+"Pàgines i plantilles d'Elementor que enllacen a imatges que ja no existeixen "
+"al servidor. Quan es troba la mateixa imatge amb un altre nom, mida o "
+"format, es proposa el canvi."
 
-#: includes/cleanup-admin.php:129
+#: includes/cleanup-admin.php:134
 msgid "Analizar la web"
 msgstr "Analitza el web"
 
-#: includes/cleanup-admin.php:131
+#: includes/cleanup-admin.php:136
 msgid "enlaces rotos"
 msgstr "enllaços trencats"
 
-#: includes/cleanup-admin.php:131
+#: includes/cleanup-admin.php:136
 #, php-format
 msgid "%d con arreglo propuesto"
 msgstr "%d amb arranjament proposat"
 
-#: includes/cleanup-admin.php:132
+#: includes/cleanup-admin.php:137
 #, php-format
 msgid "analizado hace %s"
 msgstr "analitzat fa %s"
 
-#: includes/cleanup-admin.php:133
+#: includes/cleanup-admin.php:138
 msgid "Volver a analizar"
 msgstr "Torna a analitzar"
 
-#: includes/cleanup-admin.php:137 includes/perf.php:363
+#: includes/cleanup-admin.php:142 includes/perf.php:363
 msgid "Página"
 msgstr "Pàgina"
 
-#: includes/cleanup-admin.php:137
+#: includes/cleanup-admin.php:142
 msgid "Imagen que falta"
 msgstr "Imatge que falta"
 
-#: includes/cleanup-admin.php:137
+#: includes/cleanup-admin.php:142
 msgid "Propuesta"
 msgstr "Proposta"
 
-#: includes/cleanup-admin.php:143
+#: includes/cleanup-admin.php:148
 msgid "Sin propuesta: cámbiala a mano"
 msgstr "Sense proposta: canvia-la a mà"
 
-#: includes/cleanup-admin.php:149
+#: includes/cleanup-admin.php:154
 #, php-format
 msgid "Reparar las %d con propuesta"
 msgstr "Repara les %d amb proposta"
 
-#: includes/cleanup-admin.php:156
+#: includes/cleanup-admin.php:161
 msgid "Optimizaciones que fallaron"
 msgstr "Optimitzacions que han fallat"
 
-#: includes/cleanup-admin.php:157
+#: includes/cleanup-admin.php:162
 msgid "En todas ellas se mantuvo la imagen original."
 msgstr "En totes es va mantenir la imatge original."
 
-#: includes/cleanup-admin.php:197
+#: includes/cleanup-admin.php:202
 msgid "Se borra (con copia para recuperarla)"
 msgstr "S'esborra (amb còpia per recuperar-la)"
 
-#: includes/cleanup-admin.php:197
+#: includes/cleanup-admin.php:202
 #, php-format
 msgid "Se subió en «%s»: comprueba que no la necesitas."
 msgstr "Es va pujar a «%s»: comprova que no la necessites."
 
-#: includes/cleanup-admin.php:203
+#: includes/cleanup-admin.php:208
 #, php-format
 msgid "Igual que %1$s (ID %2$d), que se conserva"
 msgstr "Igual que %1$s (ID %2$d), que es conserva"
 
-#: includes/cleanup-admin.php:221
+#: includes/cleanup-admin.php:226
 msgid "Se recupera el archivo desde la copia de seguridad"
 msgstr "Es recupera el fitxer des de la còpia de seguretat"
 
-#: includes/cleanup-admin.php:227
+#: includes/cleanup-admin.php:232
 msgid "No hay nada que limpiar."
 msgstr "No hi ha res per netejar."
 
-#: includes/cleanup-admin.php:232
+#: includes/cleanup-admin.php:237
 #, php-format
 msgid "Mandar %d imágenes a la papelera"
 msgstr "Envia %d imatges a la paperera"
 
-#: includes/cleanup-admin.php:233
+#: includes/cleanup-admin.php:238
 #, php-format
 msgid "Unificar %d duplicados"
 msgstr "Unifica %d duplicats"
 
-#: includes/cleanup-admin.php:234
+#: includes/cleanup-admin.php:239
 #, php-format
 msgid "Reparar %d enlaces"
 msgstr "Repara %d enllaços"
 
-#: includes/cleanup-admin.php:235
+#: includes/cleanup-admin.php:240
 #, php-format
 msgid "Recuperar %d imágenes"
 msgstr "Recupera %d imatges"
 
-#: includes/cleanup-admin.php:245
+#: includes/cleanup-admin.php:250
 #, php-format
 msgid "%d elemento"
 msgid_plural "%d elementos"
 msgstr[0] "%d element"
 msgstr[1] "%d elements"
 
-#: includes/cleanup-admin.php:246
+#: includes/cleanup-admin.php:251
 msgid "Limpiando"
 msgstr "Netejant"
 
-#: includes/cleanup-admin.php:275 includes/core.php:267
+#: includes/cleanup-admin.php:280 includes/core.php:267
 #: includes/i18n-js.php:111
 msgid "Imagen recuperada."
 msgstr "Imatge recuperada."
 
-#: includes/cleanup-admin.php:278 includes/core.php:155 includes/core.php:282
+#: includes/cleanup-admin.php:283 includes/core.php:155 includes/core.php:282
 msgid "Sin cambios."
 msgstr "Sense canvis."
 
@@ -1332,8 +1464,12 @@ msgid "No tienes permisos para borrar este medio."
 msgstr "No tens permisos per esborrar aquest mitjà."
 
 #: includes/cleanup.php:23 includes/cleanup.php:227
-msgid "Tiene traducciones que usan el mismo archivo: bórrala desde el plugin de idiomas."
-msgstr "Té traduccions que fan servir el mateix fitxer: esborra-la des del connector d'idiomes."
+msgid ""
+"Tiene traducciones que usan el mismo archivo: bórrala desde el plugin de "
+"idiomas."
+msgstr ""
+"Té traduccions que fan servir el mateix fitxer: esborra-la des del connector "
+"d'idiomes."
 
 #: includes/cleanup.php:39
 msgid "WordPress no ha podido borrar la imagen."
@@ -1341,8 +1477,10 @@ msgstr "WordPress no ha pogut esborrar la imatge."
 
 #: includes/cleanup.php:44
 #, php-format
-msgid "Enviada a la papelera (%s liberados). Se puede deshacer desde el Historial."
-msgstr "Enviada a la paperera (%s alliberats). Es pot desfer des de l'Historial."
+msgid ""
+"Enviada a la papelera (%s liberados). Se puede deshacer desde el Historial."
+msgstr ""
+"Enviada a la paperera (%s alliberats). Es pot desfer des de l'Historial."
 
 #: includes/cleanup.php:58 includes/optimize.php:520
 msgid "La copia de seguridad ya no existe."
@@ -1491,8 +1629,12 @@ msgstr "Imatge original restaurada."
 
 #: includes/core.php:296
 #, php-format
-msgid "el archivo %s no está en el servidor, así que no se puede renombrar. Recupéralo en Limpieza → Imágenes sin archivo o vuelve a subirlo."
-msgstr "el fitxer %s no és al servidor, així que no es pot canviar el nom. Recupera'l a Neteja → Imatges sense fitxer o torna'l a pujar."
+msgid ""
+"el archivo %s no está en el servidor, así que no se puede renombrar. "
+"Recupéralo en Limpieza → Imágenes sin archivo o vuelve a subirlo."
+msgstr ""
+"el fitxer %s no és al servidor, així que no es pot canviar el nom. "
+"Recupera'l a Neteja → Imatges sense fitxer o torna'l a pujar."
 
 #: includes/core.php:299
 msgid "nombre vacío."
@@ -1686,22 +1828,38 @@ msgid "Subida en"
 msgstr "Pujada a"
 
 #: includes/grace.php:112
-msgid "La web pasa por Cloudflare: vacía su caché desde el panel de Cloudflare para que las visitas vean ya las imágenes nuevas."
-msgstr "El web passa per Cloudflare: buida'n la memòria cau des del tauler de Cloudflare perquè les visites vegin ja les imatges noves."
+msgid ""
+"La web pasa por Cloudflare: vacía su caché desde el panel de Cloudflare para "
+"que las visitas vean ya las imágenes nuevas."
+msgstr ""
+"El web passa per Cloudflare: buida'n la memòria cau des del tauler de "
+"Cloudflare perquè les visites vegin ja les imatges noves."
 
 #: includes/grace.php:115
 #, php-format
-msgid "Los archivos antiguos se conservan %d días para que ninguna caché muestre una imagen rota; después se borran solos."
-msgstr "Els fitxers antics es conserven %d dies perquè cap memòria cau mostri una imatge trencada; després s'esborren sols."
+msgid ""
+"Los archivos antiguos se conservan %d días para que ninguna caché muestre "
+"una imagen rota; después se borran solos."
+msgstr ""
+"Els fitxers antics es conserven %d dies perquè cap memòria cau mostri una "
+"imatge trencada; després s'esborren sols."
 
 #: includes/grace.php:116
-msgid "Las imágenes anteriores se han borrado del servidor. Vacía también la caché del hosting o de Cloudflare si alguna página sigue pidiéndolas."
-msgstr "Les imatges anteriors s'han esborrat del servidor. Buida també la memòria cau de l'allotjament o de Cloudflare si alguna pàgina encara les demana."
+msgid ""
+"Las imágenes anteriores se han borrado del servidor. Vacía también la caché "
+"del hosting o de Cloudflare si alguna página sigue pidiéndolas."
+msgstr ""
+"Les imatges anteriors s'han esborrat del servidor. Buida també la memòria "
+"cau de l'allotjament o de Cloudflare si alguna pàgina encara les demana."
 
 #: includes/grace.php:161
 #, php-format
-msgid "Atención: la imagen nueva responde con error %d al abrirla desde la web; revisa los permisos de uploads o las reglas del servidor para .%s."
-msgstr "Atenció: la imatge nova respon amb error %d en obrir-la des del web; revisa els permisos d'uploads o les regles del servidor per a .%s."
+msgid ""
+"Atención: la imagen nueva responde con error %d al abrirla desde la web; "
+"revisa los permisos de uploads o las reglas del servidor para .%s."
+msgstr ""
+"Atenció: la imatge nova respon amb error %d en obrir-la des del web; revisa "
+"els permisos d'uploads o les regles del servidor per a .%s."
 
 #: includes/guide.php:41
 msgid "WPML (muestra solo las imágenes del idioma activo)"
@@ -1749,28 +1907,48 @@ msgid "o cambia el idioma en la barra superior."
 msgstr "o canvia l'idioma a la barra superior."
 
 #: includes/guide.php:63
-msgid "Cambia la carpeta en la barra superior de WordPress para verlas y trabajar con ellas."
-msgstr "Canvia la carpeta a la barra superior de WordPress per veure-les i treballar-hi."
+msgid ""
+"Cambia la carpeta en la barra superior de WordPress para verlas y trabajar "
+"con ellas."
+msgstr ""
+"Canvia la carpeta a la barra superior de WordPress per veure-les i treballar-"
+"hi."
 
 #: includes/guide.php:66
-msgid "Otro plugin está filtrando la biblioteca de medios (por idioma, carpetas o permisos). Las cifras de esta página son las de las imágenes visibles."
-msgstr "Un altre connector filtra la biblioteca de mitjans (per idioma, carpetes o permisos). Les xifres d'aquesta pàgina són les de les imatges visibles."
+msgid ""
+"Otro plugin está filtrando la biblioteca de medios (por idioma, carpetas o "
+"permisos). Las cifras de esta página son las de las imágenes visibles."
+msgstr ""
+"Un altre connector filtra la biblioteca de mitjans (per idioma, carpetes o "
+"permisos). Les xifres d'aquesta pàgina són les de les imatges visibles."
 
 #: includes/guide.php:83
 msgid "Imágenes más ligeras, mejor posicionadas y sin romper nada"
 msgstr "Imatges més lleugeres, més ben posicionades i sense trencar res"
 
 #: includes/guide.php:84
-msgid "Inpulsia Medios revisa las imágenes de la biblioteca de medios y las deja listas para Google: pesan menos, tienen nombres que se entienden y un texto alternativo que describe lo que se ve. Todo se revisa antes de aplicarse y se puede deshacer."
-msgstr "Inpulsia Medios revisa les imatges de la biblioteca de mitjans i les deixa a punt per a Google: pesen menys, tenen noms que s'entenen i un text alternatiu que descriu el que s'hi veu. Tot es revisa abans d'aplicar-se i es pot desfer."
+msgid ""
+"Inpulsia Medios revisa las imágenes de la biblioteca de medios y las deja "
+"listas para Google: pesan menos, tienen nombres que se entienden y un texto "
+"alternativo que describe lo que se ve. Todo se revisa antes de aplicarse y "
+"se puede deshacer."
+msgstr ""
+"Inpulsia Medios revisa les imatges de la biblioteca de mitjans i les deixa a "
+"punt per a Google: pesen menys, tenen noms que s'entenen i un text "
+"alternatiu que descriu el que s'hi veu. Tot es revisa abans d'aplicar-se i "
+"es pot desfer."
 
 #: includes/guide.php:93
 msgid "Aligerar las imágenes pesadas"
 msgstr "Alleugereix les imatges pesades"
 
 #: includes/guide.php:94
-msgid "Las de más de 1 MB ralentizan la web. Se convierten y comprimen; antes ves qué se hará con cada una."
-msgstr "Les de més d'1 MB alenteixen el web. Es converteixen i es comprimeixen; abans veus què es farà amb cadascuna."
+msgid ""
+"Las de más de 1 MB ralentizan la web. Se convierten y comprimen; antes ves "
+"qué se hará con cada una."
+msgstr ""
+"Les de més d'1 MB alenteixen el web. Es converteixen i es comprimeixen; "
+"abans veus què es farà amb cadascuna."
 
 #: includes/guide.php:95
 msgid "No hay imágenes de más de 1 MB."
@@ -1786,12 +1964,18 @@ msgid "Escribir los textos alternativos que faltan"
 msgstr "Escriu els textos alternatius que falten"
 
 #: includes/guide.php:102
-msgid "La IA mira cada imagen y propone el alt. Lo revisas en la tabla y aplicas."
-msgstr "La IA mira cada imatge i proposa l'alt. El revises a la taula i l'apliques."
+msgid ""
+"La IA mira cada imagen y propone el alt. Lo revisas en la tabla y aplicas."
+msgstr ""
+"La IA mira cada imatge i proposa l'alt. El revises a la taula i l'apliques."
 
 #: includes/guide.php:102
-msgid "Escríbelos en la tabla, o usa una plantilla. Con la IA activada se proponen solos."
-msgstr "Escriu-los a la taula o fes servir una plantilla. Amb la IA activada es proposen sols."
+msgid ""
+"Escríbelos en la tabla, o usa una plantilla. Con la IA activada se proponen "
+"solos."
+msgstr ""
+"Escriu-los a la taula o fes servir una plantilla. Amb la IA activada es "
+"proposen sols."
 
 #: includes/guide.php:103
 msgid "Todas las imágenes tienen alt."
@@ -1810,8 +1994,12 @@ msgid "Poner nombres de archivo claros"
 msgstr "Posa noms de fitxer clars"
 
 #: includes/guide.php:110
-msgid "Cambia IMG_2041.jpg y similares por nombres que describan la imagen. Las URLs antiguas redirigen a las nuevas."
-msgstr "Canvia IMG_2041.jpg i similars per noms que descriguin la imatge. Les URL antigues redirigeixen a les noves."
+msgid ""
+"Cambia IMG_2041.jpg y similares por nombres que describan la imagen. Las "
+"URLs antiguas redirigen a las nuevas."
+msgstr ""
+"Canvia IMG_2041.jpg i similars per noms que descriguin la imatge. Les URL "
+"antigues redirigeixen a les noves."
 
 #: includes/guide.php:111
 msgid "Todos los nombres de archivo son claros."
@@ -1835,20 +2023,29 @@ msgid "Salud de las imágenes"
 msgstr "Salut de les imatges"
 
 #: includes/guide.php:123
-msgid "La biblioteca está en buena forma. Revisa de vez en cuando las imágenes nuevas."
-msgstr "La biblioteca està en bona forma. Revisa de tant en tant les imatges noves."
+msgid ""
+"La biblioteca está en buena forma. Revisa de vez en cuando las imágenes "
+"nuevas."
+msgstr ""
+"La biblioteca està en bona forma. Revisa de tant en tant les imatges noves."
 
 #: includes/guide.php:123
 msgid "Bien encaminada: completa los pasos del asistente para subir la nota."
 msgstr "Ben encaminada: completa els passos de l'assistent per pujar la nota."
 
 #: includes/guide.php:123
-msgid "Hay margen de mejora: cada paso del asistente sube la nota y mejora el SEO y la velocidad."
-msgstr "Hi ha marge de millora: cada pas de l'assistent puja la nota i millora el SEO i la velocitat."
+msgid ""
+"Hay margen de mejora: cada paso del asistente sube la nota y mejora el SEO y "
+"la velocidad."
+msgstr ""
+"Hi ha marge de millora: cada pas de l'assistent puja la nota i millora el "
+"SEO i la velocitat."
 
 #: includes/guide.php:124
-msgid "Cuenta el alt (40 %), el peso (30 %), los nombres (20 %) y el formato (10 %)."
-msgstr "Compta l'alt (40 %), el pes (30 %), els noms (20 %) i el format (10 %)."
+msgid ""
+"Cuenta el alt (40 %), el peso (30 %), los nombres (20 %) y el formato (10 %)."
+msgstr ""
+"Compta l'alt (40 %), el pes (30 %), els noms (20 %) i el format (10 %)."
 
 #: includes/guide.php:128
 msgid "Asistente rápido"
@@ -1915,8 +2112,12 @@ msgid "Aligerar las imágenes"
 msgstr "Alleugerir les imatges"
 
 #: includes/guide.php:162
-msgid "Convierte a JPG o WebP, reduce las fotos enormes a un tamaño razonable y las comprime sin que se note. Los logos con fondo transparente se respetan."
-msgstr "Converteix a JPG o WebP, redueix les fotos enormes a una mida raonable i les comprimeix sense que es noti. Els logotips amb fons transparent es respecten."
+msgid ""
+"Convierte a JPG o WebP, reduce las fotos enormes a un tamaño razonable y las "
+"comprime sin que se note. Los logos con fondo transparente se respetan."
+msgstr ""
+"Converteix a JPG o WebP, redueix les fotos enormes a una mida raonable i les "
+"comprimeix sense que es noti. Els logotips amb fons transparent es respecten."
 
 #: includes/guide.php:166
 msgid "Nombres y textos para Google"
@@ -1939,24 +2140,38 @@ msgid "reforma-cocina-santander.jpg"
 msgstr "reforma-cuina-girona.jpg"
 
 #: includes/guide.php:167
-msgid "y añade el texto alternativo. Puedes escribirlos tú o pedir a la IA que los proponga mirando la imagen."
-msgstr "i afegeix el text alternatiu. Els pots escriure tu o demanar a la IA que els proposi mirant la imatge."
+msgid ""
+"y añade el texto alternativo. Puedes escribirlos tú o pedir a la IA que los "
+"proponga mirando la imagen."
+msgstr ""
+"i afegeix el text alternatiu. Els pots escriure tu o demanar a la IA que els "
+"proposi mirant la imatge."
 
 #: includes/guide.php:171
 msgid "Cambios en bloque"
 msgstr "Canvis en bloc"
 
 #: includes/guide.php:172
-msgid "Edita decenas de imágenes en una tabla, o descarga un Excel, rellénalo (o pásaselo al equipo de SEO) y vuelve a subirlo."
-msgstr "Edita desenes d'imatges en una taula, o baixa un Excel, omple'l (o passa'l a l'equip de SEO) i torna'l a pujar."
+msgid ""
+"Edita decenas de imágenes en una tabla, o descarga un Excel, rellénalo (o "
+"pásaselo al equipo de SEO) y vuelve a subirlo."
+msgstr ""
+"Edita desenes d'imatges en una taula, o baixa un Excel, omple'l (o passa'l a "
+"l'equip de SEO) i torna'l a pujar."
 
 #: includes/guide.php:176
 msgid "Sin romper nada"
 msgstr "Sense trencar res"
 
 #: includes/guide.php:177
-msgid "Al cambiar un archivo se actualizan las páginas que lo usan, las direcciones antiguas redirigen a las nuevas y cualquier cambio se puede deshacer desde el Historial."
-msgstr "En canviar un fitxer s'actualitzen les pàgines que l'utilitzen, les adreces antigues redirigeixen a les noves i qualsevol canvi es pot desfer des de l'Historial."
+msgid ""
+"Al cambiar un archivo se actualizan las páginas que lo usan, las direcciones "
+"antiguas redirigen a las nuevas y cualquier cambio se puede deshacer desde "
+"el Historial."
+msgstr ""
+"En canviar un fitxer s'actualitzen les pàgines que l'utilitzen, les adreces "
+"antigues redirigeixen a les noves i qualsevol canvi es pot desfer des de "
+"l'Historial."
 
 #: includes/guide.php:181
 msgid "Cómo empezar"
@@ -1995,16 +2210,24 @@ msgid "Optimizar las del filtro"
 msgstr "Optimitza les del filtre"
 
 #: includes/guide.php:189
-msgid ". Verás qué se va a hacer con cada una antes de confirmar y, al terminar, cuánto peso has ahorrado."
-msgstr ". Veuràs què es farà amb cadascuna abans de confirmar i, en acabar, quant pes has estalviat."
+msgid ""
+". Verás qué se va a hacer con cada una antes de confirmar y, al terminar, "
+"cuánto peso has ahorrado."
+msgstr ""
+". Veuràs què es farà amb cadascuna abans de confirmar i, en acabar, quant "
+"pes has estalviat."
 
 #: includes/guide.php:192
 msgid "Completa nombres y textos alternativos."
 msgstr "Completa noms i textos alternatius."
 
 #: includes/guide.php:193
-msgid "Escríbelos en la tabla (pulsa Intro para bajar de fila o pega una columna de Excel), usa una plantilla o pulsa"
-msgstr "Escriu-los a la taula (prem Intro per baixar de fila o enganxa una columna d'Excel), fes servir una plantilla o prem"
+msgid ""
+"Escríbelos en la tabla (pulsa Intro para bajar de fila o pega una columna de "
+"Excel), usa una plantilla o pulsa"
+msgstr ""
+"Escriu-los a la taula (prem Intro per baixar de fila o enganxa una columna "
+"d'Excel), fes servir una plantilla o prem"
 
 #: includes/guide.php:193
 msgid ". Revisa y pulsa"
@@ -2047,16 +2270,22 @@ msgid "Añadir la clave de Claude"
 msgstr "Afegeix la clau de Claude"
 
 #: includes/guide.php:211
-msgid "Sugerencias con IA desactivadas: pide a un administrador que las configure."
-msgstr "Suggeriments amb IA desactivats: demana a un administrador que els configuri."
+msgid ""
+"Sugerencias con IA desactivadas: pide a un administrador que las configure."
+msgstr ""
+"Suggeriments amb IA desactivats: demana a un administrador que els configuri."
 
 #: includes/guide.php:215
 msgid "Copia de seguridad activada al optimizar."
 msgstr "Còpia de seguretat activada en optimitzar."
 
 #: includes/guide.php:215
-msgid "La copia de seguridad está desactivada: las optimizaciones no se podrán deshacer."
-msgstr "La còpia de seguretat està desactivada: les optimitzacions no es podran desfer."
+msgid ""
+"La copia de seguridad está desactivada: las optimizaciones no se podrán "
+"deshacer."
+msgstr ""
+"La còpia de seguretat està desactivada: les optimitzacions no es podran "
+"desfer."
 
 #: includes/guide.php:218
 msgid "El servidor puede generar WebP."
@@ -2083,40 +2312,68 @@ msgid "¿Puedo romper la web?"
 msgstr "Puc trencar el web?"
 
 #: includes/guide.php:233
-msgid "No debería: antes de aplicar ves una vista previa, las páginas que usan la imagen se actualizan solas y las direcciones antiguas redirigen a las nuevas. Aun así, todo se puede deshacer desde el Historial."
-msgstr "No hauria: abans d'aplicar veus una previsualització, les pàgines que utilitzen la imatge s'actualitzen soles i les adreces antigues redirigeixen a les noves. Tot i així, tot es pot desfer des de l'Historial."
+msgid ""
+"No debería: antes de aplicar ves una vista previa, las páginas que usan la "
+"imagen se actualizan solas y las direcciones antiguas redirigen a las "
+"nuevas. Aun así, todo se puede deshacer desde el Historial."
+msgstr ""
+"No hauria: abans d'aplicar veus una previsualització, les pàgines que "
+"utilitzen la imatge s'actualitzen soles i les adreces antigues redirigeixen "
+"a les noves. Tot i així, tot es pot desfer des de l'Historial."
 
 #: includes/guide.php:236
 msgid "¿Se pierde calidad?"
 msgstr "Es perd qualitat?"
 
 #: includes/guide.php:237
-msgid "Con la calidad 82 que viene por defecto, la diferencia no se aprecia a simple vista. Si una imagen no pesa al menos un 5 % menos tras optimizarla, se deja como estaba."
-msgstr "Amb la qualitat 82 per defecte, la diferència no s'aprecia a simple vista. Si una imatge no pesa almenys un 5 % menys després d'optimitzar-la, es deixa com estava."
+msgid ""
+"Con la calidad 82 que viene por defecto, la diferencia no se aprecia a "
+"simple vista. Si una imagen no pesa al menos un 5 % menos tras optimizarla, "
+"se deja como estaba."
+msgstr ""
+"Amb la qualitat 82 per defecte, la diferència no s'aprecia a simple vista. "
+"Si una imatge no pesa almenys un 5 % menys després d'optimitzar-la, es deixa "
+"com estava."
 
 #: includes/guide.php:240
 msgid "¿Qué pasa con los logos y los iconos?"
 msgstr "Què passa amb els logotips i les icones?"
 
 #: includes/guide.php:241
-msgid "Las imágenes con fondo transparente se mantienen en PNG para no perder la transparencia. Los GIF animados no se tocan."
-msgstr "Les imatges amb fons transparent es mantenen en PNG per no perdre la transparència. Els GIF animats no es toquen."
+msgid ""
+"Las imágenes con fondo transparente se mantienen en PNG para no perder la "
+"transparencia. Los GIF animados no se tocan."
+msgstr ""
+"Les imatges amb fons transparent es mantenen en PNG per no perdre la "
+"transparència. Els GIF animats no es toquen."
 
 #: includes/guide.php:244
 msgid "¿Qué es el texto alternativo?"
 msgstr "Què és el text alternatiu?"
 
 #: includes/guide.php:245
-msgid "Una frase que describe la imagen. La leen Google y las personas que usan lectores de pantalla. Mejor concreta y natural, de menos de 125 caracteres: «Cocina reformada con isla de madera en Santander»."
-msgstr "Una frase que descriu la imatge. La llegeixen Google i les persones que fan servir lectors de pantalla. Millor concreta i natural, de menys de 125 caràcters: «Cuina reformada amb illa de fusta a Girona»."
+msgid ""
+"Una frase que describe la imagen. La leen Google y las personas que usan "
+"lectores de pantalla. Mejor concreta y natural, de menos de 125 caracteres: "
+"«Cocina reformada con isla de madera en Santander»."
+msgstr ""
+"Una frase que descriu la imatge. La llegeixen Google i les persones que fan "
+"servir lectors de pantalla. Millor concreta i natural, de menys de 125 "
+"caràcters: «Cuina reformada amb illa de fusta a Girona»."
 
 #: includes/guide.php:248
 msgid "¿Cuánto cuesta la IA?"
 msgstr "Quant costa la IA?"
 
 #: includes/guide.php:249
-msgid "Cada sugerencia es una consulta a la API de Claude y se cobra en la cuenta de la clave configurada, normalmente céntimos por cada pocas imágenes. Solo se usa cuando pulsas"
-msgstr "Cada suggeriment és una consulta a l'API de Claude i es cobra al compte de la clau configurada, normalment cèntims per cada poques imatges. Només s'utilitza quan prems"
+msgid ""
+"Cada sugerencia es una consulta a la API de Claude y se cobra en la cuenta "
+"de la clave configurada, normalmente céntimos por cada pocas imágenes. Solo "
+"se usa cuando pulsas"
+msgstr ""
+"Cada suggeriment és una consulta a l'API de Claude i es cobra al compte de "
+"la clau configurada, normalment cèntims per cada poques imatges. Només "
+"s'utilitza quan prems"
 
 #: includes/guide.php:249
 msgid "o activas esa opción al optimizar."
@@ -2127,48 +2384,100 @@ msgid "¿Y si ya uso ShortPixel, Imagify o similares?"
 msgstr "I si ja faig servir ShortPixel, Imagify o similars?"
 
 #: includes/guide.php:253
-msgid "El plugin te avisará. Puedes seguir usándolo para nombres, textos y redirecciones, y dejar la compresión al otro plugin para no comprimir dos veces."
-msgstr "El connector t'avisarà. Pots continuar fent-lo servir per a noms, textos i redireccions, i deixar la compressió a l'altre connector per no comprimir dues vegades."
+msgid ""
+"El plugin te avisará. Puedes seguir usándolo para nombres, textos y "
+"redirecciones, y dejar la compresión al otro plugin para no comprimir dos "
+"veces."
+msgstr ""
+"El connector t'avisarà. Pots continuar fent-lo servir per a noms, textos i "
+"redireccions, i deixar la compressió a l'altre connector per no comprimir "
+"dues vegades."
 
 #: includes/guide.php:280
 msgid "Cómo funciona"
 msgstr "Com funciona"
 
 #: includes/guide.php:280
-msgid "<p>Inpulsia Medios mejora las imágenes de la biblioteca: menos peso, nombres de archivo claros y texto alternativo. Todo se revisa en una vista previa antes de aplicarse y se puede deshacer desde <strong>Historial</strong>.</p>"
-msgstr "<p>Inpulsia Medios millora les imatges de la biblioteca: menys pes, noms de fitxer clars i text alternatiu. Tot es revisa en una previsualització abans d'aplicar-se i es pot desfer des de l'<strong>Historial</strong>.</p>"
+msgid ""
+"<p>Inpulsia Medios mejora las imágenes de la biblioteca: menos peso, nombres "
+"de archivo claros y texto alternativo. Todo se revisa en una vista previa "
+"antes de aplicarse y se puede deshacer desde <strong>Historial</strong>.</p>"
+msgstr ""
+"<p>Inpulsia Medios millora les imatges de la biblioteca: menys pes, noms de "
+"fitxer clars i text alternatiu. Tot es revisa en una previsualització abans "
+"d'aplicar-se i es pot desfer des de l'<strong>Historial</strong>.</p>"
 
 #: includes/guide.php:281
 msgid "Editar y optimizar"
 msgstr "Edita i optimitza"
 
 #: includes/guide.php:281
-msgid "<p>Filtra las imágenes (por ejemplo, <em>En uso en la web</em>), escribe los cambios directamente en la tabla o pulsa <strong>IA</strong> para que se propongan, y después <strong>Revisar cambios</strong>.</p><p>Para reducir el peso, abre <strong>Optimizar imágenes</strong> y elige las seleccionadas o todas las del filtro.</p>"
-msgstr "<p>Filtra les imatges (per exemple, <em>En ús al web</em>), escriu els canvis directament a la taula o prem <strong>IA</strong> perquè es proposin, i després <strong>Revisa els canvis</strong>.</p><p>Per reduir el pes, obre <strong>Optimitza les imatges</strong> i tria les seleccionades o totes les del filtre.</p>"
+msgid ""
+"<p>Filtra las imágenes (por ejemplo, <em>En uso en la web</em>), escribe los "
+"cambios directamente en la tabla o pulsa <strong>IA</strong> para que se "
+"propongan, y después <strong>Revisar cambios</strong>.</p><p>Para reducir el "
+"peso, abre <strong>Optimizar imágenes</strong> y elige las seleccionadas o "
+"todas las del filtro.</p>"
+msgstr ""
+"<p>Filtra les imatges (per exemple, <em>En ús al web</em>), escriu els "
+"canvis directament a la taula o prem <strong>IA</strong> perquè es proposin, "
+"i després <strong>Revisa els canvis</strong>.</p><p>Per reduir el pes, obre "
+"<strong>Optimitza les imatges</strong> i tria les seleccionades o totes les "
+"del filtre.</p>"
 
 #: includes/guide.php:282
 msgid "Importar un Excel o CSV"
 msgstr "Importa un Excel o CSV"
 
 #: includes/guide.php:282
-msgid "<p>Sube un archivo con las columnas <code>ID</code>, <code>filename</code>, <code>title</code>, <code>alt</code>, <code>caption</code> y <code>description</code>. Las celdas vacías no cambian nada; escribe <code>[vaciar]</code> para borrar un campo.</p><p>La forma más cómoda es exportar primero desde <strong>Exportar</strong>, editar ese archivo y subirlo aquí.</p>"
-msgstr "<p>Puja un fitxer amb les columnes <code>ID</code>, <code>filename</code>, <code>title</code>, <code>alt</code>, <code>caption</code> i <code>description</code>. Les cel·les buides no canvien res; escriu <code>[vaciar]</code> per esborrar un camp.</p><p>El més còmode és exportar primer des d'<strong>Exporta</strong>, editar aquest fitxer i pujar-lo aquí.</p>"
+msgid ""
+"<p>Sube un archivo con las columnas <code>ID</code>, <code>filename</code>, "
+"<code>title</code>, <code>alt</code>, <code>caption</code> y "
+"<code>description</code>. Las celdas vacías no cambian nada; escribe "
+"<code>[vaciar]</code> para borrar un campo.</p><p>La forma más cómoda es "
+"exportar primero desde <strong>Exportar</strong>, editar ese archivo y "
+"subirlo aquí.</p>"
+msgstr ""
+"<p>Puja un fitxer amb les columnes <code>ID</code>, <code>filename</code>, "
+"<code>title</code>, <code>alt</code>, <code>caption</code> i "
+"<code>description</code>. Les cel·les buides no canvien res; escriu "
+"<code>[vaciar]</code> per esborrar un camp.</p><p>El més còmode és exportar "
+"primer des d'<strong>Exporta</strong>, editar aquest fitxer i pujar-lo aquí."
+"</p>"
 
 #: includes/guide.php:283
-msgid "<p>Descarga un CSV con los datos actuales de las imágenes. La columna <code>usado_en</code> dice en qué páginas aparece cada una, útil para escribir textos alternativos con contexto.</p>"
-msgstr "<p>Baixa un CSV amb les dades actuals de les imatges. La columna <code>usado_en</code> diu en quines pàgines apareix cadascuna, útil per escriure textos alternatius amb context.</p>"
+msgid ""
+"<p>Descarga un CSV con los datos actuales de las imágenes. La columna "
+"<code>usado_en</code> dice en qué páginas aparece cada una, útil para "
+"escribir textos alternativos con contexto.</p>"
+msgstr ""
+"<p>Baixa un CSV amb les dades actuals de les imatges. La columna "
+"<code>usado_en</code> diu en quines pàgines apareix cadascuna, útil per "
+"escriure textos alternatius amb context.</p>"
 
 #: includes/guide.php:284
 msgid "Deshacer cambios"
 msgstr "Desfer canvis"
 
 #: includes/guide.php:284
-msgid "<p>Cada importación, edición u optimización queda aquí. <strong>Deshacer</strong> devuelve nombres, textos y, si había copia de seguridad, los archivos originales.</p>"
-msgstr "<p>Cada importació, edició o optimització queda aquí. <strong>Desfés</strong> retorna noms, textos i, si hi havia còpia de seguretat, els fitxers originals.</p>"
+msgid ""
+"<p>Cada importación, edición u optimización queda aquí. <strong>Deshacer</"
+"strong> devuelve nombres, textos y, si había copia de seguridad, los "
+"archivos originales.</p>"
+msgstr ""
+"<p>Cada importació, edició o optimització queda aquí. <strong>Desfés</"
+"strong> retorna noms, textos i, si hi havia còpia de seguretat, els fitxers "
+"originals.</p>"
 
 #: includes/guide.php:285
-msgid "<p>Cuando un archivo cambia de nombre o de formato, su dirección antigua redirige a la nueva para que no haya enlaces rotos ni se pierda el posicionamiento en Google Imágenes.</p>"
-msgstr "<p>Quan un fitxer canvia de nom o de format, la seva adreça antiga redirigeix a la nova perquè no hi hagi enllaços trencats ni es perdi el posicionament a Google Imatges.</p>"
+msgid ""
+"<p>Cuando un archivo cambia de nombre o de formato, su dirección antigua "
+"redirige a la nueva para que no haya enlaces rotos ni se pierda el "
+"posicionamiento en Google Imágenes.</p>"
+msgstr ""
+"<p>Quan un fitxer canvia de nom o de format, la seva adreça antiga "
+"redirigeix a la nova perquè no hi hagi enllaços trencats ni es perdi el "
+"posicionament a Google Imatges.</p>"
 
 #: includes/guide.php:295
 msgid "Guía de inicio"
@@ -2179,8 +2488,12 @@ msgid "Inpulsia Medios está listo."
 msgstr "Inpulsia Medios està a punt."
 
 #: includes/guide.php:308
-msgid "Optimiza las imágenes de la web y completa sus nombres y textos alternativos en unos minutos."
-msgstr "Optimitza les imatges del web i completa'n els noms i els textos alternatius en pocs minuts."
+msgid ""
+"Optimiza las imágenes de la web y completa sus nombres y textos alternativos "
+"en unos minutos."
+msgstr ""
+"Optimitza les imatges del web i completa'n els noms i els textos alternatius "
+"en pocs minuts."
 
 #: includes/guide.php:309
 msgid "Ver la guía de inicio"
@@ -2261,13 +2574,21 @@ msgid "Deshaciendo importación"
 msgstr "Desfent la importació"
 
 #: includes/i18n-js.php:27
-msgid "El servidor ha devuelto una respuesta no válida. Revisa el registro de errores de PHP."
-msgstr "El servidor ha retornat una resposta no vàlida. Revisa el registre d'errors de PHP."
+msgid ""
+"El servidor ha devuelto una respuesta no válida. Revisa el registro de "
+"errores de PHP."
+msgstr ""
+"El servidor ha retornat una resposta no vàlida. Revisa el registre d'errors "
+"de PHP."
 
 #: includes/i18n-js.php:28
 #, php-format
-msgid "El servidor ha fallado (%s) en el registro %s. Lo ya procesado está guardado en el Historial."
-msgstr "El servidor ha fallat (%s) al registre %s. El que ja s'ha processat està desat a l'Historial."
+msgid ""
+"El servidor ha fallado (%s) en el registro %s. Lo ya procesado está guardado "
+"en el Historial."
+msgstr ""
+"El servidor ha fallat (%s) al registre %s. El que ja s'ha processat està "
+"desat a l'Historial."
 
 #: includes/i18n-js.php:29
 #, php-format
@@ -2304,7 +2625,8 @@ msgstr "Falta l'alt."
 
 #: includes/i18n-js.php:38
 msgid "Los nombres de archivo deben ser distintos: usa una plantilla con {n}."
-msgstr "Els noms de fitxer han de ser diferents: fes servir una plantilla amb {n}."
+msgstr ""
+"Els noms de fitxer han de ser diferents: fes servir una plantilla amb {n}."
 
 #: includes/i18n-js.php:39
 msgid "Muy corto: describe qué se ve."
@@ -2393,7 +2715,8 @@ msgstr "temps esgotat"
 
 #: includes/i18n-js.php:60
 msgid "¿Aplicar los cambios? Podrás deshacerlos desde la pestaña Historial."
-msgstr "Vols aplicar els canvis? Els podràs desfer des de la pestanya Historial."
+msgstr ""
+"Vols aplicar els canvis? Els podràs desfer des de la pestanya Historial."
 
 #: includes/i18n-js.php:61
 msgid "¿Deshacer esta importación y restaurar los valores anteriores?"
@@ -2472,7 +2795,8 @@ msgstr "escriptori"
 
 #: includes/i18n-js.php:79
 #, php-format
-msgid "%s campos rellenados y guardados. Puedes deshacerlos con «Deshacer todos»."
+msgid ""
+"%s campos rellenados y guardados. Puedes deshacerlos con «Deshacer todos»."
 msgstr "%s camps omplerts i desats. Els pots desfer amb «Desfés-ho tot»."
 
 #: includes/i18n-js.php:80
@@ -2555,8 +2879,12 @@ msgid "Tab acepta la sugerencia en gris."
 msgstr "Tab accepta el suggeriment en gris."
 
 #: includes/i18n-js.php:101
-msgid "En esta página no falta nada. Usa los atajos «Sin alt» o «Nombres de cámara» para ver más."
-msgstr "En aquesta pàgina no falta res. Fes servir les dreceres «Sense alt» o «Noms de càmera» per veure'n més."
+msgid ""
+"En esta página no falta nada. Usa los atajos «Sin alt» o «Nombres de cámara» "
+"para ver más."
+msgstr ""
+"En aquesta pàgina no falta res. Fes servir les dreceres «Sense alt» o «Noms "
+"de càmera» per veure'n més."
 
 #: includes/i18n-js.php:102
 msgid "Sin IA: sacado de la página"
@@ -2595,8 +2923,20 @@ msgstr "Falta el fitxer al servidor"
 
 #: includes/i18n-js.php:110
 #, php-format
-msgid "¿Usar %s como archivo de esta imagen? Se regeneran sus tamaños y las páginas pasan a usarlo."
-msgstr "Vols fer servir %s com a fitxer d'aquesta imatge? Es regeneren les mides i les pàgines passen a fer-lo servir."
+msgid ""
+"¿Usar %s como archivo de esta imagen? Se regeneran sus tamaños y las páginas "
+"pasan a usarlo."
+msgstr ""
+"Vols fer servir %s com a fitxer d'aquesta imatge? Es regeneren les mides i "
+"les pàgines passen a fer-lo servir."
+
+#: includes/i18n-js.php:112
+msgid "Ninguno: vuelve a subirla o cámbiala en las páginas."
+msgstr "Cap: torna-la a pujar o canvia-la a les pàgines."
+
+#: includes/i18n-js.php:113
+msgid "Usar este"
+msgstr "Fes servir aquest"
 
 #: includes/media.php:15
 msgid "SEO de imagen"
@@ -2668,8 +3008,12 @@ msgid "La imagen anterior se borra del servidor al momento"
 msgstr "La imatge anterior s'esborra del servidor a l'instant"
 
 #: includes/optimize.php:197
-msgid "Esta imagen ya se está procesando en otra pestaña o en segundo plano; no se toca."
-msgstr "Aquesta imatge ja s'està processant en una altra pestanya o en segon pla; no es toca."
+msgid ""
+"Esta imagen ya se está procesando en otra pestaña o en segundo plano; no se "
+"toca."
+msgstr ""
+"Aquesta imatge ja s'està processant en una altra pestanya o en segon pla; no "
+"es toca."
 
 #: includes/optimize.php:261
 #, php-format
@@ -2706,13 +3050,21 @@ msgid "Se mantiene en %s: convertirla no reduce el peso"
 msgstr "Es manté en %s: convertir-la no en redueix el pes"
 
 #: includes/optimize.php:348
-msgid "No se pudo escribir la imagen nueva en uploads (permisos o espacio); el original no se ha tocado."
-msgstr "No s'ha pogut escriure la imatge nova a uploads (permisos o espai); l'original no s'ha tocat."
+msgid ""
+"No se pudo escribir la imagen nueva en uploads (permisos o espacio); el "
+"original no se ha tocado."
+msgstr ""
+"No s'ha pogut escriure la imatge nova a uploads (permisos o espai); "
+"l'original no s'ha tocat."
 
 #: includes/optimize.php:396
 #, php-format
-msgid "La imagen nueva no se ha generado bien (falta %s); se mantiene la original sin cambios."
-msgstr "La imatge nova no s'ha generat bé (falta %s); es manté l'original sense canvis."
+msgid ""
+"La imagen nueva no se ha generado bien (falta %s); se mantiene la original "
+"sin cambios."
+msgstr ""
+"La imatge nova no s'ha generat bé (falta %s); es manté l'original sense "
+"canvis."
 
 #: includes/optimize.php:489
 msgid "No hay archivos que copiar."
@@ -2727,7 +3079,8 @@ msgid "No se pudo crear la copia de seguridad (¿espacio en disco?)."
 msgstr "No s'ha pogut crear la còpia de seguretat (espai al disc?)."
 
 #: includes/parser.php:79
-msgid "El servidor no tiene la extensión ZIP de PHP. Guarda el archivo como CSV."
+msgid ""
+"El servidor no tiene la extensión ZIP de PHP. Guarda el archivo como CSV."
 msgstr "El servidor no té l'extensió ZIP de PHP. Desa el fitxer com a CSV."
 
 #: includes/parser.php:83
@@ -2764,8 +3117,12 @@ msgid "Comprobación de las imágenes cambiadas"
 msgstr "Comprovació de les imatges canviades"
 
 #: includes/perf.php:309
-msgid "Cada día se abren, como lo haría un visitante, las imágenes optimizadas o renombradas en los últimos 30 días. Si alguna no carga, se avisa en Inicio."
-msgstr "Cada dia s'obren, com ho faria un visitant, les imatges optimitzades o reanomenades els darrers 30 dies. Si alguna no carrega, s'avisa a Inici."
+msgid ""
+"Cada día se abren, como lo haría un visitante, las imágenes optimizadas o "
+"renombradas en los últimos 30 días. Si alguna no carga, se avisa en Inicio."
+msgstr ""
+"Cada dia s'obren, com ho faria un visitant, les imatges optimitzades o "
+"reanomenades els darrers 30 dies. Si alguna no carrega, s'avisa a Inici."
 
 #: includes/perf.php:313
 #, php-format
@@ -2808,12 +3165,23 @@ msgid "Análisis de páginas"
 msgstr "Anàlisi de pàgines"
 
 #: includes/perf.php:342
-msgid "Se abren las páginas principales en este navegador, en tamaño escritorio y móvil, y se mide qué imagen tarda más en aparecer (la que más pesa en Core Web Vitals) y qué imágenes se sirven mucho más grandes de lo que se ven."
-msgstr "S'obren les pàgines principals en aquest navegador, en mida d'escriptori i de mòbil, i es mesura quina imatge triga més a aparèixer (la que més compta a Core Web Vitals) i quines imatges se serveixen molt més grans del que es veuen."
+msgid ""
+"Se abren las páginas principales en este navegador, en tamaño escritorio y "
+"móvil, y se mide qué imagen tarda más en aparecer (la que más pesa en Core "
+"Web Vitals) y qué imágenes se sirven mucho más grandes de lo que se ven."
+msgstr ""
+"S'obren les pàgines principals en aquest navegador, en mida d'escriptori i "
+"de mòbil, i es mesura quina imatge triga més a aparèixer (la que més compta "
+"a Core Web Vitals) i quines imatges se serveixen molt més grans del que es "
+"veuen."
 
 #: includes/perf.php:343
-msgid "También se mide al navegar por la web con tu sesión iniciada, una vez al día por página."
-msgstr "També es mesura quan navegues pel web amb la sessió iniciada, un cop al dia per pàgina."
+msgid ""
+"También se mide al navegar por la web con tu sesión iniciada, una vez al día "
+"por página."
+msgstr ""
+"També es mesura quan navegues pel web amb la sessió iniciada, un cop al dia "
+"per pàgina."
 
 #: includes/perf.php:345
 #, php-format
@@ -2830,8 +3198,13 @@ msgid "Imagen principal de cada página (LCP)"
 msgstr "Imatge principal de cada pàgina (LCP)"
 
 #: includes/perf.php:357
-msgid "Es la imagen grande que se ve al entrar. Google mide cuánto tarda en aparecer: debe cargarse la primera, sin carga diferida y con prioridad alta."
-msgstr "És la imatge gran que es veu en entrar. Google mesura quant triga a aparèixer: s'ha de carregar la primera, sense càrrega diferida i amb prioritat alta."
+msgid ""
+"Es la imagen grande que se ve al entrar. Google mide cuánto tarda en "
+"aparecer: debe cargarse la primera, sin carga diferida y con prioridad alta."
+msgstr ""
+"És la imatge gran que es veu en entrar. Google mesura quant triga a "
+"aparèixer: s'ha de carregar la primera, sense càrrega diferida i amb "
+"prioritat alta."
 
 #: includes/perf.php:359 includes/perf.php:406
 msgid "Sin datos todavía: pulsa «Analizar páginas»."
@@ -2882,16 +3255,27 @@ msgid "Cambiar el fondo por una imagen"
 msgstr "Canvia el fons per una imatge"
 
 #: includes/perf.php:398
-msgid "«Arreglar» quita la carga diferida y da prioridad alta a esa imagen solo en esa página. Si usas un plugin de caché, se vacía solo; si no, vacíala tú."
-msgstr "«Arregla» treu la càrrega diferida i dona prioritat alta a aquesta imatge només en aquesta pàgina. Si fas servir un plugin de memòria cau, es buida sol; si no, buida-la tu."
+msgid ""
+"«Arreglar» quita la carga diferida y da prioridad alta a esa imagen solo en "
+"esa página. Si usas un plugin de caché, se vacía solo; si no, vacíala tú."
+msgstr ""
+"«Arregla» treu la càrrega diferida i dona prioritat alta a aquesta imatge "
+"només en aquesta pàgina. Si fas servir un plugin de memòria cau, es buida "
+"sol; si no, buida-la tu."
 
 #: includes/perf.php:403
 msgid "Imágenes más grandes de lo que se ven"
 msgstr "Imatges més grans del que es veuen"
 
 #: includes/perf.php:404
-msgid "El navegador descarga la imagen entera aunque se muestre pequeña. Aquí salen las que tienen más del doble de los píxeles necesarios, ordenadas por lo que se desperdicia."
-msgstr "El navegador descarrega la imatge sencera encara que es mostri petita. Aquí surten les que tenen més del doble dels píxels necessaris, ordenades pel que es malbarata."
+msgid ""
+"El navegador descarga la imagen entera aunque se muestre pequeña. Aquí salen "
+"las que tienen más del doble de los píxeles necesarios, ordenadas por lo que "
+"se desperdicia."
+msgstr ""
+"El navegador descarrega la imatge sencera encara que es mostri petita. Aquí "
+"surten les que tenen més del doble dels píxels necessaris, ordenades pel que "
+"es malbarata."
 
 #: includes/perf.php:406
 msgid "Ninguna: todas se sirven a un tamaño adecuado."
@@ -2924,8 +3308,12 @@ msgstr "Optimitza (redueix a 2560 px)"
 
 #: includes/perf.php:426
 #, php-format
-msgid "En la página, elige un tamaño de unos %d px (Mediano o Grande) en vez de «Completo»."
-msgstr "A la pàgina, tria una mida d'uns %d px (Mitjana o Gran) en lloc de «Completa»."
+msgid ""
+"En la página, elige un tamaño de unos %d px (Mediano o Grande) en vez de "
+"«Completo»."
+msgstr ""
+"A la pàgina, tria una mida d'uns %d px (Mitjana o Gran) en lloc de "
+"«Completa»."
 
 #: includes/sizes.php:13 includes/ux.php:237
 msgid "Más de 300 KB"
@@ -2944,12 +3332,26 @@ msgid "PNG, GIF y otros pesados"
 msgstr "PNG, GIF i altres pesats"
 
 #: includes/updater.php:104
-msgid "<p>Edición masiva de los medios de WordPress: nombre de archivo, título, texto alternativo, leyenda y descripción desde CSV, Excel, una tabla editable o WP-CLI, con sugerencias de IA.</p>"
-msgstr "<p>Edició massiva dels mitjans de WordPress: nom de fitxer, títol, text alternatiu, llegenda i descripció des de CSV, Excel, una taula editable o WP-CLI, amb suggeriments d'IA.</p>"
+msgid ""
+"<p>Edición masiva de los medios de WordPress: nombre de archivo, título, "
+"texto alternativo, leyenda y descripción desde CSV, Excel, una tabla "
+"editable o WP-CLI, con sugerencias de IA.</p>"
+msgstr ""
+"<p>Edició massiva dels mitjans de WordPress: nom de fitxer, títol, text "
+"alternatiu, llegenda i descripció des de CSV, Excel, una taula editable o WP-"
+"CLI, amb suggeriments d'IA.</p>"
 
 #: includes/updater.php:105
-msgid "<p>Optimiza imágenes (JPG o WebP, ancho máximo y compresión) manteniendo las transparentes. Al renombrar o convertir actualiza las URLs en todo el sitio, crea redirecciones 301, vacía cachés y permite deshacer desde el historial.</p>"
-msgstr "<p>Optimitza imatges (JPG o WebP, amplada màxima i compressió) mantenint les transparents. En reanomenar o convertir actualitza les URL a tot el lloc, crea redireccions 301, buida memòries cau i permet desfer des de l'historial.</p>"
+msgid ""
+"<p>Optimiza imágenes (JPG o WebP, ancho máximo y compresión) manteniendo las "
+"transparentes. Al renombrar o convertir actualiza las URLs en todo el sitio, "
+"crea redirecciones 301, vacía cachés y permite deshacer desde el historial.</"
+"p>"
+msgstr ""
+"<p>Optimitza imatges (JPG o WebP, amplada màxima i compressió) mantenint les "
+"transparents. En reanomenar o convertir actualitza les URL a tot el lloc, "
+"crea redireccions 301, buida memòries cau i permet desfer des de l'historial."
+"</p>"
 
 #: includes/updater.php:117
 msgid "<p>Sin notas de versión.</p>"
@@ -2968,8 +3370,12 @@ msgid "ninguno"
 msgstr "cap"
 
 #: includes/ux.php:37
-msgid "Sin Imagick ni GD no se puede optimizar: pide al hosting que active una de las dos."
-msgstr "Sense Imagick ni GD no es pot optimitzar: demana al hosting que n'activi un dels dos."
+msgid ""
+"Sin Imagick ni GD no se puede optimizar: pide al hosting que active una de "
+"las dos."
+msgstr ""
+"Sense Imagick ni GD no es pot optimitzar: demana al hosting que n'activi un "
+"dels dos."
 
 #: includes/ux.php:42
 msgid "Conversión a WebP"
@@ -3025,16 +3431,22 @@ msgid "sin permiso de escritura"
 msgstr "sense permís d'escriptura"
 
 #: includes/ux.php:69
-msgid "WordPress no puede escribir en uploads: no se puede optimizar ni renombrar."
-msgstr "WordPress no pot escriure a uploads: no es pot optimitzar ni canviar el nom."
+msgid ""
+"WordPress no puede escribir en uploads: no se puede optimizar ni renombrar."
+msgstr ""
+"WordPress no pot escriure a uploads: no es pot optimitzar ni canviar el nom."
 
 #: includes/ux.php:75
 msgid "Espacio libre en disco"
 msgstr "Espai lliure al disc"
 
 #: includes/ux.php:78
-msgid "Las copias de seguridad necesitan espacio: libera disco o borra copias antiguas."
-msgstr "Les còpies de seguretat necessiten espai: allibera disc o esborra còpies antigues."
+msgid ""
+"Las copias de seguridad necesitan espacio: libera disco o borra copias "
+"antiguas."
+msgstr ""
+"Les còpies de seguretat necessiten espai: allibera disc o esborra còpies "
+"antigues."
 
 #: includes/ux.php:84
 msgid "Tareas programadas (WP-Cron)"
@@ -3049,13 +3461,18 @@ msgid "desactivadas en wp-config.php"
 msgstr "desactivades a wp-config.php"
 
 #: includes/ux.php:87
-msgid "Si no hay un cron real en el servidor, no funcionarán la optimización al subir, el proceso en segundo plano ni la limpieza diaria."
-msgstr "Si no hi ha un cron real al servidor, no funcionaran l'optimització en pujar, el procés en segon pla ni la neteja diària."
+msgid ""
+"Si no hay un cron real en el servidor, no funcionarán la optimización al "
+"subir, el proceso en segundo plano ni la limpieza diaria."
+msgstr ""
+"Si no hi ha un cron real al servidor, no funcionaran l'optimització en "
+"pujar, el procés en segon pla ni la neteja diària."
 
 #: includes/ux.php:142
 #, php-format
 msgid "%d imagen no tiene archivo en el servidor y se ve rota en la web."
-msgid_plural "%d imágenes no tienen archivo en el servidor y se ven rotas en la web."
+msgid_plural ""
+"%d imágenes no tienen archivo en el servidor y se ven rotas en la web."
 msgstr[0] "%d imatge no té fitxer al servidor i es veu trencada al web."
 msgstr[1] "%d imatges no tenen fitxer al servidor i es veuen trencades al web."
 
@@ -3066,9 +3483,11 @@ msgstr "Revisa i recupera"
 #: includes/ux.php:146
 #, php-format
 msgid "La comprobación diaria ha encontrado %d imagen cambiada que no carga."
-msgid_plural "La comprobación diaria ha encontrado %d imágenes cambiadas que no cargan."
+msgid_plural ""
+"La comprobación diaria ha encontrado %d imágenes cambiadas que no cargan."
 msgstr[0] "La comprovació diària ha trobat %d imatge canviada que no carrega."
-msgstr[1] "La comprovació diària ha trobat %d imatges canviades que no carreguen."
+msgstr[1] ""
+"La comprovació diària ha trobat %d imatges canviades que no carreguen."
 
 #: includes/ux.php:146
 msgid "Ver cuáles"
@@ -3082,9 +3501,12 @@ msgstr "Optimització en segon pla: %1$d de %2$d imatges."
 #: includes/ux.php:154
 #, php-format
 msgid "%d optimización ha fallado esta semana (se mantuvo el original)."
-msgid_plural "%d optimizaciones han fallado esta semana (se mantuvo el original)."
-msgstr[0] "%d optimització ha fallat aquesta setmana (es va mantenir l'original)."
-msgstr[1] "%d optimitzacions han fallat aquesta setmana (es va mantenir l'original)."
+msgid_plural ""
+"%d optimizaciones han fallado esta semana (se mantuvo el original)."
+msgstr[0] ""
+"%d optimització ha fallat aquesta setmana (es va mantenir l'original)."
+msgstr[1] ""
+"%d optimitzacions han fallat aquesta setmana (es va mantenir l'original)."
 
 #: includes/ux.php:154
 msgid "Ver fallos"
@@ -3178,8 +3600,10 @@ msgid "recomendado"
 msgstr "recomanat"
 
 #: includes/ux.php:515
-msgid "Valores por defecto de «Optimizar imágenes» y de la optimización al subir."
-msgstr "Valors per defecte d'«Optimitzar imatges» i de l'optimització en pujar."
+msgid ""
+"Valores por defecto de «Optimizar imágenes» y de la optimización al subir."
+msgstr ""
+"Valors per defecte d'«Optimitzar imatges» i de l'optimització en pujar."
 
 #: includes/ux.php:526
 #, php-format
@@ -3298,11 +3722,18 @@ msgstr "Acaba"
 #~ msgid "Guardar automáticamente alt, título, leyenda y descripción"
 #~ msgstr "Desa automàticament alt, títol, llegenda i descripció"
 
-#~ msgid "Intro: fila siguiente · Pega una columna de Excel para rellenar hacia abajo"
-#~ msgstr "Intro: fila següent · Enganxa una columna d'Excel per omplir cap avall"
+#~ msgid ""
+#~ "Intro: fila siguiente · Pega una columna de Excel para rellenar hacia "
+#~ "abajo"
+#~ msgstr ""
+#~ "Intro: fila següent · Enganxa una columna d'Excel per omplir cap avall"
 
-#~ msgid "Se guardan las 20 últimas. Deshacer restaura los valores anteriores, incluidos los nombres de archivo y sus URLs."
-#~ msgstr "Es desen les 20 últimes. Desfer restaura els valors anteriors, inclosos els noms de fitxer i les seves URL."
+#~ msgid ""
+#~ "Se guardan las 20 últimas. Deshacer restaura los valores anteriores, "
+#~ "incluidos los nombres de archivo y sus URLs."
+#~ msgstr ""
+#~ "Es desen les 20 últimes. Desfer restaura els valors anteriors, inclosos "
+#~ "els noms de fitxer i les seves URL."
 
 #~ msgid "Imágenes nuevas"
 #~ msgstr "Imatges noves"
@@ -3310,8 +3741,11 @@ msgstr "Acaba"
 #~ msgid "Optimizar automáticamente cada imagen que se suba"
 #~ msgstr "Optimitza automàticament cada imatge que es pugi"
 
-#~ msgid "Se hace en segundo plano a los pocos segundos de subirla, con las opciones de"
-#~ msgstr "Es fa en segon pla pocs segons després de pujar-la, amb les opcions d'"
+#~ msgid ""
+#~ "Se hace en segundo plano a los pocos segundos de subirla, con las "
+#~ "opciones de"
+#~ msgstr ""
+#~ "Es fa en segon pla pocs segons després de pujar-la, amb les opcions d'"
 
 #~ msgid "(ahora:"
 #~ msgstr "(ara:"

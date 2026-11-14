@@ -109,5 +109,8 @@ function inpulsia_medios_js_i18n() {
 		'Falta el archivo en el servidor' => __( 'Falta el archivo en el servidor', 'inpulsia-medios' ),
 		'¿Usar %s como archivo de esta imagen? Se regeneran sus tamaños y las páginas pasan a usarlo.' => __( '¿Usar %s como archivo de esta imagen? Se regeneran sus tamaños y las páginas pasan a usarlo.', 'inpulsia-medios' ),
 		'Imagen recuperada.' => __( 'Imagen recuperada.', 'inpulsia-medios' ),
+		'Ninguno: vuelve a subirla o cámbiala en las páginas.' => __( 'Ninguno: vuelve a subirla o cámbiala en las páginas.', 'inpulsia-medios' ),
+		'Usar este' => __( 'Usar este', 'inpulsia-medios' ),
+		'No se ha podido buscar: %s' => __( 'No se ha podido buscar: %s', 'inpulsia-medios' ),
 	];
 }

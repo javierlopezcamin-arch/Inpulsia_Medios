@@ -988,4 +988,27 @@
 			.fail(function () { alert(t('Error de conexión con el servidor.')); $b.prop('disabled', false).removeClass('is-busy'); });
 	});
 
+	// Similar files for each lost image, one request at a time.
+	(function nextCandidates() {
+		var $box = $('.im-candidates-list').not('.is-done').first();
+		if (!$box.length) return;
+		$box.addClass('is-done');
+		var id = $box.data('id');
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_lost_candidates', nonce: cfg.nonce, id: id }, null, 'json')
+			.done(function (r) {
+				$box.empty();
+				if (!r.success) return $box.append(txt('span', r.data || t('Error'), 'log-error'));
+				if (!r.data.length) return $box.append(txt('span', t('Ninguno: vuelve a subirla o cámbiala en las páginas.'), 'muted'));
+				r.data.forEach(function (c) {
+					$box.append($('<div class="im-candidate">').append(
+						$('<a target="_blank" rel="noopener">').attr('href', c.url).append($('<img alt="" loading="lazy">').attr('src', c.url)),
+						$('<span>').append(txt('code', c.name), '<br>', txt('small', c.size + ' · ' + c.date + ' · ' + c.why, 'muted')),
+						$('<button type="button" class="button button-small im-relink">').attr({ 'data-id': id, 'data-name': c.name }).text(t('Usar este'))
+					));
+				});
+			})
+			.fail(function (xhr) { $box.empty().append(txt('span', t('No se ha podido buscar: %s', (xhr.responseText || xhr.status || '').toString().replace(/<[^>]+>/g, ' ').trim().slice(0, 200)), 'log-error')); })
+			.always(nextCandidates);
+	})();
+
 })(jQuery);
