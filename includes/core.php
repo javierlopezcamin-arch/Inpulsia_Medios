@@ -293,7 +293,7 @@ function inpulsia_medios_rename( $id, $new_stem, $keep_old = true ) {
 
 	$file = get_attached_file( $id );
 	if ( ! $file || ! file_exists( $file ) ) {
-		return new WP_Error( 'not_found', sprintf( __( 'el archivo %s no está en el servidor, así que no se puede renombrar. Recupéralo en Limpieza → Imágenes sin archivo o vuelve a subirlo.', 'inpulsia-medios' ), (string) get_post_meta( $id, '_wp_attached_file', true ) ) );
+		return new WP_Error( 'not_found', sprintf( __( 'el archivo %s no está en el servidor, así que no se puede renombrar. Recupéralo en Archivos → Rotas o vuelve a subirlo.', 'inpulsia-medios' ), (string) get_post_meta( $id, '_wp_attached_file', true ) ) );
 	}
 	if ( $new_stem === '' ) {
 		return new WP_Error( 'empty', __( 'nombre vacío.', 'inpulsia-medios' ) );

@@ -290,23 +290,33 @@ function inpulsia_medios_ajax_lcp_fix() {
 	wp_send_json_success();
 }
 
-function inpulsia_medios_tab_rendimiento() {
-	$health = inpulsia_medios_health_result();
-	$issues = inpulsia_medios_perf_issues();
-	$pages  = inpulsia_medios_perf_pages();
-	$fixes  = inpulsia_medios_lcp_fixes();
-	$urls   = array_map( function ( $id ) {
-		return add_query_arg( 'inpulsia_perf', 1, get_permalink( $id ) );
-	}, $pages );
-	$data   = inpulsia_medios_perf_data();
-	$last   = $data ? max( array_map( function ( $d ) {
-		return max( wp_list_pluck( $d, 'time' ) );
-	}, $data ) ) : 0;
+function inpulsia_medios_perf_vars() {
+	static $vars = null;
+	if ( $vars !== null ) {
+		return $vars;
+	}
+	$pages = inpulsia_medios_perf_pages();
+	$data  = inpulsia_medios_perf_data();
+	return $vars = [
+		'health' => inpulsia_medios_health_result(),
+		'issues' => inpulsia_medios_perf_issues(),
+		'fixes'  => inpulsia_medios_lcp_fixes(),
+		'data'   => $data,
+		'urls'   => array_map( function ( $id ) {
+			return add_query_arg( 'inpulsia_perf', 1, get_permalink( $id ) );
+		}, $pages ),
+		'last'   => $data ? max( array_map( function ( $d ) {
+			return max( wp_list_pluck( $d, 'time' ) );
+		}, $data ) ) : 0,
+	];
+}
+
+function inpulsia_medios_card_health() {
+	extract( inpulsia_medios_perf_vars() ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
 	?>
-	<div id="im-perf">
 		<div class="inpulsia-medios-card">
 			<h2><span class="dashicons dashicons-yes-alt" aria-hidden="true"></span> <?php esc_html_e( 'Comprobación de las imágenes cambiadas', 'inpulsia-medios' ); ?></h2>
-			<p><?php esc_html_e( 'Cada día se abren, como lo haría un visitante, las imágenes optimizadas o renombradas en los últimos 30 días. Si alguna no carga, se avisa en Inicio.', 'inpulsia-medios' ); ?></p>
+			<p><?php esc_html_e( 'Cada día se abren, como lo haría un visitante, las imágenes optimizadas o renombradas en los últimos 30 días. Si alguna no carga, se avisa en el Resumen.', 'inpulsia-medios' ); ?></p>
 			<?php if ( $health ) : ?>
 				<p class="im-clean-figure">
 					<?php if ( $health['failed'] ) : ?>
@@ -329,14 +339,19 @@ function inpulsia_medios_tab_rendimiento() {
 						<?php endforeach; ?>
 						</tbody>
 					</table>
-					<p><a class="button" href="<?php echo esc_url( inpulsia_medios_url( 'limpieza' ) ); ?>"><?php esc_html_e( 'Ir a Limpieza para recuperarlas', 'inpulsia-medios' ); ?></a></p>
+					<p><a class="button" href="<?php echo esc_url( inpulsia_medios_url( 'limpieza' ) ); ?>"><?php esc_html_e( 'Ir a Rotas para recuperarlas', 'inpulsia-medios' ); ?></a></p>
 				<?php endif; ?>
 			<?php else : ?>
 				<p class="muted"><?php esc_html_e( 'Todavía no se ha hecho ninguna comprobación.', 'inpulsia-medios' ); ?></p>
 			<?php endif; ?>
 			<p><button type="button" class="button" id="im-health-now"><?php esc_html_e( 'Comprobar ahora', 'inpulsia-medios' ); ?></button></p>
 		</div>
+	<?php
+}
 
+function inpulsia_medios_card_analysis() {
+	extract( inpulsia_medios_perf_vars() ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
+	?>
 		<div class="inpulsia-medios-card">
 			<h2><span class="dashicons dashicons-dashboard" aria-hidden="true"></span> <?php esc_html_e( 'Análisis de páginas', 'inpulsia-medios' ); ?></h2>
 			<p><?php esc_html_e( 'Se abren las páginas principales en este navegador, en tamaño escritorio y móvil, y se mide qué imagen tarda más en aparecer (la que más pesa en Core Web Vitals) y qué imágenes se sirven mucho más grandes de lo que se ven.', 'inpulsia-medios' ); ?></p>
@@ -351,7 +366,12 @@ function inpulsia_medios_tab_rendimiento() {
 				<div class="im-perf-frames" aria-hidden="true"></div>
 			</div>
 		</div>
+	<?php
+}
 
+function inpulsia_medios_card_lcp() {
+	extract( inpulsia_medios_perf_vars() ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
+	?>
 		<div class="inpulsia-medios-card">
 			<h2><span class="dashicons dashicons-star-filled" aria-hidden="true"></span> <?php esc_html_e( 'Imagen principal de cada página (LCP)', 'inpulsia-medios' ); ?></h2>
 			<p><?php esc_html_e( 'Es la imagen grande que se ve al entrar. Google mide cuánto tarda en aparecer: debe cargarse la primera, sin carga diferida y con prioridad alta.', 'inpulsia-medios' ); ?></p>
@@ -398,7 +418,12 @@ function inpulsia_medios_tab_rendimiento() {
 				<p class="description"><?php esc_html_e( '«Arreglar» quita la carga diferida y da prioridad alta a esa imagen solo en esa página. Si usas un plugin de caché, se vacía solo; si no, vacíala tú.', 'inpulsia-medios' ); ?></p>
 			<?php endif; ?>
 		</div>
+	<?php
+}
 
+function inpulsia_medios_card_oversized() {
+	extract( inpulsia_medios_perf_vars() ); // phpcs:ignore WordPress.PHP.DontExtract.extract_extract
+	?>
 		<div class="inpulsia-medios-card">
 			<h2><span class="dashicons dashicons-image-crop" aria-hidden="true"></span> <?php esc_html_e( 'Imágenes más grandes de lo que se ven', 'inpulsia-medios' ); ?></h2>
 			<p><?php esc_html_e( 'El navegador descarga la imagen entera aunque se muestre pequeña. Aquí salen las que tienen más del doble de los píxeles necesarios, ordenadas por lo que se desperdicia.', 'inpulsia-medios' ); ?></p>
@@ -433,6 +458,6 @@ function inpulsia_medios_tab_rendimiento() {
 				</div>
 			<?php endif; ?>
 		</div>
-	</div>
 	<?php
 }
+

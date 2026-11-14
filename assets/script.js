@@ -140,7 +140,7 @@
 	function suggestion($tr, field) {
 		var title = ($tr.find('[data-field="title"]').val() || '').trim();
 		var name = $tr.find('[data-field="filename"]').val() || '';
-		var page = String($tr.data('page') || '');
+		var page = String($tr.data('heading') || $tr.data('page') || '');
 		if (field === 'alt') return title && !CAMERA.test(title) && slug(title) !== name ? title : page;
 		if (field === 'title') return !CAMERA.test(name) ? name.replace(/-/g, ' ').replace(/^./, function (c) { return c.toUpperCase(); }) : page;
 		return '';
@@ -331,7 +331,7 @@
 			.done(function (res) {
 				if (!res.success) return alert(res.data || t('Error.'));
 				token = res.data.token;
-				$('#inpulsia-medios-grid-wrap').prop('hidden', true);
+				$('#inpulsia-medios-grid-wrap, #im-clean').prop('hidden', true);
 				renderPreview(res.data);
 			})
 			.fail(function (xhr, textStatus) { alert(textStatus === 'parsererror' ? t('El servidor ha devuelto una respuesta no válida. Revisa el registro de errores de PHP.') : t('Error de conexión con el servidor.')); })
@@ -378,7 +378,7 @@
 
 	/* ---------- Optimize ---------- */
 
-	function optimize(mode) {
+	function optimize(mode, extra) {
 		var data = {
 			action: 'inpulsia_medios_opt_stage',
 			nonce: cfg.nonce,
@@ -393,6 +393,8 @@
 		if (mode === 'selected') {
 			data.ids = selectedRows().map(function () { return $(this).data('id'); }).get();
 			if (!data.ids.length) return alert(t('Selecciona al menos una imagen.'));
+		} else if (extra) {
+			$.extend(data, extra);
 		} else {
 			var params = new URLSearchParams(location.search);
 			data.s = params.get('s') || '';
@@ -404,12 +406,14 @@
 			data.lang = params.get('lang') || '';
 			data.ids = params.get('ids') || '';
 		}
-		var $btns = $('#inpulsia-medios-opt-selected, #inpulsia-medios-opt-all').prop('disabled', true).addClass('is-loading');
+		// Without the options panel on the page, the saved settings (Ajustes → Optimización) are used.
+		if (!$('#im-opt-format').length) data.use_saved = 1;
+		var $btns = $('#inpulsia-medios-opt-selected, #inpulsia-medios-opt-all, .im-opt-run').prop('disabled', true).addClass('is-loading');
 		$.post(cfg.ajax_url, data, null, 'json')
 			.done(function (res) {
 				if (!res.success) return alert(res.data || t('Error.'));
 				token = res.data.token;
-				$('#inpulsia-medios-grid-wrap').prop('hidden', true);
+				$('#inpulsia-medios-grid-wrap, #im-clean').prop('hidden', true);
 				renderPreview(res.data);
 			})
 			.fail(function (xhr, textStatus) { alert(textStatus === 'parsererror' ? t('El servidor ha devuelto una respuesta no válida. Revisa el registro de errores de PHP.') : t('Error de conexión con el servidor.')); })
@@ -421,7 +425,8 @@
 	// Shortcuts from the Inicio assistant: start the task straight away (a preview still comes first).
 	$(function () {
 		var task = $('#inpulsia-medios-grid-wrap').data('do');
-		if (task === 'optimize' && $('#inpulsia-medios-opt-all').data('total') > 0) optimize('filter');
+		if (task === 'optimize') optimize('filter');
+		if (task === 'focus') setTimeout(function () { $('#im-focus-mode').trigger('click'); }, 200);
 		if (task === 'ai') {
 			$('#inpulsia-medios-check-all').prop('checked', true).trigger('change');
 			if ($('#inpulsia-medios-suggest-selected').length) $('#inpulsia-medios-suggest-selected').trigger('click');
@@ -448,7 +453,7 @@
 			.done(function (res) {
 				if (!res.success) return alert(res.data || t('Error.'));
 				token = res.data.token;
-				$('#inpulsia-medios-grid-wrap').prop('hidden', true);
+				$('#inpulsia-medios-grid-wrap, #im-clean').prop('hidden', true);
 				renderPreview(res.data);
 			})
 			.fail(function () { alert(t('Error de conexión con el servidor.')); })
@@ -681,7 +686,7 @@
 			$status.append(' ', $('<a>').attr('href', cfg.history).text(t('Ver historial / deshacer')));
 			$('#inpulsia-medios-file').val('');
 			if ($grid.length || $('#im-clean').length) {
-				$status.append(' · ', $('<a href="#">').text($grid.length ? t('Volver a la tabla') : t('Volver a Limpieza')).on('click', function (e) { e.preventDefault(); location.reload(); }));
+				$status.append(' · ', $('<a href="#">').text($grid.length ? t('Volver a la tabla') : t('Volver a Archivos')).on('click', function (e) { e.preventDefault(); location.reload(); }));
 			}
 		}
 	}
@@ -1010,5 +1015,11 @@
 			.fail(function (xhr) { $box.empty().append(txt('span', t('No se ha podido buscar: %s', (xhr.responseText || xhr.status || '').toString().replace(/<[^>]+>/g, ' ').trim().slice(0, 200)), 'log-error')); })
 			.always(nextCandidates);
 	})();
+
+	$('.im-opt-run').on('click', function () {
+		var n = $(this).data('total');
+		if (n > 50 && !confirm(t('Se van a revisar %s imágenes. Puede tardar varios minutos. ¿Seguir?', n))) return;
+		optimize('filter', $(this).data('params'));
+	});
 
 })(jQuery);

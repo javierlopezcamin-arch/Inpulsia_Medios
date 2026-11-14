@@ -27,6 +27,7 @@ tests_add_filter( 'muplugins_loaded', function () use ( $root ) {
 	require_once $root . '/includes/cleanup-admin.php';
 	require_once $root . '/includes/bulk-filter.php';
 	require_once $root . '/includes/ux.php';
+	require_once $root . '/includes/sections.php';
 } );
 
 require $tests_dir . '/includes/bootstrap.php';

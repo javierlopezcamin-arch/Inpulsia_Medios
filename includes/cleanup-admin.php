@@ -41,37 +41,13 @@ function inpulsia_medios_clean_labels() {
 	];
 }
 
-function inpulsia_medios_tab_limpieza() {
-	if ( ! empty( $_GET['refresh_usage'] ) ) {
-		inpulsia_medios_used_ids( true );
+function inpulsia_medios_card_lost() {
+	$lost = inpulsia_medios_lost_files();
+	if ( ! $lost ) {
+		return 0;
 	}
-	$unused = inpulsia_medios_unused_ids();
-	$ubytes = 0;
-	foreach ( $unused as $id ) {
-		$ubytes += (int) get_post_meta( $id, INPULSIA_MEDIOS_BYTES_KEY, true );
-	}
-	$groups = inpulsia_medios_duplicate_groups();
-	$dupes  = 0;
-	$dbytes = 0;
-	foreach ( $groups as $g ) {
-		foreach ( $g['dupes'] as $id ) {
-			$dupes++;
-			$dbytes += (int) get_post_meta( $id, INPULSIA_MEDIOS_BYTES_KEY, true );
-		}
-	}
-	if ( ! empty( $_GET['scan'] ) ) {
-		inpulsia_medios_broken_scan();
-	}
-	$broken = get_transient( 'inpulsia_medios_broken' );
-	$fixable = $broken ? count( array_filter( $broken['items'], function ( $b ) {
-		return $b['fix'] !== '';
-	} ) ) : 0;
-	$lost       = inpulsia_medios_lost_files();
 	$recoverable = count( array_filter( wp_list_pluck( $lost, 'backup' ) ) );
-	$errors     = array_reverse( (array) get_option( 'inpulsia_medios_errors', [] ) );
 	?>
-	<div id="im-clean">
-		<?php if ( $lost ) : ?>
 			<div class="inpulsia-medios-card im-clean-card im-clean-alert">
 				<h2><span class="dashicons dashicons-dismiss" aria-hidden="true"></span> <?php esc_html_e( 'Imágenes sin archivo en el servidor', 'inpulsia-medios' ); ?></h2>
 				<p class="im-clean-figure"><strong><?php echo esc_html( number_format_i18n( count( $lost ) ) ); ?></strong> <?php esc_html_e( 'imágenes', 'inpulsia-medios' ); ?> · <?php echo esc_html( sprintf( __( '%d se pueden recuperar de una copia', 'inpulsia-medios' ), $recoverable ) ); ?></p>
@@ -95,9 +71,17 @@ function inpulsia_medios_tab_limpieza() {
 				</div>
 				<p><button type="button" class="button button-primary im-clean-stage" data-kind="lost" <?php disabled( ! $recoverable ); ?>><?php echo esc_html( sprintf( __( 'Recuperar las %d con copia', 'inpulsia-medios' ), $recoverable ) ); ?></button></p>
 			</div>
-		<?php endif; ?>
-		<p class="description im-clean-intro"><?php esc_html_e( 'Antes de borrar o cambiar nada verás la lista completa. Las imágenes borradas se guardan en una copia y se pueden recuperar desde el Historial.', 'inpulsia-medios' ); ?></p>
+	<?php
+	return count( $lost );
+}
 
+function inpulsia_medios_card_unused() {
+	$unused = inpulsia_medios_unused_ids();
+	$ubytes = 0;
+	foreach ( $unused as $id ) {
+		$ubytes += (int) get_post_meta( $id, INPULSIA_MEDIOS_BYTES_KEY, true );
+	}
+	?>
 		<div class="inpulsia-medios-card im-clean-card">
 			<h2><span class="dashicons dashicons-trash" aria-hidden="true"></span> <?php esc_html_e( 'Imágenes sin uso', 'inpulsia-medios' ); ?></h2>
 			<p class="im-clean-figure"><strong><?php echo esc_html( number_format_i18n( count( $unused ) ) ); ?></strong> <?php esc_html_e( 'imágenes', 'inpulsia-medios' ); ?> · <?php echo esc_html( size_format( $ubytes, 1 ) ?: '0 B' ); ?></p>
@@ -105,11 +89,24 @@ function inpulsia_medios_tab_limpieza() {
 			<p class="description"><?php esc_html_e( 'Si alguna imagen se usa desde código del tema, un CSS propio o una web externa, aquí no se detecta: revisa la lista antes de confirmar.', 'inpulsia-medios' ); ?></p>
 			<p>
 				<button type="button" class="button button-primary im-clean-stage" data-kind="unused" <?php disabled( ! $unused ); ?>><?php esc_html_e( 'Revisar y mandar a la papelera', 'inpulsia-medios' ); ?></button>
-				<a class="button" href="<?php echo esc_url( inpulsia_medios_url( 'editar', [ 'usage' => 'unused' ] ) ); ?>"><?php esc_html_e( 'Verlas en Editar', 'inpulsia-medios' ); ?></a>
+				<a class="button" href="<?php echo esc_url( inpulsia_medios_url( 'editar', [ 'usage' => 'unused' ] ) ); ?>"><?php esc_html_e( 'Verlas en Textos', 'inpulsia-medios' ); ?></a>
 				<a href="<?php echo esc_url( add_query_arg( 'refresh_usage', 1 ) ); ?>"><?php esc_html_e( 'Recalcular uso', 'inpulsia-medios' ); ?></a>
 			</p>
 		</div>
+	<?php
+}
 
+function inpulsia_medios_card_dupes() {
+	$groups = inpulsia_medios_duplicate_groups();
+	$dupes  = 0;
+	$dbytes = 0;
+	foreach ( $groups as $g ) {
+		foreach ( $g['dupes'] as $id ) {
+			$dupes++;
+			$dbytes += (int) get_post_meta( $id, INPULSIA_MEDIOS_BYTES_KEY, true );
+		}
+	}
+	?>
 		<div class="inpulsia-medios-card im-clean-card">
 			<h2><span class="dashicons dashicons-images-alt2" aria-hidden="true"></span> <?php esc_html_e( 'Imágenes duplicadas', 'inpulsia-medios' ); ?></h2>
 			<p class="im-clean-figure"><strong><?php echo esc_html( number_format_i18n( $dupes ) ); ?></strong> <?php esc_html_e( 'copias sobrantes', 'inpulsia-medios' ); ?> · <?php echo esc_html( size_format( $dbytes, 1 ) ?: '0 B' ); ?></p>
@@ -126,7 +123,15 @@ function inpulsia_medios_tab_limpieza() {
 			<?php endif; ?>
 			<p><button type="button" class="button button-primary im-clean-stage" data-kind="dupes" <?php disabled( ! $dupes ); ?>><?php esc_html_e( 'Revisar y unificar', 'inpulsia-medios' ); ?></button></p>
 		</div>
+	<?php
+}
 
+function inpulsia_medios_card_broken() {
+	$broken  = get_transient( 'inpulsia_medios_broken' );
+	$fixable = $broken ? count( array_filter( $broken['items'], function ( $b ) {
+		return $b['fix'] !== '';
+	} ) ) : 0;
+	?>
 		<div class="inpulsia-medios-card im-clean-card">
 			<h2><span class="dashicons dashicons-warning" aria-hidden="true"></span> <?php esc_html_e( 'Imágenes rotas', 'inpulsia-medios' ); ?></h2>
 			<p><?php esc_html_e( 'Páginas y plantillas de Elementor que enlazan a imágenes que ya no existen en el servidor. Cuando se encuentra la misma imagen con otro nombre, tamaño o formato, se propone el cambio.', 'inpulsia-medios' ); ?></p>
@@ -155,8 +160,15 @@ function inpulsia_medios_tab_limpieza() {
 				<?php endif; ?>
 			<?php endif; ?>
 		</div>
+	<?php
+}
 
-		<?php if ( $errors ) : ?>
+function inpulsia_medios_card_errors() {
+	$errors = array_reverse( (array) get_option( 'inpulsia_medios_errors', [] ) );
+	if ( ! $errors ) {
+		return;
+	}
+	?>
 			<div class="inpulsia-medios-card im-clean-card" id="im-errors">
 				<h2><span class="dashicons dashicons-list-view" aria-hidden="true"></span> <?php esc_html_e( 'Optimizaciones que fallaron', 'inpulsia-medios' ); ?></h2>
 				<p><?php esc_html_e( 'En todas ellas se mantuvo la imagen original.', 'inpulsia-medios' ); ?></p>
@@ -174,10 +186,7 @@ function inpulsia_medios_tab_limpieza() {
 				</table>
 				</div>
 			</div>
-		<?php endif; ?>
-	</div>
 	<?php
-	inpulsia_medios_preview_markup();
 }
 
 function inpulsia_medios_ajax_clean_stage() {

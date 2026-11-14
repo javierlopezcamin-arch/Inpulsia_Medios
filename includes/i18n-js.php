@@ -51,7 +51,7 @@ function inpulsia_medios_js_i18n() {
 		'Sin cambios' => __( 'Sin cambios', 'inpulsia-medios' ),
 		'Terminado: %s correctos, %s parciales, %s errores, %s sin cambios.' => __( 'Terminado: %s correctos, %s parciales, %s errores, %s sin cambios.', 'inpulsia-medios' ),
 		'Ver historial / deshacer' => __( 'Ver historial / deshacer', 'inpulsia-medios' ),
-		'Volver a Limpieza' => __( 'Volver a Limpieza', 'inpulsia-medios' ),
+		'Volver a Archivos' => __( 'Volver a Archivos', 'inpulsia-medios' ),
 		'Volver a la tabla' => __( 'Volver a la tabla', 'inpulsia-medios' ),
 		'respuesta no válida' => __( 'respuesta no válida', 'inpulsia-medios' ),
 		'se muestran %s de %s' => __( 'se muestran %s de %s', 'inpulsia-medios' ),

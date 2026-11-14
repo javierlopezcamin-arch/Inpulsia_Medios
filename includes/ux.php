@@ -136,22 +136,11 @@ function inpulsia_medios_recent_errors( $days = 7 ) {
  * Things that need attention, most serious first. Each: [ level => bad|warn|info, text, url, cta ].
  */
 function inpulsia_medios_alerts() {
-	$out  = [];
-	$lost = inpulsia_medios_lost_count();
-	if ( $lost ) {
-		$out[] = [ 'bad', sprintf( _n( '%d imagen no tiene archivo en el servidor y se ve rota en la web.', '%d imágenes no tienen archivo en el servidor y se ven rotas en la web.', $lost, 'inpulsia-medios' ), $lost ), inpulsia_medios_url( 'limpieza' ), __( 'Revisar y recuperar', 'inpulsia-medios' ) ];
-	}
-	$health = function_exists( 'inpulsia_medios_health_result' ) ? inpulsia_medios_health_result() : null;
-	if ( $health && $health['failed'] ) {
-		$out[] = [ 'bad', sprintf( _n( 'La comprobación diaria ha encontrado %d imagen cambiada que no carga.', 'La comprobación diaria ha encontrado %d imágenes cambiadas que no cargan.', count( $health['failed'] ), 'inpulsia-medios' ), count( $health['failed'] ) ), inpulsia_medios_url( 'rendimiento' ), __( 'Ver cuáles', 'inpulsia-medios' ) ];
-	}
+	// Problems with images are in the Resumen to-do list; these are about the server and running jobs.
+	$out = [];
 	$job = inpulsia_medios_bg_job();
 	if ( $job && empty( $job['done'] ) ) {
 		$out[] = [ 'info', sprintf( __( 'Optimización en segundo plano: %1$d de %2$d imágenes.', 'inpulsia-medios' ), $job['offset'], count( $job['ids'] ) ), '', '' ];
-	}
-	$errors = count( inpulsia_medios_recent_errors() );
-	if ( $errors ) {
-		$out[] = [ 'warn', sprintf( _n( '%d optimización ha fallado esta semana (se mantuvo el original).', '%d optimizaciones han fallado esta semana (se mantuvo el original).', $errors, 'inpulsia-medios' ), $errors ), inpulsia_medios_url( 'limpieza' ) . '#im-errors', __( 'Ver fallos', 'inpulsia-medios' ) ];
 	}
 	foreach ( inpulsia_medios_diagnostics() as $d ) {
 		if ( $d['status'] === 'bad' ) {
@@ -568,8 +557,8 @@ function inpulsia_medios_opt_settings_card() {
 function inpulsia_medios_shortcuts_markup() {
 	$keys = [
 		[ '?', __( 'Mostrar u ocultar esta ayuda', 'inpulsia-medios' ) ],
-		[ 'g i / g e / g l / g h', __( 'Ir a Inicio, Editar, Limpieza o Historial', 'inpulsia-medios' ) ],
-		[ '/', __( 'Buscar en Editar', 'inpulsia-medios' ) ],
+		[ 'g r / g t / g a / g h', __( 'Ir a Resumen, Textos, Archivos o Historial', 'inpulsia-medios' ) ],
+		[ '/', __( 'Buscar en Textos', 'inpulsia-medios' ) ],
 		[ 'Enter', __( 'En la tabla: bajar a la misma celda de la fila siguiente', 'inpulsia-medios' ) ],
 		[ 'Ctrl/⌘ + Enter', __( 'En la tabla: revisar cambios', 'inpulsia-medios' ) ],
 		[ 'Esc', __( 'Cerrar la vista previa o esta ayuda', 'inpulsia-medios' ) ],
