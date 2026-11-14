@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inpulsia Medios\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 23:28+0100\n"
+"POT-Creation-Date: 2026-11-14 08:41+0100\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -226,12 +226,12 @@ msgstr "Images per page"
 msgid "%d por página"
 msgstr "%d per page"
 
-#: includes/admin.php:283 includes/cleanup-admin.php:51
-#: includes/cleanup-admin.php:74
+#: includes/admin.php:283 includes/cleanup-admin.php:62
+#: includes/cleanup-admin.php:98
 msgid "imágenes"
 msgstr "images"
 
-#: includes/admin.php:285 includes/cleanup-admin.php:80
+#: includes/admin.php:285 includes/cleanup-admin.php:104
 msgid "Recalcular uso"
 msgstr "Recalculate usage"
 
@@ -841,7 +841,7 @@ msgid "No hay cambios que revisar."
 msgstr "There are no changes to review."
 
 #: includes/admin.php:856 includes/bulk-filter.php:135
-#: includes/cleanup-admin.php:232
+#: includes/cleanup-admin.php:256
 msgid "La sesión ha caducado. Vuelve a cargar los cambios."
 msgstr "The session has expired. Load the changes again."
 
@@ -900,8 +900,8 @@ msgstr "Claude Haiku 5.5 (cheapest)"
 msgid "No tienes permisos."
 msgstr "You do not have permission."
 
-#: includes/ai.php:157 includes/core.php:89 includes/core.php:150
-#: includes/optimize.php:220
+#: includes/ai.php:157 includes/cleanup.php:530 includes/core.php:89
+#: includes/core.php:150 includes/optimize.php:220
 msgid "No tienes permisos para editar este medio."
 msgstr "You do not have permission to edit this media item."
 
@@ -1054,7 +1054,7 @@ msgstr "OpenRouter free models"
 msgid "Elige uno con visión que termine en «:free»."
 msgstr "Pick one with vision ending in “:free”."
 
-#: includes/bulk-filter.php:68 includes/cleanup-admin.php:200
+#: includes/bulk-filter.php:68 includes/cleanup-admin.php:224
 msgid "Acción no válida."
 msgstr "Invalid action."
 
@@ -1104,208 +1104,221 @@ msgstr "Free quota used up: %d images are queued and will be completed automatic
 msgid "Se ha agotado la cuota gratuita de IA. %d imágenes quedan en cola y se completarán solas cuando se renueve (cada hora se comprueba)."
 msgstr "The free AI quota is used up. %d images are queued and will be completed automatically when it resets (checked every hour)."
 
-#: includes/cleanup-admin.php:50
+#: includes/cleanup-admin.php:61
 msgid "Imágenes sin archivo en el servidor"
 msgstr "Images with no file on the server"
 
-#: includes/cleanup-admin.php:51
+#: includes/cleanup-admin.php:62
 #, php-format
 msgid "%d se pueden recuperar de una copia"
 msgstr "%d can be recovered from a backup"
 
-#: includes/cleanup-admin.php:52
+#: includes/cleanup-admin.php:63
 msgid "La biblioteca las tiene, pero el archivo ya no está en uploads, así que la web las muestra rotas."
 msgstr "They are in the library, but the file is no longer in uploads, so the site shows them broken."
 
-#: includes/cleanup-admin.php:55
+#: includes/cleanup-admin.php:66
 msgid "Archivo que falta"
 msgstr "Missing file"
 
-#: includes/cleanup-admin.php:55
+#: includes/cleanup-admin.php:66
 msgid "Copia de seguridad"
 msgstr "Backup"
 
-#: includes/cleanup-admin.php:61
+#: includes/cleanup-admin.php:66
+msgid "Archivos parecidos en el servidor"
+msgstr "Similar files on the server"
+
+#: includes/cleanup-admin.php:72
 msgid "Sí"
 msgstr "Yes"
 
-#: includes/cleanup-admin.php:61
-msgid "No: vuelve a subirla o cámbiala en las páginas"
-msgstr "No: upload it again or replace it in the pages"
+#: includes/cleanup-admin.php:72
+msgid "No"
+msgstr "No"
 
-#: includes/cleanup-admin.php:67
+#: includes/cleanup-admin.php:76
+msgid "Ninguno: vuelve a subirla o cámbiala en las páginas."
+msgstr "None: upload it again or replace it in the pages."
+
+#: includes/cleanup-admin.php:82
+msgid "Usar este"
+msgstr "Use this one"
+
+#: includes/cleanup-admin.php:91
 #, php-format
 msgid "Recuperar las %d con copia"
 msgstr "Recover the %d with a backup"
 
-#: includes/cleanup-admin.php:70
+#: includes/cleanup-admin.php:94
 msgid "Antes de borrar o cambiar nada verás la lista completa. Las imágenes borradas se guardan en una copia y se pueden recuperar desde el Historial."
 msgstr "Before anything is deleted or changed you will see the full list. Deleted images are kept in a backup and can be recovered from History."
 
-#: includes/cleanup-admin.php:73
+#: includes/cleanup-admin.php:97
 msgid "Imágenes sin uso"
 msgstr "Unused images"
 
-#: includes/cleanup-admin.php:75
+#: includes/cleanup-admin.php:99
 msgid "No aparecen en ninguna página, entrada, producto, plantilla de Elementor ni ajuste del tema. Se excluyen las subidas en los últimos 7 días."
 msgstr "They do not appear on any page, post, product, Elementor template or theme setting. Images uploaded in the last 7 days are excluded."
 
-#: includes/cleanup-admin.php:76
+#: includes/cleanup-admin.php:100
 msgid "Si alguna imagen se usa desde código del tema, un CSS propio o una web externa, aquí no se detecta: revisa la lista antes de confirmar."
 msgstr "Images used from theme code, custom CSS or an external site are not detected here: check the list before confirming."
 
-#: includes/cleanup-admin.php:78
+#: includes/cleanup-admin.php:102
 msgid "Revisar y mandar a la papelera"
 msgstr "Review and move to trash"
 
-#: includes/cleanup-admin.php:79
+#: includes/cleanup-admin.php:103
 msgid "Verlas en Editar"
 msgstr "See them in Edit"
 
-#: includes/cleanup-admin.php:85
+#: includes/cleanup-admin.php:109
 msgid "Imágenes duplicadas"
 msgstr "Duplicate images"
 
-#: includes/cleanup-admin.php:86
+#: includes/cleanup-admin.php:110
 msgid "copias sobrantes"
 msgstr "redundant copies"
 
-#: includes/cleanup-admin.php:87
+#: includes/cleanup-admin.php:111
 msgid "La misma foto subida varias veces. Se conserva la que se usa (o la más antigua); las páginas que usan las copias pasan a usar esa y las direcciones antiguas redirigen a ella."
 msgstr "The same photo uploaded several times. The one in use (or the oldest) is kept; pages using the copies switch to it and the old addresses redirect to it."
 
-#: includes/cleanup-admin.php:92
+#: includes/cleanup-admin.php:116
 msgid "Se conserva"
 msgstr "Kept"
 
-#: includes/cleanup-admin.php:93
+#: includes/cleanup-admin.php:117
 #, php-format
 msgid "%d copia"
 msgid_plural "%d copias"
 msgstr[0] "%d copy"
 msgstr[1] "%d copies"
 
-#: includes/cleanup-admin.php:98
+#: includes/cleanup-admin.php:122
 msgid "Revisar y unificar"
 msgstr "Review and merge"
 
-#: includes/cleanup-admin.php:102
+#: includes/cleanup-admin.php:126
 msgid "Imágenes rotas"
 msgstr "Broken images"
 
-#: includes/cleanup-admin.php:103
+#: includes/cleanup-admin.php:127
 msgid "Páginas y plantillas de Elementor que enlazan a imágenes que ya no existen en el servidor. Cuando se encuentra la misma imagen con otro nombre, tamaño o formato, se propone el cambio."
 msgstr "Pages and Elementor templates that link to images no longer on the server. When the same image is found under another name, size or format, a fix is suggested."
 
-#: includes/cleanup-admin.php:105
+#: includes/cleanup-admin.php:129
 msgid "Analizar la web"
 msgstr "Scan the site"
 
-#: includes/cleanup-admin.php:107
+#: includes/cleanup-admin.php:131
 msgid "enlaces rotos"
 msgstr "broken links"
 
-#: includes/cleanup-admin.php:107
+#: includes/cleanup-admin.php:131
 #, php-format
 msgid "%d con arreglo propuesto"
 msgstr "%d with a suggested fix"
 
-#: includes/cleanup-admin.php:108
+#: includes/cleanup-admin.php:132
 #, php-format
 msgid "analizado hace %s"
 msgstr "scanned %s ago"
 
-#: includes/cleanup-admin.php:109
+#: includes/cleanup-admin.php:133
 msgid "Volver a analizar"
 msgstr "Scan again"
 
-#: includes/cleanup-admin.php:113 includes/perf.php:363
+#: includes/cleanup-admin.php:137 includes/perf.php:363
 msgid "Página"
 msgstr "Page"
 
-#: includes/cleanup-admin.php:113
+#: includes/cleanup-admin.php:137
 msgid "Imagen que falta"
 msgstr "Missing image"
 
-#: includes/cleanup-admin.php:113
+#: includes/cleanup-admin.php:137
 msgid "Propuesta"
 msgstr "Suggestion"
 
-#: includes/cleanup-admin.php:119
+#: includes/cleanup-admin.php:143
 msgid "Sin propuesta: cámbiala a mano"
 msgstr "No suggestion: change it manually"
 
-#: includes/cleanup-admin.php:125
+#: includes/cleanup-admin.php:149
 #, php-format
 msgid "Reparar las %d con propuesta"
 msgstr "Fix the %d with a suggestion"
 
-#: includes/cleanup-admin.php:132
+#: includes/cleanup-admin.php:156
 msgid "Optimizaciones que fallaron"
 msgstr "Failed optimizations"
 
-#: includes/cleanup-admin.php:133
+#: includes/cleanup-admin.php:157
 msgid "En todas ellas se mantuvo la imagen original."
 msgstr "The original image was kept in all of them."
 
-#: includes/cleanup-admin.php:173
+#: includes/cleanup-admin.php:197
 msgid "Se borra (con copia para recuperarla)"
 msgstr "Will be deleted (with a backup to recover it)"
 
-#: includes/cleanup-admin.php:173
+#: includes/cleanup-admin.php:197
 #, php-format
 msgid "Se subió en «%s»: comprueba que no la necesitas."
 msgstr "Uploaded to “%s”: make sure you don't need it."
 
-#: includes/cleanup-admin.php:179
+#: includes/cleanup-admin.php:203
 #, php-format
 msgid "Igual que %1$s (ID %2$d), que se conserva"
 msgstr "Same as %1$s (ID %2$d), which is kept"
 
-#: includes/cleanup-admin.php:197
+#: includes/cleanup-admin.php:221
 msgid "Se recupera el archivo desde la copia de seguridad"
 msgstr "The file is recovered from the backup"
 
-#: includes/cleanup-admin.php:203
+#: includes/cleanup-admin.php:227
 msgid "No hay nada que limpiar."
 msgstr "Nothing to clean up."
 
-#: includes/cleanup-admin.php:208
+#: includes/cleanup-admin.php:232
 #, php-format
 msgid "Mandar %d imágenes a la papelera"
 msgstr "Move %d images to trash"
 
-#: includes/cleanup-admin.php:209
+#: includes/cleanup-admin.php:233
 #, php-format
 msgid "Unificar %d duplicados"
 msgstr "Merge %d duplicates"
 
-#: includes/cleanup-admin.php:210
+#: includes/cleanup-admin.php:234
 #, php-format
 msgid "Reparar %d enlaces"
 msgstr "Fix %d links"
 
-#: includes/cleanup-admin.php:211
+#: includes/cleanup-admin.php:235
 #, php-format
 msgid "Recuperar %d imágenes"
 msgstr "Recover %d images"
 
-#: includes/cleanup-admin.php:221
+#: includes/cleanup-admin.php:245
 #, php-format
 msgid "%d elemento"
 msgid_plural "%d elementos"
 msgstr[0] "%d item"
 msgstr[1] "%d items"
 
-#: includes/cleanup-admin.php:222
+#: includes/cleanup-admin.php:246
 msgid "Limpiando"
 msgstr "Cleaning up"
 
-#: includes/cleanup-admin.php:251 includes/core.php:267
+#: includes/cleanup-admin.php:275 includes/core.php:267
+#: includes/i18n-js.php:111
 msgid "Imagen recuperada."
 msgstr "Image recovered."
 
-#: includes/cleanup-admin.php:254 includes/core.php:155 includes/core.php:282
+#: includes/cleanup-admin.php:278 includes/core.php:155 includes/core.php:282
 msgid "Sin cambios."
 msgstr "No changes."
 
@@ -1352,6 +1365,26 @@ msgstr "The image to keep no longer exists."
 #, php-format
 msgid "Unificada con la imagen %1$d (%2$d usos actualizados). %3$s"
 msgstr "Merged into image %1$d (%2$d uses updated). %3$s"
+
+#: includes/cleanup.php:489
+msgid "la dirección antigua redirige aquí"
+msgstr "the old address redirects here"
+
+#: includes/cleanup.php:494
+msgid "mismo nombre, otro formato"
+msgstr "same name, other format"
+
+#: includes/cleanup.php:508
+msgid "imagen sin dueño en la misma carpeta"
+msgstr "unclaimed image in the same folder"
+
+#: includes/cleanup.php:533
+msgid "Ese archivo ya no está disponible para esta imagen."
+msgstr "That file is no longer available for this image."
+
+#: includes/cleanup.php:537
+msgid "No es una imagen."
+msgstr "It is not an image."
 
 #: includes/cli.php:17
 msgid "No hay administradores. Indica un usuario con --user=<id|login>."
@@ -2560,6 +2593,11 @@ msgstr "Retry"
 msgid "Falta el archivo en el servidor"
 msgstr "The file is missing on the server"
 
+#: includes/i18n-js.php:110
+#, php-format
+msgid "¿Usar %s como archivo de esta imagen? Se regeneran sus tamaños y las páginas pasan a usarlo."
+msgstr "Use %s as this image's file? Its sizes are regenerated and pages switch to it."
+
 #: includes/media.php:15
 msgid "SEO de imagen"
 msgstr "Image SEO"
@@ -3243,6 +3281,9 @@ msgstr "Skip"
 #: includes/ux.php:638
 msgid "Terminar"
 msgstr "Finish"
+
+#~ msgid "No: vuelve a subirla o cámbiala en las páginas"
+#~ msgstr "No: upload it again or replace it in the pages"
 
 #~ msgid "archivo no encontrado en el servidor."
 #~ msgstr "file not found on the server."

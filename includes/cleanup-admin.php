@@ -5,6 +5,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_action( 'wp_ajax_inpulsia_medios_clean_stage', 'inpulsia_medios_ajax_clean_stage' );
 add_action( 'wp_ajax_inpulsia_medios_clean_apply', 'inpulsia_medios_ajax_clean_apply' );
+add_action( 'wp_ajax_inpulsia_medios_relink', 'inpulsia_medios_ajax_relink' );
+
+function inpulsia_medios_ajax_relink() {
+	inpulsia_medios_check_ajax();
+	$r = inpulsia_medios_relink( absint( $_POST['id'] ?? 0 ), sanitize_file_name( wp_unslash( $_POST['name'] ?? '' ) ) );
+	if ( is_wp_error( $r ) ) {
+		wp_send_json_error( $r->get_error_message() );
+	}
+	inpulsia_medios_flush_elementor();
+	wp_send_json_success();
+}
 
 function inpulsia_medios_clean_labels() {
 	return [
@@ -52,13 +63,26 @@ function inpulsia_medios_tab_limpieza() {
 				<p><?php esc_html_e( 'La biblioteca las tiene, pero el archivo ya no está en uploads, así que la web las muestra rotas.', 'inpulsia-medios' ); ?></p>
 				<div class="inpulsia-medios-scroll">
 				<table class="wp-list-table widefat striped">
-					<thead><tr><th>ID</th><th><?php esc_html_e( 'Archivo que falta', 'inpulsia-medios' ); ?></th><th><?php esc_html_e( 'Copia de seguridad', 'inpulsia-medios' ); ?></th></tr></thead>
+					<thead><tr><th>ID</th><th><?php esc_html_e( 'Archivo que falta', 'inpulsia-medios' ); ?></th><th><?php esc_html_e( 'Copia de seguridad', 'inpulsia-medios' ); ?></th><th><?php esc_html_e( 'Archivos parecidos en el servidor', 'inpulsia-medios' ); ?></th></tr></thead>
 					<tbody>
 					<?php foreach ( array_slice( $lost, 0, 50 ) as $l ) : ?>
 						<tr>
 							<td><a href="<?php echo esc_url( (string) get_edit_post_link( $l['id'] ) ); ?>" target="_blank" rel="noopener"><?php echo (int) $l['id']; ?></a></td>
 							<td><code><?php echo esc_html( $l['file'] ); ?></code></td>
-							<td><?php echo $l['backup'] ? esc_html__( 'Sí', 'inpulsia-medios' ) : '<span class="muted">' . esc_html__( 'No: vuelve a subirla o cámbiala en las páginas', 'inpulsia-medios' ) . '</span>'; ?></td>
+							<td><?php echo $l['backup'] ? esc_html__( 'Sí', 'inpulsia-medios' ) : '<span class="muted">' . esc_html__( 'No', 'inpulsia-medios' ) . '</span>'; ?></td>
+							<td class="im-candidates">
+								<?php $cands = inpulsia_medios_lost_candidates( $l['id'] ); ?>
+								<?php if ( ! $cands ) : ?>
+									<span class="muted"><?php esc_html_e( 'Ninguno: vuelve a subirla o cámbiala en las páginas.', 'inpulsia-medios' ); ?></span>
+								<?php endif; ?>
+								<?php foreach ( $cands as $c ) : ?>
+									<div class="im-candidate">
+										<a href="<?php echo esc_url( $c['url'] ); ?>" target="_blank" rel="noopener"><img src="<?php echo esc_url( $c['url'] ); ?>" alt="" loading="lazy" /></a>
+										<span><code><?php echo esc_html( $c['name'] ); ?></code><br><small class="muted"><?php echo esc_html( size_format( $c['bytes'], 0 ) . ' · ' . wp_date( 'd/m/Y H:i', $c['time'] ) . ' · ' . $c['why'] ); ?></small></span>
+										<button type="button" class="button button-small im-relink" data-id="<?php echo (int) $l['id']; ?>" data-name="<?php echo esc_attr( $c['name'] ); ?>"><?php esc_html_e( 'Usar este', 'inpulsia-medios' ); ?></button>
+									</div>
+								<?php endforeach; ?>
+							</td>
 						</tr>
 					<?php endforeach; ?>
 					</tbody>

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Inpulsia Medios\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 23:28+0100\n"
+"POT-Creation-Date: 2026-11-14 08:41+0100\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -226,12 +226,12 @@ msgstr "Imatges per pàgina"
 msgid "%d por página"
 msgstr "%d per pàgina"
 
-#: includes/admin.php:283 includes/cleanup-admin.php:51
-#: includes/cleanup-admin.php:74
+#: includes/admin.php:283 includes/cleanup-admin.php:62
+#: includes/cleanup-admin.php:98
 msgid "imágenes"
 msgstr "imatges"
 
-#: includes/admin.php:285 includes/cleanup-admin.php:80
+#: includes/admin.php:285 includes/cleanup-admin.php:104
 msgid "Recalcular uso"
 msgstr "Recalcula l'ús"
 
@@ -841,7 +841,7 @@ msgid "No hay cambios que revisar."
 msgstr "No hi ha canvis per revisar."
 
 #: includes/admin.php:856 includes/bulk-filter.php:135
-#: includes/cleanup-admin.php:232
+#: includes/cleanup-admin.php:256
 msgid "La sesión ha caducado. Vuelve a cargar los cambios."
 msgstr "La sessió ha caducat. Torna a carregar els canvis."
 
@@ -900,8 +900,8 @@ msgstr "Claude Haiku 5.5 (més econòmic)"
 msgid "No tienes permisos."
 msgstr "No tens permisos."
 
-#: includes/ai.php:157 includes/core.php:89 includes/core.php:150
-#: includes/optimize.php:220
+#: includes/ai.php:157 includes/cleanup.php:530 includes/core.php:89
+#: includes/core.php:150 includes/optimize.php:220
 msgid "No tienes permisos para editar este medio."
 msgstr "No tens permisos per editar aquest mitjà."
 
@@ -1054,7 +1054,7 @@ msgstr "Models gratuïts d'OpenRouter"
 msgid "Elige uno con visión que termine en «:free»."
 msgstr "Tria'n un amb visió que acabi en «:free»."
 
-#: includes/bulk-filter.php:68 includes/cleanup-admin.php:200
+#: includes/bulk-filter.php:68 includes/cleanup-admin.php:224
 msgid "Acción no válida."
 msgstr "Acció no vàlida."
 
@@ -1104,208 +1104,221 @@ msgstr "Quota gratuïta esgotada: %d imatges queden en cua i es completaran sole
 msgid "Se ha agotado la cuota gratuita de IA. %d imágenes quedan en cola y se completarán solas cuando se renueve (cada hora se comprueba)."
 msgstr "S'ha esgotat la quota gratuïta d'IA. %d imatges queden en cua i es completaran soles quan es renovi (es comprova cada hora)."
 
-#: includes/cleanup-admin.php:50
+#: includes/cleanup-admin.php:61
 msgid "Imágenes sin archivo en el servidor"
 msgstr "Imatges sense fitxer al servidor"
 
-#: includes/cleanup-admin.php:51
+#: includes/cleanup-admin.php:62
 #, php-format
 msgid "%d se pueden recuperar de una copia"
 msgstr "%d es poden recuperar d'una còpia"
 
-#: includes/cleanup-admin.php:52
+#: includes/cleanup-admin.php:63
 msgid "La biblioteca las tiene, pero el archivo ya no está en uploads, así que la web las muestra rotas."
 msgstr "La biblioteca les té, però el fitxer ja no és a uploads, així que el web les mostra trencades."
 
-#: includes/cleanup-admin.php:55
+#: includes/cleanup-admin.php:66
 msgid "Archivo que falta"
 msgstr "Fitxer que falta"
 
-#: includes/cleanup-admin.php:55
+#: includes/cleanup-admin.php:66
 msgid "Copia de seguridad"
 msgstr "Còpia de seguretat"
 
-#: includes/cleanup-admin.php:61
+#: includes/cleanup-admin.php:66
+msgid "Archivos parecidos en el servidor"
+msgstr "Fitxers semblants al servidor"
+
+#: includes/cleanup-admin.php:72
 msgid "Sí"
 msgstr "Sí"
 
-#: includes/cleanup-admin.php:61
-msgid "No: vuelve a subirla o cámbiala en las páginas"
-msgstr "No: torna-la a pujar o canvia-la a les pàgines"
+#: includes/cleanup-admin.php:72
+msgid "No"
+msgstr "No"
 
-#: includes/cleanup-admin.php:67
+#: includes/cleanup-admin.php:76
+msgid "Ninguno: vuelve a subirla o cámbiala en las páginas."
+msgstr "Cap: torna-la a pujar o canvia-la a les pàgines."
+
+#: includes/cleanup-admin.php:82
+msgid "Usar este"
+msgstr "Fes servir aquest"
+
+#: includes/cleanup-admin.php:91
 #, php-format
 msgid "Recuperar las %d con copia"
 msgstr "Recupera les %d amb còpia"
 
-#: includes/cleanup-admin.php:70
+#: includes/cleanup-admin.php:94
 msgid "Antes de borrar o cambiar nada verás la lista completa. Las imágenes borradas se guardan en una copia y se pueden recuperar desde el Historial."
 msgstr "Abans d'esborrar o canviar res veuràs la llista completa. Les imatges esborrades es desen en una còpia i es poden recuperar des de l'Historial."
 
-#: includes/cleanup-admin.php:73
+#: includes/cleanup-admin.php:97
 msgid "Imágenes sin uso"
 msgstr "Imatges sense ús"
 
-#: includes/cleanup-admin.php:75
+#: includes/cleanup-admin.php:99
 msgid "No aparecen en ninguna página, entrada, producto, plantilla de Elementor ni ajuste del tema. Se excluyen las subidas en los últimos 7 días."
 msgstr "No apareixen a cap pàgina, entrada, producte, plantilla d'Elementor ni ajust del tema. S'exclouen les pujades els últims 7 dies."
 
-#: includes/cleanup-admin.php:76
+#: includes/cleanup-admin.php:100
 msgid "Si alguna imagen se usa desde código del tema, un CSS propio o una web externa, aquí no se detecta: revisa la lista antes de confirmar."
 msgstr "Si alguna imatge s'utilitza des del codi del tema, un CSS propi o un web extern, aquí no es detecta: revisa la llista abans de confirmar."
 
-#: includes/cleanup-admin.php:78
+#: includes/cleanup-admin.php:102
 msgid "Revisar y mandar a la papelera"
 msgstr "Revisa i envia a la paperera"
 
-#: includes/cleanup-admin.php:79
+#: includes/cleanup-admin.php:103
 msgid "Verlas en Editar"
 msgstr "Mostra-les a Edita"
 
-#: includes/cleanup-admin.php:85
+#: includes/cleanup-admin.php:109
 msgid "Imágenes duplicadas"
 msgstr "Imatges duplicades"
 
-#: includes/cleanup-admin.php:86
+#: includes/cleanup-admin.php:110
 msgid "copias sobrantes"
 msgstr "còpies sobrants"
 
-#: includes/cleanup-admin.php:87
+#: includes/cleanup-admin.php:111
 msgid "La misma foto subida varias veces. Se conserva la que se usa (o la más antigua); las páginas que usan las copias pasan a usar esa y las direcciones antiguas redirigen a ella."
 msgstr "La mateixa foto pujada diverses vegades. Es conserva la que s'utilitza (o la més antiga); les pàgines que fan servir les còpies passen a fer servir aquesta i les adreces antigues hi redirigeixen."
 
-#: includes/cleanup-admin.php:92
+#: includes/cleanup-admin.php:116
 msgid "Se conserva"
 msgstr "Es conserva"
 
-#: includes/cleanup-admin.php:93
+#: includes/cleanup-admin.php:117
 #, php-format
 msgid "%d copia"
 msgid_plural "%d copias"
 msgstr[0] "%d còpia"
 msgstr[1] "%d còpies"
 
-#: includes/cleanup-admin.php:98
+#: includes/cleanup-admin.php:122
 msgid "Revisar y unificar"
 msgstr "Revisa i unifica"
 
-#: includes/cleanup-admin.php:102
+#: includes/cleanup-admin.php:126
 msgid "Imágenes rotas"
 msgstr "Imatges trencades"
 
-#: includes/cleanup-admin.php:103
+#: includes/cleanup-admin.php:127
 msgid "Páginas y plantillas de Elementor que enlazan a imágenes que ya no existen en el servidor. Cuando se encuentra la misma imagen con otro nombre, tamaño o formato, se propone el cambio."
 msgstr "Pàgines i plantilles d'Elementor que enllacen a imatges que ja no existeixen al servidor. Quan es troba la mateixa imatge amb un altre nom, mida o format, es proposa el canvi."
 
-#: includes/cleanup-admin.php:105
+#: includes/cleanup-admin.php:129
 msgid "Analizar la web"
 msgstr "Analitza el web"
 
-#: includes/cleanup-admin.php:107
+#: includes/cleanup-admin.php:131
 msgid "enlaces rotos"
 msgstr "enllaços trencats"
 
-#: includes/cleanup-admin.php:107
+#: includes/cleanup-admin.php:131
 #, php-format
 msgid "%d con arreglo propuesto"
 msgstr "%d amb arranjament proposat"
 
-#: includes/cleanup-admin.php:108
+#: includes/cleanup-admin.php:132
 #, php-format
 msgid "analizado hace %s"
 msgstr "analitzat fa %s"
 
-#: includes/cleanup-admin.php:109
+#: includes/cleanup-admin.php:133
 msgid "Volver a analizar"
 msgstr "Torna a analitzar"
 
-#: includes/cleanup-admin.php:113 includes/perf.php:363
+#: includes/cleanup-admin.php:137 includes/perf.php:363
 msgid "Página"
 msgstr "Pàgina"
 
-#: includes/cleanup-admin.php:113
+#: includes/cleanup-admin.php:137
 msgid "Imagen que falta"
 msgstr "Imatge que falta"
 
-#: includes/cleanup-admin.php:113
+#: includes/cleanup-admin.php:137
 msgid "Propuesta"
 msgstr "Proposta"
 
-#: includes/cleanup-admin.php:119
+#: includes/cleanup-admin.php:143
 msgid "Sin propuesta: cámbiala a mano"
 msgstr "Sense proposta: canvia-la a mà"
 
-#: includes/cleanup-admin.php:125
+#: includes/cleanup-admin.php:149
 #, php-format
 msgid "Reparar las %d con propuesta"
 msgstr "Repara les %d amb proposta"
 
-#: includes/cleanup-admin.php:132
+#: includes/cleanup-admin.php:156
 msgid "Optimizaciones que fallaron"
 msgstr "Optimitzacions que han fallat"
 
-#: includes/cleanup-admin.php:133
+#: includes/cleanup-admin.php:157
 msgid "En todas ellas se mantuvo la imagen original."
 msgstr "En totes es va mantenir la imatge original."
 
-#: includes/cleanup-admin.php:173
+#: includes/cleanup-admin.php:197
 msgid "Se borra (con copia para recuperarla)"
 msgstr "S'esborra (amb còpia per recuperar-la)"
 
-#: includes/cleanup-admin.php:173
+#: includes/cleanup-admin.php:197
 #, php-format
 msgid "Se subió en «%s»: comprueba que no la necesitas."
 msgstr "Es va pujar a «%s»: comprova que no la necessites."
 
-#: includes/cleanup-admin.php:179
+#: includes/cleanup-admin.php:203
 #, php-format
 msgid "Igual que %1$s (ID %2$d), que se conserva"
 msgstr "Igual que %1$s (ID %2$d), que es conserva"
 
-#: includes/cleanup-admin.php:197
+#: includes/cleanup-admin.php:221
 msgid "Se recupera el archivo desde la copia de seguridad"
 msgstr "Es recupera el fitxer des de la còpia de seguretat"
 
-#: includes/cleanup-admin.php:203
+#: includes/cleanup-admin.php:227
 msgid "No hay nada que limpiar."
 msgstr "No hi ha res per netejar."
 
-#: includes/cleanup-admin.php:208
+#: includes/cleanup-admin.php:232
 #, php-format
 msgid "Mandar %d imágenes a la papelera"
 msgstr "Envia %d imatges a la paperera"
 
-#: includes/cleanup-admin.php:209
+#: includes/cleanup-admin.php:233
 #, php-format
 msgid "Unificar %d duplicados"
 msgstr "Unifica %d duplicats"
 
-#: includes/cleanup-admin.php:210
+#: includes/cleanup-admin.php:234
 #, php-format
 msgid "Reparar %d enlaces"
 msgstr "Repara %d enllaços"
 
-#: includes/cleanup-admin.php:211
+#: includes/cleanup-admin.php:235
 #, php-format
 msgid "Recuperar %d imágenes"
 msgstr "Recupera %d imatges"
 
-#: includes/cleanup-admin.php:221
+#: includes/cleanup-admin.php:245
 #, php-format
 msgid "%d elemento"
 msgid_plural "%d elementos"
 msgstr[0] "%d element"
 msgstr[1] "%d elements"
 
-#: includes/cleanup-admin.php:222
+#: includes/cleanup-admin.php:246
 msgid "Limpiando"
 msgstr "Netejant"
 
-#: includes/cleanup-admin.php:251 includes/core.php:267
+#: includes/cleanup-admin.php:275 includes/core.php:267
+#: includes/i18n-js.php:111
 msgid "Imagen recuperada."
 msgstr "Imatge recuperada."
 
-#: includes/cleanup-admin.php:254 includes/core.php:155 includes/core.php:282
+#: includes/cleanup-admin.php:278 includes/core.php:155 includes/core.php:282
 msgid "Sin cambios."
 msgstr "Sense canvis."
 
@@ -1352,6 +1365,26 @@ msgstr "La imatge que es conserva ja no existeix."
 #, php-format
 msgid "Unificada con la imagen %1$d (%2$d usos actualizados). %3$s"
 msgstr "Unificada amb la imatge %1$d (%2$d usos actualitzats). %3$s"
+
+#: includes/cleanup.php:489
+msgid "la dirección antigua redirige aquí"
+msgstr "l'adreça antiga redirigeix aquí"
+
+#: includes/cleanup.php:494
+msgid "mismo nombre, otro formato"
+msgstr "mateix nom, un altre format"
+
+#: includes/cleanup.php:508
+msgid "imagen sin dueño en la misma carpeta"
+msgstr "imatge sense propietari a la mateixa carpeta"
+
+#: includes/cleanup.php:533
+msgid "Ese archivo ya no está disponible para esta imagen."
+msgstr "Aquest fitxer ja no està disponible per a aquesta imatge."
+
+#: includes/cleanup.php:537
+msgid "No es una imagen."
+msgstr "No és una imatge."
 
 #: includes/cli.php:17
 msgid "No hay administradores. Indica un usuario con --user=<id|login>."
@@ -2560,6 +2593,11 @@ msgstr "Torna-ho a provar"
 msgid "Falta el archivo en el servidor"
 msgstr "Falta el fitxer al servidor"
 
+#: includes/i18n-js.php:110
+#, php-format
+msgid "¿Usar %s como archivo de esta imagen? Se regeneran sus tamaños y las páginas pasan a usarlo."
+msgstr "Vols fer servir %s com a fitxer d'aquesta imatge? Es regeneren les mides i les pàgines passen a fer-lo servir."
+
 #: includes/media.php:15
 msgid "SEO de imagen"
 msgstr "SEO d'imatge"
@@ -3243,6 +3281,9 @@ msgstr "Omet"
 #: includes/ux.php:638
 msgid "Terminar"
 msgstr "Acaba"
+
+#~ msgid "No: vuelve a subirla o cámbiala en las páginas"
+#~ msgstr "No: torna-la a pujar o canvia-la a les pàgines"
 
 #~ msgid "archivo no encontrado en el servidor."
 #~ msgstr "no s'ha trobat el fitxer al servidor."

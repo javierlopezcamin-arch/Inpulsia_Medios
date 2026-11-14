@@ -449,3 +449,118 @@ function inpulsia_medios_latest_backup( $id ) {
 	return $dirs ? basename( end( $dirs ) ) : '';
 }
 
+
+/**
+ * Files in the same folder that may be the lost one under another name: a redirect target we created,
+ * the same name with another extension or "-scaled", or an image no attachment claims (left behind by
+ * an interrupted rename or conversion). Best matches first. [ [ name, bytes, time, why ] ].
+ */
+function inpulsia_medios_lost_candidates( $id ) {
+	global $wpdb;
+	$base = wp_get_upload_dir()['basedir'];
+	$rel  = (string) get_post_meta( $id, '_wp_attached_file', true );
+	$sub  = dirname( $rel ) === '.' ? '' : dirname( $rel );
+	$dir  = $base . ( $sub !== '' ? '/' . $sub : '' );
+	$stem = pathinfo( $rel, PATHINFO_FILENAME );
+	if ( ! is_dir( $dir ) ) {
+		return [];
+	}
+
+	// Main files of every attachment in this folder: those are taken.
+	$claimed = [];
+	$like    = $sub !== '' ? $wpdb->esc_like( $sub . '/' ) . '%' : '%';
+	foreach ( $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s", $like ) ) as $f ) {
+		$claimed[ basename( $f ) ] = true;
+	}
+	foreach ( $wpdb->get_col( $wpdb->prepare( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s", $like ) ) as $other ) {
+		$m = wp_get_attachment_metadata( (int) $other );
+		if ( ! empty( $m['original_image'] ) ) {
+			$claimed[ $m['original_image'] ] = true;
+		}
+		foreach ( $m['sizes'] ?? [] as $s ) {
+			$claimed[ $s['file'] ] = true;
+		}
+	}
+
+	$why = [];
+	// 1. Where our own redirects send the missing file.
+	$upath = inpulsia_medios_uploads_path();
+	foreach ( $wpdb->get_col( $wpdb->prepare( 'SELECT target FROM %i WHERE source = %s', inpulsia_medios_redirects_table(), $upath . '/' . $rel ) ) as $target ) {
+		$why[ basename( $target ) ] = __( 'la dirección antigua redirige aquí', 'inpulsia-medios' );
+	}
+	// 2. Same name, another extension or the "-scaled" copy.
+	foreach ( [ 'jpg', 'jpeg', 'png', 'webp', 'gif', 'avif', 'JPG', 'JPEG', 'PNG' ] as $ext ) {
+		foreach ( [ $stem, $stem . '-scaled', preg_replace( '/-scaled$/', '', $stem ) ] as $s ) {
+			$why[ $s . '.' . $ext ] = $why[ $s . '.' . $ext ] ?? __( 'mismo nombre, otro formato', 'inpulsia-medios' );
+		}
+	}
+	// 3. Images in the folder that no attachment uses, most similar name first.
+	$loose = [];
+	foreach ( (array) scandir( $dir ) as $f ) {
+		if ( ! preg_match( '/\.(jpe?g|png|webp|gif|avif)$/i', $f ) || preg_match( '/-\d+x\d+\.\w+$/', $f ) || isset( $claimed[ $f ] ) || isset( $why[ $f ] ) || strpos( $f, '.' ) === 0 ) {
+			continue;
+		}
+		similar_text( strtolower( $stem ), strtolower( pathinfo( $f, PATHINFO_FILENAME ) ), $pct );
+		$loose[ $f ] = $pct;
+	}
+	arsort( $loose );
+	foreach ( array_slice( $loose, 0, 6, true ) as $f => $pct ) {
+		$why[ $f ] = __( 'imagen sin dueño en la misma carpeta', 'inpulsia-medios' );
+	}
+
+	$out = [];
+	foreach ( $why as $f => $reason ) {
+		if ( $f === basename( $rel ) || isset( $claimed[ $f ] ) || ! is_file( $dir . '/' . $f ) ) {
+			continue;
+		}
+		$out[] = [ 'name' => $f, 'bytes' => (int) filesize( $dir . '/' . $f ), 'time' => (int) filemtime( $dir . '/' . $f ), 'why' => $reason, 'url' => trailingslashit( wp_get_upload_dir()['baseurl'] ) . ( $sub !== '' ? $sub . '/' : '' ) . rawurlencode( $f ) ];
+	}
+	return array_slice( $out, 0, 6 );
+}
+
+/**
+ * Points a lost attachment at a file found in its folder, rebuilds its sizes and sends the old URLs to it.
+ */
+function inpulsia_medios_relink( $id, $name ) {
+	$name = wp_basename( (string) $name );
+	$rel  = (string) get_post_meta( $id, '_wp_attached_file', true );
+	$sub  = dirname( $rel ) === '.' ? '' : dirname( $rel );
+	$dir  = wp_get_upload_dir()['basedir'] . ( $sub !== '' ? '/' . $sub : '' );
+	if ( get_post_type( $id ) !== 'attachment' || ! current_user_can( 'edit_post', $id ) ) {
+		return new WP_Error( 'perm', __( 'No tienes permisos para editar este medio.', 'inpulsia-medios' ) );
+	}
+	if ( ! in_array( $name, wp_list_pluck( inpulsia_medios_lost_candidates( $id ), 'name' ), true ) ) {
+		return new WP_Error( 'not_candidate', __( 'Ese archivo ya no está disponible para esta imagen.', 'inpulsia-medios' ) );
+	}
+	$type = wp_check_filetype( $name );
+	if ( ! $type['type'] || strpos( $type['type'], 'image/' ) !== 0 ) {
+		return new WP_Error( 'type', __( 'No es una imagen.', 'inpulsia-medios' ) );
+	}
+	$old_meta = wp_get_attachment_metadata( $id ) ?: [];
+	$old_main = basename( $rel );
+	update_attached_file( $id, $dir . '/' . $name );
+	wp_update_post( [ 'ID' => $id, 'post_mime_type' => $type['type'] ] );
+	if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+	}
+	$meta = wp_generate_attachment_metadata( $id, $dir . '/' . $name );
+	wp_update_attachment_metadata( $id, $meta );
+	global $wpdb;
+	$wpdb->update( $wpdb->posts, [ 'guid' => wp_get_attachment_url( $id ) ], [ 'ID' => $id ] );
+	clean_post_cache( $id );
+
+	$map = [ $old_main => $name ];
+	foreach ( $old_meta['sizes'] ?? [] as $k => $s ) {
+		$map[ $s['file'] ] = $meta['sizes'][ $k ]['file'] ?? $name;
+	}
+	$map  = array_filter( $map, function ( $new, $old ) {
+		return $new !== $old;
+	}, ARRAY_FILTER_USE_BOTH );
+	$rdir = inpulsia_medios_rel_dir( $id );
+	if ( $map ) {
+		inpulsia_medios_replace_urls( $rdir, pathinfo( $old_main, PATHINFO_FILENAME ), $map, $id );
+		inpulsia_medios_redirects_add( $rdir, $map );
+	}
+	delete_transient( 'inpulsia_medios_lost_count' );
+	return true;
+}

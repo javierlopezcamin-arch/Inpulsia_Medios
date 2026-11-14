@@ -976,4 +976,16 @@
 		if (e.key === 'Tab' && !e.shiftKey && !$in.val() && $in.attr('placeholder')) { e.preventDefault(); $in.val($in.attr('placeholder')); }
 	});
 
+	$(document).on('click', '.im-relink', function () {
+		var $b = $(this);
+		if (!confirm(t('¿Usar %s como archivo de esta imagen? Se regeneran sus tamaños y las páginas pasan a usarlo.', $b.data('name')))) return;
+		$b.prop('disabled', true).addClass('is-busy');
+		$.post(cfg.ajax_url, { action: 'inpulsia_medios_relink', nonce: cfg.nonce, id: $b.data('id'), name: $b.data('name') }, null, 'json')
+			.done(function (r) {
+				if (!r.success) { alert(r.data); $b.prop('disabled', false).removeClass('is-busy'); return; }
+				$b.closest('td').empty().append(txt('strong', '✓ ' + t('Imagen recuperada.'), 'im-text-ok'));
+			})
+			.fail(function () { alert(t('Error de conexión con el servidor.')); $b.prop('disabled', false).removeClass('is-busy'); });
+	});
+
 })(jQuery);

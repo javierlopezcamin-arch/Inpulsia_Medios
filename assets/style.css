@@ -320,3 +320,7 @@ body.im-sheet-open .inpulsia-medios-wrap { margin-right: 410px; }
 
 .im-lost-msg { display: block; color: var(--im-bad); margin-top: 2px; }
 .inpulsia-medios-grid tr.is-lost [data-field="filename"] { background: var(--im-bad-bg); }
+
+.im-candidate { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+.im-candidate img { width: 48px; height: 48px; object-fit: cover; border-radius: 3px; display: block; background: #f0f0f1; }
+.im-candidate span { flex: 1; min-width: 0; word-break: break-all; }

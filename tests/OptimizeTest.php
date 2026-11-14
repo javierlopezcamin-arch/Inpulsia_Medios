@@ -721,4 +721,23 @@ class OptimizeTest extends WP_UnitTestCase {
 		$this->assertSame( 'Escalera de piscina', inpulsia_medios_current( $id )['alt'] );
 		$this->assertSame( 'escalera-piscina', inpulsia_medios_current( $id )['filename'] );
 	}
+
+	public function test_a_file_renamed_halfway_is_found_and_relinked() {
+		$id   = $this->upload( 'diafano.jpg', 900, 600 );
+		$file = get_attached_file( $id );
+		$dir  = dirname( $file );
+		// An interrupted rename: the file moved on disk, the library still points to the old name.
+		rename( $file, $dir . '/diafano-obra-local.jpg' );
+		$post = self::factory()->post->create( [ 'post_content' => '<img class="wp-image-' . $id . '" src="' . wp_get_attachment_url( $id ) . '">' ] );
+		$this->assertContains( $id, wp_list_pluck( inpulsia_medios_lost_files(), 'id' ) );
+		$names = wp_list_pluck( inpulsia_medios_lost_candidates( $id ), 'name' );
+		$this->assertSame( 'diafano-obra-local.jpg', $names[0] );
+		$this->assertTrue( inpulsia_medios_relink( $id, 'diafano-obra-local.jpg' ) );
+		$this->assertFileExists( get_attached_file( $id ) );
+		$this->assertSame( 'diafano-obra-local.jpg', basename( get_attached_file( $id ) ) );
+		$this->assertNotEmpty( wp_get_attachment_metadata( $id )['sizes'] );
+		$this->assertStringContainsString( 'diafano-obra-local', get_post_field( 'post_content', $post ) );
+		$this->assertNotContains( $id, wp_list_pluck( inpulsia_medios_lost_files(), 'id' ) );
+		$this->assertInstanceOf( 'WP_Error', inpulsia_medios_relink( $id, '../../wp-config.php' ) );
+	}
 }
