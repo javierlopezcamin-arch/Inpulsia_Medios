@@ -566,9 +566,9 @@ class OptimizeTest extends WP_UnitTestCase {
 		$id = $this->upload( 'aviso.png', 600, 300 );
 		unlink( get_attached_file( $id ) );
 		delete_transient( 'inpulsia_medios_lost_count' );
-		$pending = inpulsia_medios_pending( true );
-		$this->assertSame( 'lost', $pending[0]['key'] );
-		$this->assertSame( 'bad', inpulsia_medios_section_badges()['archivos'][1] );
+		$pending = wp_list_pluck( inpulsia_medios_pending( true ), 'level', 'key' );
+		$this->assertSame( 'bad', $pending['lost'] ?? '', wp_json_encode( $pending ) );
+		$this->assertSame( 'bad', inpulsia_medios_section_badges()['archivos'][1] ?? '', wp_json_encode( inpulsia_medios_section_badges() ) );
 	}
 
 	public function test_background_job_optimizes_every_image() {
@@ -613,7 +613,8 @@ class OptimizeTest extends WP_UnitTestCase {
 		$r = inpulsia_medios_health_run();
 		$this->assertNotEmpty( $r['failed'] );
 		$this->assertSame( $id, $r['failed'][0]['id'] );
-		$this->assertSame( 'bad', inpulsia_medios_pending( true )[0]['level'] );
+		$levels = wp_list_pluck( inpulsia_medios_pending( true ), 'level', 'key' );
+		$this->assertSame( 'bad', $levels['lost'] ?? '', wp_json_encode( $levels ) );
 	}
 
 	public function test_lcp_fix_marks_only_the_main_image_of_that_page() {
