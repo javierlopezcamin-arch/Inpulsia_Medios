@@ -401,16 +401,16 @@ class OptimizeTest extends WP_UnitTestCase {
 			add_filter( 'determine_locale', $filter, 99 );
 			unload_textdomain( 'inpulsia-medios' );
 			inpulsia_medios_load_textdomain();
-			$text = __( 'Optimizar imágenes', 'inpulsia-medios' );
+			$text = __( 'Imágenes pesadas', 'inpulsia-medios' );
 			remove_filter( 'determine_locale', $filter, 99 );
 			unload_textdomain( 'inpulsia-medios' );
 			return $text;
 		};
-		$this->assertSame( 'Optimize images', $check( 'en_US' ) );
-		$this->assertSame( 'Optimize images', $check( 'en_GB' ) );
-		$this->assertSame( 'Optimitza les imatges', $check( 'ca' ) );
-		$this->assertSame( 'Optimitza les imatges', $check( 'ca_ES' ) );
-		$this->assertSame( 'Optimizar imágenes', $check( 'es_ES' ) );
+		$this->assertSame( 'Heavy images', $check( 'en_US' ) );
+		$this->assertSame( 'Heavy images', $check( 'en_GB' ) );
+		$this->assertSame( 'Imatges pesades', $check( 'ca' ) );
+		$this->assertSame( 'Imatges pesades', $check( 'ca_ES' ) );
+		$this->assertSame( 'Imágenes pesadas', $check( 'es_ES' ) );
 		$this->assertArrayHasKey( '%s seleccionadas', inpulsia_medios_js_i18n() );
 	}
 
